@@ -28,4 +28,8 @@ Add the dependency
         <version>LATEST</version>
     </dependency>
 </dependencies>
+<<<<<<< HEAD
 ```
+=======
+```
+>>>>>>> origin/master
