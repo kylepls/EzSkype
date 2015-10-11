@@ -32,4 +32,4 @@ Add the dependency
 
 ### Usage
 
-Basic bot usage can be found
+Basic bot usage can be found on the [wiki](https://github.com/AkHo1ic/EzSkype/wiki)
