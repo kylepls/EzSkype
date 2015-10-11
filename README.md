@@ -33,4 +33,5 @@ Add the dependency
 ### Usage
 
 Basic bot usage can be found on the [wiki](https://github.com/AkHo1ic/EzSkype/wiki)
+
 A full bot example can be found [here](https://github.com/AkHo1ic/EzSkype/blob/master/src/test/java/TestSkypeBot.java)
