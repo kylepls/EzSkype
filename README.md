@@ -30,4 +30,6 @@ Add the dependency
 </dependencies>
 ```
 
+### Usage
 
+Basic bot usage can be found
