@@ -24,6 +24,7 @@ import in.kyle.ezskypeezlife.internal.thread.SkypePacketIOPool;
 import in.kyle.ezskypeezlife.internal.thread.SkypePollerThread;
 import in.kyle.ezskypeezlife.internal.thread.SkypeSessionThread;
 import lombok.Getter;
+import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,11 +51,11 @@ public class EzSkype {
     @Getter
     private SkypeCacheManager skypeCache;
     @Getter
-    private boolean saveSession;
-    @Getter
     private SkypePollerThread skypePoller;
     @Getter
     private SkypeLocalUserInternal localUser;
+    @Accessors
+    private boolean lazyLoad = true;
     
     private SkypeCredentials skypeCredentials;
     
@@ -63,15 +64,13 @@ public class EzSkype {
      *
      * @param skypeCredentials - The Skype login credentials
      * @param packetThreads    - How many threads for packet IO
-     * @param saveSession      - Save the session to a file to prevent relogs and rate limiting
      */
-    public EzSkype(SkypeCredentials skypeCredentials, int packetThreads, boolean saveSession) {
+    public EzSkype(SkypeCredentials skypeCredentials, int packetThreads) {
         this.skypeCredentials = skypeCredentials;
         this.active = new AtomicBoolean();
         this.skypeCache = new SkypeCacheManager(this);
         this.eventManager = new EventManager();
         this.packetIOPool = new SkypePacketIOPool(packetThreads);
-        this.saveSession = false;
     }
     
     /**
@@ -80,10 +79,9 @@ public class EzSkype {
      * @param user          - The Skype username
      * @param pass          - The Skype password
      * @param packetThreads - How many threads for packet IO
-     * @param saveSession   - Save the session to a file to prevent relogs and rate limiting
      */
-    public EzSkype(String user, String pass, int packetThreads, boolean saveSession) {
-        this(new SkypeCredentials(user, pass.toCharArray()), packetThreads, saveSession);
+    public EzSkype(String user, String pass, int packetThreads) {
+        this(new SkypeCredentials(user, pass.toCharArray()), packetThreads);
     }
     
     public void logout() {
@@ -119,7 +117,9 @@ public class EzSkype {
         loadLocalProfile();
         System.out.println("Loading contacts");
         loadContacts();
-        loadConversations();
+        if (!lazyLoad) {
+            loadConversations();
+        }
         System.out.println("Starting poller");
         startThreads();
         return this;
@@ -235,7 +235,7 @@ public class EzSkype {
      * - If the api did not return anything, a user with all empty fields except the username will be returned
      */
     public SkypeUser getSkypeUser(String username) {
-        return skypeCache.getUsersCache().getOrCreateUser(username);
+        return skypeCache.getUsersCache().getOrCreateUserLoaded(username);
     }
     
     /**

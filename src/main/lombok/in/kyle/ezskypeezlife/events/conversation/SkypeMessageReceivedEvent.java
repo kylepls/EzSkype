@@ -12,4 +12,12 @@ public class SkypeMessageReceivedEvent implements SkypeEvent {
     
     private final SkypeMessage message;
     
+    /**
+     * Sends a SkypeMessage back to the conversation where the message was received from
+     * @param text - The message to send to the conversation
+     * @return - The Skype message sent
+     */
+    public SkypeMessage reply(String text) {
+        return message.getConversation().sendMessage(text);
+    }
 }

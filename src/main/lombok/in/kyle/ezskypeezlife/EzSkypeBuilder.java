@@ -67,7 +67,7 @@ public class EzSkypeBuilder {
      * @throws Exception
      */
     public EzSkype buildAndLogin() throws Exception {
-        EzSkype ezSkype = new EzSkype(credentials, threads, saveSession);
+        EzSkype ezSkype = new EzSkype(credentials, threads);
         ezSkype.login(skypeEndpoints.toArray(new SkypeEndpoint[skypeEndpoints.size()]));
         
         return ezSkype;

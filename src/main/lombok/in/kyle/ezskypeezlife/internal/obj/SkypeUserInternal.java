@@ -34,6 +34,7 @@ public class SkypeUserInternal implements SkypeUser {
     private Optional<String> avatarUrl;
     private boolean contact;
     private boolean blocked;
+    private boolean loaded;
     
     public SkypeUserInternal(String username, EzSkype ezSkype) {
         this.username = username;
@@ -87,6 +88,7 @@ public class SkypeUserInternal implements SkypeUser {
         if (!avatarUrl.isJsonNull()) {
             this.avatarUrl = Optional.of(avatarUrl.getAsString());
         }
+        this.loaded = true;
     }
     
     /**
@@ -124,6 +126,18 @@ public class SkypeUserInternal implements SkypeUser {
         // TODO
         //SkypeConversation skypeConversation = ezSkype.getSkypeConversation()
         return null;
+    }
+    
+    @Override
+    public boolean isFullyLoaded() {
+        return loaded;
+    }
+    
+    @Override
+    public void fullyLoad() {
+        if (!loaded) {
+            ezSkype.getSkypeCache().getUsersCache().fullyLoadUser(this);
+        }
     }
     
     // TODO work on avatar urls

@@ -83,7 +83,8 @@ public class SkypeGetGroupConversationPacket extends SkypePacket {
             String username = memberObject.get("id").getAsString();
             username = username.substring(username.indexOf(":") + 1);
             
-            SkypeUserInternal skypeUserInternal = (SkypeUserInternal) ezSkype.getSkypeUser(username);
+            SkypeUserInternal skypeUserInternal = ezSkype.getSkypeCache().getUsersCache().getOrCreateUserUnloaded
+                    (username);
             
             SkypeUserRole role = SkypeUserRole.valueOf(memberObject.get("role").getAsString().toUpperCase());
             
