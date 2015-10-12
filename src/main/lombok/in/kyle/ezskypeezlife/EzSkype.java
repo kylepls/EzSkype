@@ -78,7 +78,7 @@ public class EzSkype {
      * @param user          - The Skype username
      * @param pass          - The Skype password
      */
-    public EzSkype(String user, String pass, int packetThreads) {
+    public EzSkype(String user, String pass) {
         this(new SkypeCredentials(user, pass.toCharArray()));
     }
     

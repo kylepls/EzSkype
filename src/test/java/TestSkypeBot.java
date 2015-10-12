@@ -23,7 +23,7 @@ public class TestSkypeBot {
         LoginCredentials loginCredentials = EzSkype.GSON.fromJson(new FileReader(new File("login.json")), LoginCredentials.class);
         
         // Enter the Skype login info here and login
-        EzSkype ezSkype = new EzSkype(new SkypeCredentials(loginCredentials.getUser(), loginCredentials.getPass()), 2).login();
+        EzSkype ezSkype = new EzSkype(new SkypeCredentials(loginCredentials.getUser(), loginCredentials.getPass())).login();
         
         // Register all the events in this class
         // Events are denoted as methods that have 1 parameter that implements SkypeEvent
@@ -34,7 +34,7 @@ public class TestSkypeBot {
     public void onMessage(SkypeMessageReceivedEvent e) {
         String message = e.getMessage().getMessage(); // Get the message content
         System.out.println("Got message: " + e.getMessage().getSender().getUsername() + " - " + message);
-    
+        
         switch (message) {
             case "+ping":  // Replies to a conversation with the message pong
                 e.reply("Pong!");
