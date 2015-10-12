@@ -4,6 +4,7 @@ import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.api.SkypeConversationPermission;
 import in.kyle.ezskypeezlife.api.SkypeConversationType;
 import in.kyle.ezskypeezlife.api.SkypeUserRole;
+import in.kyle.ezskypeezlife.api.obj.SkypeUser;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationAddPacket;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationKickPacket;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationRolePacket;
@@ -59,5 +60,16 @@ public class SkypeGroupConversationInternal extends SkypeConversationInternal {
     
     public void add(SkypeUserInternal skypeUserInternal) {
         new SkypeConversationAddPacket(ezSkype, longId, skypeUserInternal.getUsername()).executeAsync();
+    }
+    
+    @Override
+    public boolean kick(SkypeUser skypeUser) {
+        new SkypeConversationKickPacket(ezSkype, longId, skypeUser.getUsername()).executeAsync();
+        return true;
+    }
+    
+    @Override
+    public boolean isAdmin(SkypeUser skypeUser) {
+        return admins.contains(skypeUser);
     }
 }

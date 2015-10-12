@@ -63,14 +63,13 @@ public class EzSkype {
      * Creates a new Skype instance (Pro constructor)
      *
      * @param skypeCredentials - The Skype login credentials
-     * @param packetThreads    - How many threads for packet IO
      */
-    public EzSkype(SkypeCredentials skypeCredentials, int packetThreads) {
+    public EzSkype(SkypeCredentials skypeCredentials) {
         this.skypeCredentials = skypeCredentials;
         this.active = new AtomicBoolean();
         this.skypeCache = new SkypeCacheManager(this);
         this.eventManager = new EventManager();
-        this.packetIOPool = new SkypePacketIOPool(packetThreads);
+        this.packetIOPool = new SkypePacketIOPool(2);
     }
     
     /**
@@ -78,10 +77,9 @@ public class EzSkype {
      *
      * @param user          - The Skype username
      * @param pass          - The Skype password
-     * @param packetThreads - How many threads for packet IO
      */
     public EzSkype(String user, String pass, int packetThreads) {
-        this(new SkypeCredentials(user, pass.toCharArray()), packetThreads);
+        this(new SkypeCredentials(user, pass.toCharArray()));
     }
     
     public void logout() {
@@ -242,6 +240,7 @@ public class EzSkype {
      * Gets a Skype conversation from the LONG id
      * The long id should look like this
      * "19:3000ebdcfcca4b42b9f6964f4066e1ad@thread.skype"
+     * "8:username"
      *
      * @param longId - The long id of the conversation
      * @return - A populated SkypeConversation class

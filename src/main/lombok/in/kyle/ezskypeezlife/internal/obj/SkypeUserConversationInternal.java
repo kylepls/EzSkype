@@ -2,6 +2,7 @@ package in.kyle.ezskypeezlife.internal.obj;
 
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.api.SkypeConversationType;
+import in.kyle.ezskypeezlife.api.obj.SkypeUser;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -26,4 +27,14 @@ public class SkypeUserConversationInternal extends SkypeConversationInternal {
         super(ezSkype, longId, topic, historyEnabled, joinEnabled, url, SkypeConversationType.USER, new ArrayList<>());
     }
     // @formatter:on
+    
+    @Override
+    public boolean kick(SkypeUser skypeUser) {
+        return false;
+    }
+    
+    @Override
+    public boolean isAdmin(SkypeUser skypeUser) {
+        return true;
+    }
 }

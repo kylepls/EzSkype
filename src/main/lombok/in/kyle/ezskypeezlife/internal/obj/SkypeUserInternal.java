@@ -2,6 +2,7 @@ package in.kyle.ezskypeezlife.internal.obj;
 
 import com.google.gson.JsonElement;
 import in.kyle.ezskypeezlife.EzSkype;
+import in.kyle.ezskypeezlife.api.obj.SkypeConversation;
 import in.kyle.ezskypeezlife.api.obj.SkypeMessage;
 import in.kyle.ezskypeezlife.api.obj.SkypeUser;
 import in.kyle.ezskypeezlife.internal.packet.user.SkypeAcceptContactRequestMultiPacket;
@@ -123,9 +124,7 @@ public class SkypeUserInternal implements SkypeUser {
     
     @Override
     public SkypeMessage sendMessage(String message) {
-        // TODO
-        //SkypeConversation skypeConversation = ezSkype.getSkypeConversation()
-        return null;
+        return getConversation().sendMessage(message);
     }
     
     @Override
@@ -140,9 +139,12 @@ public class SkypeUserInternal implements SkypeUser {
         }
     }
     
+    @Override
+    public SkypeConversation getConversation() {
+        return ezSkype.getSkypeConversation("8:" + username);
+    }
+    
     // TODO work on avatar urls
     //return "https://api.skype.com/users/" + username + "/profile/avatar";
-    
-    // TODO send message & whatnot
     
 }

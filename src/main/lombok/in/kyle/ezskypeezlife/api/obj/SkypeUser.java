@@ -79,4 +79,9 @@ public interface SkypeUser {
      * This is done on the main thread
      */
     void fullyLoad();
+    
+    /**
+     * @return - the users conversation
+     */
+    SkypeConversation getConversation();
 }
