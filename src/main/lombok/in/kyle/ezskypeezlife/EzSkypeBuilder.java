@@ -15,8 +15,6 @@ public class EzSkypeBuilder {
     private SkypeCredentials credentials;
     //private List<SkypeFeature> skypeFeatures;
     private List<SkypeEndpoint> skypeEndpoints;
-    private int threads;
-    private boolean saveSession;
     
     /**
      * Constructs a new EzSkype builder, this will build a Skype instance from scratch
@@ -29,7 +27,6 @@ public class EzSkypeBuilder {
         this.credentials = credentials;
         //this.skypeFeatures = new ArrayList<>();
         this.skypeEndpoints = new ArrayList<>();
-        this.threads = 1;
     }
     
     /*
@@ -53,21 +50,13 @@ public class EzSkypeBuilder {
     }
     
     /**
-     * @param threads -How many threads should be used for packet io
-     */
-    public EzSkypeBuilder packetThreads(int threads) {
-        this.threads = threads;
-        return this;
-    }
-    
-    /**
      * Creates the Skype instance and logs in
      *
      * @return - The EzSkype instance
      * @throws Exception
      */
     public EzSkype buildAndLogin() throws Exception {
-        EzSkype ezSkype = new EzSkype(credentials, threads);
+        EzSkype ezSkype = new EzSkype(credentials);
         ezSkype.login(skypeEndpoints.toArray(new SkypeEndpoint[skypeEndpoints.size()]));
         
         return ezSkype;
