@@ -32,7 +32,7 @@ public class TestSkypeBot {
     
     // Called when a new message is received from Skype
     public void onMessage(SkypeMessageReceivedEvent e) {
-        String message = e.getMessage().getMessage();
+        String message = e.getMessage().getMessage(); // Get the message content
         System.out.println("Got message: " + e.getMessage().getSender().getUsername() + " - " + message);
     
         switch (message) {

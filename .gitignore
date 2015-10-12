@@ -1,0 +1,14 @@
+/EzSkypeEzLife.iml
+/credentials.json
+/login.json
+/.idea
+# Created by .ignore support plugin (hsz.mobi)
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+/pom.xml
+/settings.xml
+/dependency-reduced-pom.xml
+out
+gen
