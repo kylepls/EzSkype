@@ -25,7 +25,7 @@ Add the dependency
     <dependency>
         <groupId>in.kyle</groupId>
         <artifactId>EzSkypeEzLife</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.1-SNAPSHOT</version>
     </dependency>
 </dependencies>
 ```
