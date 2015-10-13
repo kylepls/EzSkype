@@ -1,5 +1,6 @@
 package in.kyle.ezskypeezlife.internal.thread;
 
+import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 
 import java.util.concurrent.ExecutorService;
@@ -23,8 +24,7 @@ public class SkypePacketIOPool {
                 Thread.currentThread().setName("Skype-Packet-" + skypePacket.getClass().getName());
                 return skypePacket.executeSync();
             } catch (Exception e) {
-                System.err.println("Packet sending error, packet: " + skypePacket);
-                e.printStackTrace();
+                EzSkype.LOGGER.error("Packet sending error, packet: " + skypePacket, e);
                 return e;
             }
         });

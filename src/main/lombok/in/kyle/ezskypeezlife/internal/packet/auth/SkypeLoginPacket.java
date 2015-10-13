@@ -2,12 +2,13 @@ package in.kyle.ezskypeezlife.internal.packet.auth;
 
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.api.SkypeCredentials;
+import in.kyle.ezskypeezlife.internal.exception.SkypeLoginException;
+import in.kyle.ezskypeezlife.internal.exception.SkypeUnknownLoginErrorException;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -28,7 +29,7 @@ public class SkypeLoginPacket extends SkypePacket {
     
     @Override
     protected String run(WebConnectionBuilder webConnectionBuilder) throws 
-            IOException {
+            Exception {
         Date date = new Date();
         webConnectionBuilder.setRequest(WebConnectionBuilder.HTTPRequest.POST);
         webConnectionBuilder.addEncodedPostData("username", skypeCredentials.getUsername());
@@ -42,7 +43,16 @@ public class SkypeLoginPacket extends SkypePacket {
         Document document = webConnectionBuilder.getAsDocument();
         Elements elementsByAttributeValue = document.getElementsByAttributeValue("name", "skypetoken");
     
-        String token = elementsByAttributeValue.get(0).val();
-        return token;
+        if (elementsByAttributeValue.size() == 0) {
+            Elements messageError = document.getElementsByClass("message_error");
+            if (messageError.size() != 0) {
+                throw new SkypeLoginException(messageError.text());
+            } else {
+                EzSkype.LOGGER.error("Unknown login error");
+                throw new SkypeUnknownLoginErrorException(document.toString());
+            }
+        }
+        
+        return elementsByAttributeValue.get(0).val();
     }
 }

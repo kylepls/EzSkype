@@ -11,7 +11,6 @@ import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Kyle on 10/9/2015.
@@ -35,13 +34,13 @@ public class SkypeContactsThread extends Thread {
                 
                 List<SkypeUserInternal> contactsNew = (List<SkypeUserInternal>) contactsPacket.executeSync();
                 
-                Set<SkypeUserInternal> contactsOld = ezSkype.getLocalUser().getContacts();
+                List<SkypeUserInternal> contactsOld = new ArrayList<>(ezSkype.getLocalUser().getContacts());
                 
                 List<SkypeUserInternal> temp = new ArrayList<>(contactsNew);
                 temp.removeAll(contactsOld);
                 
                 temp.forEach(contact -> {
-                    System.out.println("Got new contact: " + contact);
+                    EzSkype.LOGGER.debug("Got new contact: " + contact);
                     
                     SkypeUserInternal realUser = (SkypeUserInternal) ezSkype.getSkypeUser(contact.getUsername());
                     realUser.contact(true);
@@ -55,7 +54,7 @@ public class SkypeContactsThread extends Thread {
                 temp.removeAll(contactsNew);
                 
                 temp.forEach(contact -> {
-                    System.out.println("Contact removed: " + contact);
+                    EzSkype.LOGGER.debug("Contact removed: " + contact);
     
                     SkypeUserInternal realUser = (SkypeUserInternal) ezSkype.getSkypeUser(contact.getUsername());
                     realUser.contact(true);
@@ -69,25 +68,22 @@ public class SkypeContactsThread extends Thread {
                 // TODO do I need this?
                 contactsNew.retainAll(contactsOld);
                 
-               /*
                 for (SkypeUserInternal contactNew : contactsNew) {
                     SkypeUserInternal contactOld = contactsOld.get(contactsOld.indexOf(contactNew));
         
                     if (contactOld.isContact() != contactNew.isContact()) {
-                        System.out.println("Contact status changed: " + contactOld.getUsername() + " " + contactOld.isContact() + " => " 
-                                + contactNew.getUsername() + " " + contactNew.isContact());
+                        EzSkype.LOGGER.debug("Contact status changed: " + contactOld.getUsername() + " " + contactOld.isContact() + " => " +
+                                contactNew.getUsername() + " " + contactNew.isContact());
                     }
         
                     if (contactOld.isBlocked() != contactNew.isBlocked()) {
-                        System.out.println("Contact status changed: " + contactOld.getUsername() + " " + contactOld.isBlocked() + " => " 
-                                + contactNew.getUsername() + " " + contactNew.isBlocked());
+                        EzSkype.LOGGER.debug("Contact status changed: " + contactOld.getUsername() + " " + contactOld.isBlocked() + " => " +
+                                contactNew.getUsername() + " " + contactNew.isBlocked());
                     }
                 }
-                */
                 
             } catch (Exception e) {
-                System.err.println("Error while getting contacts: ");
-                e.printStackTrace();
+                EzSkype.LOGGER.error("Error while getting contacts", e);
             }
             long time = System.currentTimeMillis()-start; // TODO i might not need this
             try {

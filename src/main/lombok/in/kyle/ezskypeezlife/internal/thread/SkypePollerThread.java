@@ -48,6 +48,7 @@ public class SkypePollerThread extends Thread {
             while (active.get()) {
                 SkypePullPacket skypePullPacket = new SkypePullPacket(ezSkype);
                 JsonObject responseData = (JsonObject) skypePullPacket.executeSync();
+                EzSkype.LOGGER.debug(responseData.toString());
                 if (responseData.entrySet().size() != 0) {
                     if (responseData.has("eventMessages")) {
                         JsonArray messages = responseData.getAsJsonArray("eventMessages");
@@ -56,12 +57,11 @@ public class SkypePollerThread extends Thread {
                             try {
                                 extractInfo(jsonObject.getAsJsonObject());
                             } catch (Exception e) {
-                                System.err.println("Error extracting info from:\n" + jsonObject);
-                                e.printStackTrace();
+                                EzSkype.LOGGER.error("Error extracting info from:\n" + jsonObject, e);
                             }
                         }
                     } else {
-                        System.out.println("Bad poll response: " + responseData);
+                        EzSkype.LOGGER.error("Bad poll response: " + responseData);
                     }
                 }
             }
@@ -72,8 +72,7 @@ public class SkypePollerThread extends Thread {
     
     private void extractInfo(JsonObject jsonObject) throws Exception {
         JsonObject resource = jsonObject.getAsJsonObject().getAsJsonObject("resource");
-        System.out.println(jsonObject);
-        
+    
         if (resource.has("messagetype")) {
             String messageType = resource.get("messagetype").getAsString();
             

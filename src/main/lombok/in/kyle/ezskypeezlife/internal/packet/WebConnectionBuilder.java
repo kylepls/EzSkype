@@ -1,9 +1,11 @@
 package in.kyle.ezskypeezlife.internal.packet;
 
+import in.kyle.ezskypeezlife.EzSkype;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -135,14 +137,11 @@ public class WebConnectionBuilder {
         try {
             inputStream = connection.getInputStream();
         } catch (Exception e) {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
-            System.out.println("An error occurred while sending data to server:");
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                System.out.println("    " + line);
-            }
-            System.out.println("Data:");
-            System.out.println("    " + this.toString());
+            
+            StringWriter writer = new StringWriter();
+            IOUtils.copy(connection.getErrorStream(), writer);
+            String string = writer.toString();
+            EzSkype.LOGGER.error("An error occurred while sending data to server\nData:\n" + string, e);
             throw e;
         }
         

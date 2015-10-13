@@ -1,19 +1,19 @@
 package in.kyle.ezskypeezlife;
 
 import com.google.gson.Gson;
-import in.kyle.ezskypeezlife.api.SkypeConversationType;
 import in.kyle.ezskypeezlife.api.SkypeCredentials;
 import in.kyle.ezskypeezlife.api.SkypeStatus;
 import in.kyle.ezskypeezlife.api.obj.SkypeUser;
 import in.kyle.ezskypeezlife.events.EventManager;
 import in.kyle.ezskypeezlife.internal.caches.SkypeCacheManager;
-import in.kyle.ezskypeezlife.internal.obj.*;
+import in.kyle.ezskypeezlife.internal.obj.SkypeConversationInternal;
+import in.kyle.ezskypeezlife.internal.obj.SkypeLocalUserInternal;
+import in.kyle.ezskypeezlife.internal.obj.SkypeSession;
+import in.kyle.ezskypeezlife.internal.obj.SkypeUserInternal;
 import in.kyle.ezskypeezlife.internal.packet.auth.SkypeAuthFinishPacket;
 import in.kyle.ezskypeezlife.internal.packet.auth.SkypeLoginInfoPacket;
 import in.kyle.ezskypeezlife.internal.packet.auth.SkypeLoginJavascriptParameters;
 import in.kyle.ezskypeezlife.internal.packet.auth.SkypeLoginPacket;
-import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeGetConversationsPacket;
-import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeGetGroupConversationPacket;
 import in.kyle.ezskypeezlife.internal.packet.pull.SkypeEndpoint;
 import in.kyle.ezskypeezlife.internal.packet.pull.SkypeRegisterEndpointsPacket;
 import in.kyle.ezskypeezlife.internal.packet.session.SkypeSetVisibilityPacket;
@@ -24,13 +24,10 @@ import in.kyle.ezskypeezlife.internal.thread.SkypePacketIOPool;
 import in.kyle.ezskypeezlife.internal.thread.SkypePollerThread;
 import in.kyle.ezskypeezlife.internal.thread.SkypeSessionThread;
 import lombok.Getter;
-import lombok.experimental.Accessors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -39,6 +36,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class EzSkype {
     
     public static final Gson GSON = new Gson();
+    public static final Logger LOGGER = LoggerFactory.getLogger(EzSkype.class);
     
     @Getter
     private SkypePacketIOPool packetIOPool;
@@ -54,8 +52,6 @@ public class EzSkype {
     private SkypePollerThread skypePoller;
     @Getter
     private SkypeLocalUserInternal localUser;
-    @Accessors
-    private boolean lazyLoad = true;
     
     private SkypeCredentials skypeCredentials;
     
@@ -75,8 +71,8 @@ public class EzSkype {
     /**
      * Creates a new Skype instance (Noob constructor)
      *
-     * @param user          - The Skype username
-     * @param pass          - The Skype password
+     * @param user - The Skype username
+     * @param pass - The Skype password
      */
     public EzSkype(String user, String pass) {
         this(new SkypeCredentials(user, pass.toCharArray()));
@@ -98,6 +94,7 @@ public class EzSkype {
         SkypeLoginInfoPacket loginInfoPacket = new SkypeLoginInfoPacket(this);
         SkypeLoginJavascriptParameters parameters = (SkypeLoginJavascriptParameters) loginInfoPacket.executeSync();
         
+        
         // Get x-token
         SkypeLoginPacket skypeLoginPacket = new SkypeLoginPacket(this, skypeCredentials, parameters);
         String xToken = (String) skypeLoginPacket.executeSync();
@@ -111,14 +108,11 @@ public class EzSkype {
         
         active.set(true);
         
-        System.out.println("Loading profile");
+        EzSkype.LOGGER.info("Loading profile");
         loadLocalProfile();
-        System.out.println("Loading contacts");
+        EzSkype.LOGGER.info("Loading contacts");
         loadContacts();
-        if (!lazyLoad) {
-            loadConversations();
-        }
-        System.out.println("Starting poller");
+        EzSkype.LOGGER.info("Starting poller");
         startThreads();
         return this;
     }
@@ -138,7 +132,7 @@ public class EzSkype {
      * @throws Exception
      */
     private void setOnline() throws Exception {
-        System.out.println("Setting online");
+        EzSkype.LOGGER.info("Setting online");
         SkypeSetVisibilityPacket setVisibilityPacket = new SkypeSetVisibilityPacket(this, SkypeStatus.ONLINE);
         setVisibilityPacket.executeSync();
     }
@@ -160,6 +154,7 @@ public class EzSkype {
      *
      * @throws Exception
      */
+    /*
     private void loadConversations() throws Exception {
         SkypeGetConversationsPacket skypeGetConversationsPacket = new SkypeGetConversationsPacket(this);
         List<String> conversationIds = (List<String>) skypeGetConversationsPacket.executeSync();
@@ -200,7 +195,7 @@ public class EzSkype {
         }
         
         skypeCache.getConversationsCache().getSkypeConversations().addAll(conversations);
-    }
+    }*/
     
     /**
      * Loads the users account from the server

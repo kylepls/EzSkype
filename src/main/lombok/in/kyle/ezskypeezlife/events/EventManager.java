@@ -1,5 +1,6 @@
 package in.kyle.ezskypeezlife.events;
 
+import in.kyle.ezskypeezlife.EzSkype;
 import lombok.Data;
 
 import java.lang.reflect.Method;
@@ -45,8 +46,7 @@ public class EventManager {
             try {
                 holdListener.getMethod().invoke(holdListener.getObject(), event);
             } catch (Exception e) {
-                System.err.println("Error while firing event: " + holdListener + " Reason: " + e.getMessage());
-                e.printStackTrace();
+                EzSkype.LOGGER.error("Error while firing event: " + holdListener, e);
             }
         });
     }

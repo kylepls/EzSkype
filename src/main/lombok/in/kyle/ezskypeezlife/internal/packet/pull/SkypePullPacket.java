@@ -4,11 +4,10 @@ import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
+import org.apache.commons.io.IOUtils;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
+import java.io.StringWriter;
 
 /**
  * Created by Kyle on 10/6/2015.
@@ -30,13 +29,11 @@ public class SkypePullPacket extends SkypePacket {
         try {
             result = webConnectionBuilder.send();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            HttpURLConnection connection = webConnectionBuilder.getConnection();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
-            }
+            StringWriter writer = new StringWriter();
+            IOUtils.copy(webConnectionBuilder.getConnection().getErrorStream(), writer);
+            String string = writer.toString();
+            
+            EzSkype.LOGGER.error("Error pulling Skype info: \n" + string, e);
         }
         JsonObject response = EzSkype.GSON.fromJson(result, JsonObject.class);
         return response;

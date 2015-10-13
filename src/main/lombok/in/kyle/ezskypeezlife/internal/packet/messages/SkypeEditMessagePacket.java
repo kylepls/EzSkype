@@ -27,7 +27,7 @@ public class SkypeEditMessagePacket extends SkypePacket {
         data.addProperty("messagetype", "RichText");
         data.addProperty("contenttype", "text");
         data.addProperty("skypeeditedid", messageId);
-        System.out.println("Sending edit: " + data.toString());
+        EzSkype.LOGGER.debug("Sending edit: " + data.toString());
         webConnectionBuilder.setPostData(data.toString());
         webConnectionBuilder.send();
         return null;
