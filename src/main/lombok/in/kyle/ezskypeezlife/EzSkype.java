@@ -3,10 +3,10 @@ package in.kyle.ezskypeezlife;
 import com.google.gson.Gson;
 import in.kyle.ezskypeezlife.api.SkypeCredentials;
 import in.kyle.ezskypeezlife.api.SkypeStatus;
+import in.kyle.ezskypeezlife.api.obj.SkypeConversation;
 import in.kyle.ezskypeezlife.api.obj.SkypeUser;
 import in.kyle.ezskypeezlife.events.EventManager;
 import in.kyle.ezskypeezlife.internal.caches.SkypeCacheManager;
-import in.kyle.ezskypeezlife.internal.obj.SkypeConversationInternal;
 import in.kyle.ezskypeezlife.internal.obj.SkypeLocalUserInternal;
 import in.kyle.ezskypeezlife.internal.obj.SkypeSession;
 import in.kyle.ezskypeezlife.internal.obj.SkypeUserInternal;
@@ -241,7 +241,7 @@ public class EzSkype {
      * @return - A populated SkypeConversation class
      * - If the api did not return anything, a conversation with all empty fields except the username will be returned
      */
-    public SkypeConversationInternal getSkypeConversation(String longId) {
+    public SkypeConversation getSkypeConversation(String longId) {
         return skypeCache.getConversationsCache().getSkypeConversation(longId);
     }
 }

@@ -121,7 +121,7 @@ public class WebConnectionBuilder {
         if (timeout != -1) {
             connection.setConnectTimeout(timeout);
         }
-        // connection.setRequestProperty("Accept","*/*");
+        
         headers.forEach(connection::addRequestProperty);
         
         if (request == HTTPRequest.POST || request == HTTPRequest.PUT) {
@@ -137,11 +137,15 @@ public class WebConnectionBuilder {
         try {
             inputStream = connection.getInputStream();
         } catch (Exception e) {
+            if (connection != null && connection.getErrorStream() != null) {
+                StringWriter writer = new StringWriter();
+                IOUtils.copy(connection.getErrorStream(), writer);
+                String string = writer.toString();
+                EzSkype.LOGGER.error("An error occurred while sending data to server\n  Data:\n" + string, e);
+            } else {
+                EzSkype.LOGGER.error("An error occurred while sending data to server\n  In = null, Connection: " + connection, e);
+            }
             
-            StringWriter writer = new StringWriter();
-            IOUtils.copy(connection.getErrorStream(), writer);
-            String string = writer.toString();
-            EzSkype.LOGGER.error("An error occurred while sending data to server\nData:\n" + string, e);
             throw e;
         }
         

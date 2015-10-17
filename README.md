@@ -1,5 +1,5 @@
 # EzSkype
-A Skype for Web compatability layer for Java
+A Skype for Web compatibility layer for Java
 
 ### Maven install
 
@@ -25,7 +25,7 @@ Add the dependency
     <dependency>
         <groupId>in.kyle</groupId>
         <artifactId>EzSkypeEzLife</artifactId>
-        <version>1.2.1-SNAPSHOT</version>
+        <version>1.2.2-SNAPSHOT</version>
     </dependency>
 </dependencies>
 ```

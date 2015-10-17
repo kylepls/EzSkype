@@ -28,7 +28,7 @@ public abstract class SkypePollMessageType {
                 ("messagetype").getAsString().toUpperCase());
         String content = resource.get("content").getAsString();
         
-        SkypeConversationInternal conversation = ezSkype.getSkypeConversation(longId);
+        SkypeConversationInternal conversation = (SkypeConversationInternal) ezSkype.getSkypeConversation(longId);
         
         // TODO fix params
         

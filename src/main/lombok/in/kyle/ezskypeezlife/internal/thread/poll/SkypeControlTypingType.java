@@ -20,7 +20,7 @@ public class SkypeControlTypingType extends SkypePollMessageType {
     @Override
     public void extract(EzSkype ezSkype, JsonObject jsonObject, JsonObject resource) throws Exception {
         String longId = getConversationLongId(resource);
-        SkypeConversationInternal conversation = ezSkype.getSkypeConversation(longId);
+        SkypeConversationInternal conversation = (SkypeConversationInternal) ezSkype.getSkypeConversation(longId);
         SkypeUserInternal from = getFromUser(ezSkype, resource);
         SkypeUserTypingEvent userTypingEvent = new SkypeUserTypingEvent(from, conversation);
         ezSkype.getEventManager().fire(userTypingEvent);

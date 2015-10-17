@@ -28,7 +28,10 @@ public abstract class SkypePacket {
     }
     
     public Object executeSync() throws Exception {
-        return run(getConnectionBuilder());
+        WebConnectionBuilder webConnectionBuilder = getConnectionBuilder();
+        EzSkype.LOGGER.debug("Opening connection: " + this.getClass().getCanonicalName() + " " + this + "\n    Connection: " + 
+                webConnectionBuilder);
+        return run(webConnectionBuilder);
     }
     
     private WebConnectionBuilder getConnectionBuilder() {
