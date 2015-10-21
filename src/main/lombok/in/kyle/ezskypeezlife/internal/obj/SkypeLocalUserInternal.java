@@ -2,10 +2,13 @@ package in.kyle.ezskypeezlife.internal.obj;
 
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.api.SkypeGender;
+import in.kyle.ezskypeezlife.api.obj.SkypeUser;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Kyle on 10/8/2015.
@@ -26,7 +29,8 @@ public class SkypeLocalUserInternal extends SkypeUserInternal {
     private Optional<String> phoneMobile;
     private Optional<String> phoneHome;
     private Optional<String> phoneOffice;
-    private Set<SkypeUserInternal> contacts;
+    private List<SkypeUserInternal> contacts;
+    private List<SkypeUserInternal> pendingContacts;
     
     public SkypeLocalUserInternal(String username, EzSkype ezSkype) {
         super(username, ezSkype);
@@ -42,6 +46,16 @@ public class SkypeLocalUserInternal extends SkypeUserInternal {
         this.phoneMobile = Optional.empty();
         this.phoneHome = Optional.empty();
         this.phoneOffice = Optional.empty();
-        this.contacts = new HashSet<>();
+        this.contacts = new ArrayList<>();
+        this.pendingContacts = new ArrayList<>();
+    }
+    
+    /**
+     * Gets a list of people waiting for contact acceptance
+     *
+     * @return - A list of pending contacts
+     */
+    public List<SkypeUser> getPendingContacts() {
+        return (List<SkypeUser>) (Object) pendingContacts;
     }
 }

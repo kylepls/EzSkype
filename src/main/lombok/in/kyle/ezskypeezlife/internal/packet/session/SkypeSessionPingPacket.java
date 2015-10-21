@@ -33,6 +33,6 @@ public class SkypeSessionPingPacket extends SkypePacket {
                 }
             }
         }
-        return true;
+        return null;
     }
 }

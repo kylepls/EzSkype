@@ -24,4 +24,9 @@ public class SkypeConversationInternalEmpty extends SkypeConversationInternal {
     public boolean isAdmin(SkypeUser skypeUser) {
         return false;
     }
+    
+    @Override
+    public String getJoinUrl() {
+        return "";
+    }
 }

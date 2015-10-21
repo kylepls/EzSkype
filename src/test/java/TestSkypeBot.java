@@ -1,6 +1,5 @@
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.api.SkypeCredentials;
-import in.kyle.ezskypeezlife.api.SkypeStatus;
 import in.kyle.ezskypeezlife.api.obj.SkypeMessage;
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationAddedToEvent;
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationCallEndedEvent;
@@ -40,8 +39,8 @@ public class TestSkypeBot {
         // Register all the events in this class
         // Events are denoted as methods that have 1 parameter that implements SkypeEvent
         ezSkype.getEventManager().registerEvents(this);
-        
-        System.out.println("Done");
+    
+        System.out.println("Complete");
     }
     
     // Called when a new message is received from Skype
@@ -64,10 +63,6 @@ public class TestSkypeBot {
             case "+contact":  // Adds the sender as a contact
                 e.getMessage().getSender().setContact(true);
                 e.reply("Sent");
-                break;
-            case "+status":
-                ezSkype.setStatus(SkypeStatus.ONLINE);
-                e.reply("Set status");
                 break;
         }
     }

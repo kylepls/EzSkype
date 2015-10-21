@@ -6,6 +6,7 @@ import in.kyle.ezskypeezlife.api.SkypeConversationType;
 import in.kyle.ezskypeezlife.api.SkypeUserRole;
 import in.kyle.ezskypeezlife.api.obj.SkypeUser;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationAddPacket;
+import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationGetJoinUrl;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationKickPacket;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationRolePacket;
 import lombok.Data;
@@ -71,5 +72,10 @@ public class SkypeGroupConversationInternal extends SkypeConversationInternal {
     @Override
     public boolean isAdmin(SkypeUser skypeUser) {
         return admins.contains(skypeUser);
+    }
+    
+    @Override
+    public String getJoinUrl() throws Exception {
+        return (String) new SkypeConversationGetJoinUrl(ezSkype, longId).executeSync();
     }
 }

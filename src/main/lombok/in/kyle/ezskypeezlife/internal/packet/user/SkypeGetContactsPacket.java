@@ -7,6 +7,7 @@ import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.internal.obj.SkypeUserInternal;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,13 +23,9 @@ public class SkypeGetContactsPacket extends SkypePacket {
     }
     
     @Override
-    protected List<SkypeUserInternal> run(WebConnectionBuilder webConnectionBuilder) throws Exception {
+    protected UserContacts run(WebConnectionBuilder webConnectionBuilder) throws Exception {
         String privateUsername = ezSkype.getLocalUser().getUsername();
         
-        // TODO ghetto pro
-        // Params:
-        //  $filter:type eq 'skype' or type eq 'msn' or type eq 'agent'
-        //  reason:default
         String append = "?$filter=type%20eq%20%27skype%27%20or%20type%20eq%20%27msn%27%20or%20type%20eq%20%27agent%27&reason=default";
         
         String url = "https://contacts.skype.com/contacts/v1/users/" + privateUsername + "/contacts" + append;
@@ -36,12 +33,9 @@ public class SkypeGetContactsPacket extends SkypePacket {
         webConnectionBuilder.setUrl(url);
         
         JsonObject response = EzSkype.GSON.fromJson(webConnectionBuilder.send(), JsonObject.class);
-        
         JsonArray contactsArray = response.getAsJsonArray("contacts");
-        
-        // TODO maybe save these to a account obj?
-        
         List<SkypeUserInternal> contacts = new ArrayList<>();
+        List<SkypeUserInternal> pending = new ArrayList<>();
         
         for (JsonElement contactElement : contactsArray) {
             JsonObject contactJson = contactElement.getAsJsonObject();
@@ -49,7 +43,8 @@ public class SkypeGetContactsPacket extends SkypePacket {
             String username = contactJson.get("id").getAsString();
             SkypeUserInternal skypeUser = new SkypeUserInternal(username, ezSkype);
             
-            skypeUser.contact(contactJson.get("authorized").getAsBoolean());
+            //skypeUser.contact(contactJson.get("authorized").getAsBoolean());
+            
             skypeUser.setBlocked(contactJson.get("blocked").getAsBoolean());
             
             if (contactJson.has("avatar_url")) {
@@ -70,7 +65,6 @@ public class SkypeGetContactsPacket extends SkypePacket {
             
             if (contactJson.has("locations")) {
                 JsonArray locations = contactJson.getAsJsonArray("locations");
-                // TODO wtf is this?
                 
                 if (locations.size() != 0) {
                     JsonObject location = locations.get(0).getAsJsonObject();
@@ -83,9 +77,19 @@ public class SkypeGetContactsPacket extends SkypePacket {
                 }
             }
             
-            contacts.add(skypeUser);
+            if (contactJson.get("authorized").getAsBoolean()) {
+                contacts.add(skypeUser);
+            } else {
+                pending.add(skypeUser);
+            }
         }
         
-        return contacts;
+        return new UserContacts(contacts, pending);
+    }
+    
+    @Data
+    public static class UserContacts {
+        private final List<SkypeUserInternal> contacts;
+        private final List<SkypeUserInternal> pending;
     }
 }

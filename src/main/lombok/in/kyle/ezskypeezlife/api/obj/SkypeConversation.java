@@ -70,4 +70,10 @@ public interface SkypeConversation {
      * @return - True if the user has admin privileges
      */
     boolean isAdmin(SkypeUser skypeUser);
+    
+    /**
+     * Gets the URL to join this conversation
+     * @return - The join URL
+     */
+    String getJoinUrl() throws Exception;
 }

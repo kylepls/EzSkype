@@ -143,8 +143,4 @@ public class SkypeUserInternal implements SkypeUser {
     public SkypeConversation getConversation() {
         return ezSkype.getSkypeConversation("8:" + username);
     }
-    
-    // TODO work on avatar urls
-    //return "https://api.skype.com/users/" + username + "/profile/avatar";
-    
 }

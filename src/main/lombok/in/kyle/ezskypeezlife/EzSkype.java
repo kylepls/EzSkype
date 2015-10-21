@@ -10,7 +10,7 @@ import in.kyle.ezskypeezlife.events.EventManager;
 import in.kyle.ezskypeezlife.internal.caches.SkypeCacheManager;
 import in.kyle.ezskypeezlife.internal.obj.SkypeLocalUserInternal;
 import in.kyle.ezskypeezlife.internal.obj.SkypeSession;
-import in.kyle.ezskypeezlife.internal.obj.SkypeUserInternal;
+import in.kyle.ezskypeezlife.internal.packet.auth.SkypeAuthEndpointFinalPacket;
 import in.kyle.ezskypeezlife.internal.packet.auth.SkypeAuthFinishPacket;
 import in.kyle.ezskypeezlife.internal.packet.auth.SkypeLoginInfoPacket;
 import in.kyle.ezskypeezlife.internal.packet.auth.SkypeLoginJavascriptParameters;
@@ -110,12 +110,8 @@ public class EzSkype {
         SkypeRegisterEndpointsPacket skypeRegisterEndpointsPacket = new SkypeRegisterEndpointsPacket(this, endpoints);
         skypeRegisterEndpointsPacket.executeSync();
         
-        /*
-        Thread.sleep(1750);
-    
         SkypeAuthEndpointFinalPacket finalPacket = new SkypeAuthEndpointFinalPacket(this);
         finalPacket.executeSync();
-         */
         
         active.set(true);
         
@@ -157,9 +153,10 @@ public class EzSkype {
     private void loadContacts() throws Exception {
         if (getSkypeCache().getUsersCache().getSkypeUsers().size() == 0) {
             SkypeGetContactsPacket skypeGetContactsPacket = new SkypeGetContactsPacket(this);
-            List<SkypeUserInternal> contacts = (List<SkypeUserInternal>) skypeGetContactsPacket.executeSync();
-            getSkypeCache().getUsersCache().getSkypeUsers().addAll(contacts);
-            localUser.getContacts().addAll(contacts);
+            SkypeGetContactsPacket.UserContacts contacts = (SkypeGetContactsPacket.UserContacts) skypeGetContactsPacket.executeSync();
+            getSkypeCache().getUsersCache().getSkypeUsers().addAll(contacts.getContacts());
+            localUser.getContacts().addAll(contacts.getContacts());
+            localUser.getPendingContacts().addAll(contacts.getPending());
         }
     }
     

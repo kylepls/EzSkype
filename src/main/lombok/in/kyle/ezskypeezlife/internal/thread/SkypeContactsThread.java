@@ -1,6 +1,7 @@
 package in.kyle.ezskypeezlife.internal.thread;
 
 import in.kyle.ezskypeezlife.EzSkype;
+import in.kyle.ezskypeezlife.api.obj.SkypeUser;
 import in.kyle.ezskypeezlife.events.user.SkypeContactAddedEvent;
 import in.kyle.ezskypeezlife.events.user.SkypeContactRemovedEvent;
 import in.kyle.ezskypeezlife.internal.obj.SkypeLocalUserInternal;
@@ -22,18 +23,22 @@ public class SkypeContactsThread extends Thread {
     private final EzSkype ezSkype;
     private SkypeLocalUserInternal localUserInternal;
     
+    public SkypeContactsThread(EzSkype ezSkype) {
+        super("Skype-Contact-Poller-" + ezSkype.getLocalUser().getUsername());
+        this.ezSkype = ezSkype;
+        this.localUserInternal = ezSkype.getLocalUser();
+    }
+    
     @Override
     public void run() {
-        Thread.currentThread().setName("Skype-Contact-Poller-" + ezSkype.getLocalUser().getUsername());
-        localUserInternal = ezSkype.getLocalUser();
-        
         while (ezSkype.getActive().get()) {
-            long start = System.currentTimeMillis();
             try {
                 SkypeGetContactsPacket contactsPacket = new SkypeGetContactsPacket(ezSkype);
                 
-                List<SkypeUserInternal> contactsNew = (List<SkypeUserInternal>) contactsPacket.executeSync();
+                SkypeGetContactsPacket.UserContacts contacts = (SkypeGetContactsPacket.UserContacts) contactsPacket.executeSync();
                 
+                
+                List<SkypeUserInternal> contactsNew = contacts.getContacts();
                 List<SkypeUserInternal> contactsOld = new ArrayList<>(ezSkype.getLocalUser().getContacts());
                 
                 List<SkypeUserInternal> temp = new ArrayList<>(contactsNew);
@@ -55,7 +60,7 @@ public class SkypeContactsThread extends Thread {
                 
                 temp.forEach(contact -> {
                     EzSkype.LOGGER.debug("Contact removed: " + contact);
-    
+                    
                     SkypeUserInternal realUser = (SkypeUserInternal) ezSkype.getSkypeUser(contact.getUsername());
                     realUser.contact(true);
                     
@@ -70,27 +75,29 @@ public class SkypeContactsThread extends Thread {
                 
                 for (SkypeUserInternal contactNew : contactsNew) {
                     SkypeUserInternal contactOld = contactsOld.get(contactsOld.indexOf(contactNew));
-        
+                    
                     if (contactOld.isContact() != contactNew.isContact()) {
                         EzSkype.LOGGER.debug("Contact status changed: " + contactOld.getUsername() + " " + contactOld.isContact() + " => " +
                                 contactNew.getUsername() + " " + contactNew.isContact());
                     }
-        
+                    
                     if (contactOld.isBlocked() != contactNew.isBlocked()) {
                         EzSkype.LOGGER.debug("Contact status changed: " + contactOld.getUsername() + " " + contactOld.isBlocked() + " => " +
                                 contactNew.getUsername() + " " + contactNew.isBlocked());
                     }
                 }
                 
+                // TODO this
+                List<SkypeUser> pendingContacts = localUserInternal.getPendingContacts();
+                pendingContacts.clear();
+                for (SkypeUserInternal skypeUserInternal : contacts.getPending()) {
+                    pendingContacts.add(ezSkype.getSkypeUser(skypeUserInternal.getUsername()));
+                }
             } catch (Exception e) {
                 EzSkype.LOGGER.error("Error while getting contacts", e);
             }
-            long time = System.currentTimeMillis()-start; // TODO i might not need this
             try {
-                long sleep = 5000-time;
-                if (sleep > 0) { // Make sure to refresh contacts every 5 seconds or as close as we can get to that
-                    Thread.sleep(sleep); 
-                }
+                Thread.sleep(5000);
             } catch (InterruptedException ignored) {
             }
         }

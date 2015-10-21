@@ -9,8 +9,6 @@ import lombok.Getter;
 /**
  * Skype permissions
  * 
- * TODO add descriptions for permissions
- * 
  */
 @AllArgsConstructor
 public enum SkypeConversationPermission {

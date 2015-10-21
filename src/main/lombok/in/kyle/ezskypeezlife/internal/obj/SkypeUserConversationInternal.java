@@ -37,4 +37,9 @@ public class SkypeUserConversationInternal extends SkypeConversationInternal {
     public boolean isAdmin(SkypeUser skypeUser) {
         return true;
     }
+    
+    @Override
+    public String getJoinUrl() throws Exception {
+        return "";
+    }
 }

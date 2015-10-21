@@ -23,7 +23,7 @@ public class SkypeTextType extends SkypePollMessageType {
             SkypeMessageReceivedEvent skypeMessageReceivedEvent = new SkypeMessageReceivedEvent(skypeMessageInternal);
             ezSkype.getEventManager().fire(skypeMessageReceivedEvent);
     
-            System.out.println("Got message: " + Thread.currentThread().getName());
+            //System.out.println("Got message: " + Thread.currentThread().getName());
             
         } else {
             // TODO message edit
