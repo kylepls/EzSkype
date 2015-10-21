@@ -1,5 +1,6 @@
 package in.kyle.ezskypeezlife.internal.packet.conversation;
 
+import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
@@ -16,6 +17,9 @@ public class SkypeConversationAddPacket extends SkypePacket {
     
     @Override
     protected Object run(WebConnectionBuilder webConnectionBuilder) throws Exception {
+        JsonObject data = new JsonObject();
+        data.addProperty("Role", "User");
+        webConnectionBuilder.setPostData(data.toString());
         webConnectionBuilder.send();
         return null;
     }

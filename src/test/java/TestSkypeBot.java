@@ -1,7 +1,17 @@
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.api.SkypeCredentials;
+import in.kyle.ezskypeezlife.api.SkypeStatus;
 import in.kyle.ezskypeezlife.api.obj.SkypeMessage;
-import in.kyle.ezskypeezlife.events.conversation.*;
+import in.kyle.ezskypeezlife.events.conversation.SkypeConversationAddedToEvent;
+import in.kyle.ezskypeezlife.events.conversation.SkypeConversationCallEndedEvent;
+import in.kyle.ezskypeezlife.events.conversation.SkypeConversationCallStartedEvent;
+import in.kyle.ezskypeezlife.events.conversation.SkypeConversationKickedFromEvent;
+import in.kyle.ezskypeezlife.events.conversation.SkypeConversationPictureChangeEvent;
+import in.kyle.ezskypeezlife.events.conversation.SkypeConversationUpdateTopicEvent;
+import in.kyle.ezskypeezlife.events.conversation.SkypeConversationUserJoinEvent;
+import in.kyle.ezskypeezlife.events.conversation.SkypeConversationUserLeaveEvent;
+import in.kyle.ezskypeezlife.events.conversation.SkypeConversationUserRoleUpdate;
+import in.kyle.ezskypeezlife.events.conversation.SkypeMessageReceivedEvent;
 import in.kyle.ezskypeezlife.events.user.SkypeContactAddedEvent;
 
 import java.io.File;
@@ -11,6 +21,8 @@ import java.io.FileReader;
  * Created by Kyle on 10/8/2015.
  */
 public class TestSkypeBot {
+    
+    private EzSkype ezSkype;
     
     public static void main(String[] args) throws Exception {
         new TestSkypeBot().startTest();
@@ -23,11 +35,13 @@ public class TestSkypeBot {
         LoginCredentials loginCredentials = EzSkype.GSON.fromJson(new FileReader(new File("login.json")), LoginCredentials.class);
         
         // Enter the Skype login info here and login
-        EzSkype ezSkype = new EzSkype(new SkypeCredentials(loginCredentials.getUser(), loginCredentials.getPass())).login();
+        ezSkype = new EzSkype(new SkypeCredentials(loginCredentials.getUser(), loginCredentials.getPass())).login();
         
         // Register all the events in this class
         // Events are denoted as methods that have 1 parameter that implements SkypeEvent
         ezSkype.getEventManager().registerEvents(this);
+        
+        System.out.println("Done");
     }
     
     // Called when a new message is received from Skype
@@ -50,6 +64,10 @@ public class TestSkypeBot {
             case "+contact":  // Adds the sender as a contact
                 e.getMessage().getSender().setContact(true);
                 e.reply("Sent");
+                break;
+            case "+status":
+                ezSkype.setStatus(SkypeStatus.ONLINE);
+                e.reply("Set status");
                 break;
         }
     }

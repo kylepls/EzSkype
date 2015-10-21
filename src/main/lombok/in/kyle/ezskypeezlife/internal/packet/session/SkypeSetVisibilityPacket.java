@@ -24,8 +24,8 @@ public class SkypeSetVisibilityPacket extends SkypePacket {
     protected Object run(WebConnectionBuilder webConnectionBuilder) throws Exception {
         JsonObject data = new JsonObject();
         data.addProperty("status", StringUtils.capitalize(status.name().toLowerCase()));
-        webConnectionBuilder.addHeader("Content-Length", Integer.toString(data.toString().length()));
         webConnectionBuilder.setPostData(data.toString());
+        webConnectionBuilder.setContentType(WebConnectionBuilder.ContentType.JSON);
         webConnectionBuilder.send();
         return null;
     }

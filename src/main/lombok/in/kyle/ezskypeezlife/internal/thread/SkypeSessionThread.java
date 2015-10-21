@@ -2,6 +2,7 @@ package in.kyle.ezskypeezlife.internal.thread;
 
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.internal.packet.session.SkypeActivePacket;
+import in.kyle.ezskypeezlife.internal.packet.session.SkypeSessionExpiredException;
 import in.kyle.ezskypeezlife.internal.packet.session.SkypeSessionPingPacket;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -23,8 +24,25 @@ public class SkypeSessionThread extends Thread {
     @Override
     public void run() {
         while (active.get()) {
-            new SkypeActivePacket(ezSkype).executeAsync();
-            new SkypeSessionPingPacket(ezSkype).executeAsync();
+            try {
+                new SkypeSessionPingPacket(ezSkype).executeSync();
+                new SkypeActivePacket(ezSkype).executeSync();
+            } catch (SkypeSessionExpiredException exception) {
+    
+                try {
+                    EzSkype.LOGGER.info("Skype session expired, logging in again...");
+                    ezSkype.login();
+                } catch (Exception e) {
+                    EzSkype.LOGGER.info("Could not login to Skype again, shutting down");
+                    e.printStackTrace();
+                    active.set(false);
+                    return;
+                }
+            } catch (Exception e) {
+                EzSkype.LOGGER.info("Error sending session ping packet");
+                e.printStackTrace();
+            }
+    
             try {
                 Thread.sleep(10000);
             } catch (InterruptedException ignored) {

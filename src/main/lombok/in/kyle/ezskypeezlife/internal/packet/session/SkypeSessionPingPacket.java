@@ -4,6 +4,9 @@ import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+
 /**
  * Created by Kyle on 10/8/2015.
  */
@@ -20,7 +23,16 @@ public class SkypeSessionPingPacket extends SkypePacket {
         session = session.substring(1, session.length() - 1);
         webConnectionBuilder.setPostData("sessionId=" + session);
         
-        webConnectionBuilder.send();
-        return null;
+        try {
+            webConnectionBuilder.send();
+        } catch (IOException exception) {
+            HttpURLConnection connection = webConnectionBuilder.getConnection();
+            if (connection != null) {
+                if (connection.getResponseCode() == 403) {
+                    throw new SkypeSessionExpiredException();
+                }
+            }
+        }
+        return true;
     }
 }

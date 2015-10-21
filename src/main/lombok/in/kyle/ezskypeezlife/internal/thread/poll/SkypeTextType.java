@@ -22,8 +22,11 @@ public class SkypeTextType extends SkypePollMessageType {
             SkypeMessageInternal skypeMessageInternal = getMessageFromJson(ezSkype, jsonObject);
             SkypeMessageReceivedEvent skypeMessageReceivedEvent = new SkypeMessageReceivedEvent(skypeMessageInternal);
             ezSkype.getEventManager().fire(skypeMessageReceivedEvent);
-        } else { // message edit
+    
+            System.out.println("Got message: " + Thread.currentThread().getName());
             
+        } else {
+            // TODO message edit
         }
     }
 }

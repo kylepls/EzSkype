@@ -27,8 +27,8 @@ public abstract class SkypeConversationInternal implements SkypeConversation {
     protected SkypeConversationType conversationType;
     protected List<SkypeUserInternal> users;
     
-    // TODO add messages and whatnot
     public SkypeMessageInternal sendMessage(String message) {
+        EzSkype.LOGGER.debug("Sending message \"{}\" to {}", message, longId);
         String id = Long.toString(System.currentTimeMillis());
         new SkypeSendMessagePacket(ezSkype, longId, message, id).executeAsync();
         return new SkypeMessageInternal(ezSkype, id, ezSkype.getLocalUser(), false, SkypeMessageType.RICHTEXT, message, this);

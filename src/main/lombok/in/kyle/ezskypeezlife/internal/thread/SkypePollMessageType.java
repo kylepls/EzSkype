@@ -30,8 +30,6 @@ public abstract class SkypePollMessageType {
         
         SkypeConversationInternal conversation = (SkypeConversationInternal) ezSkype.getSkypeConversation(longId);
         
-        // TODO fix params
-        
         return new SkypeMessageInternal(ezSkype, id, sender, false, messageType, content, conversation);
     }
     

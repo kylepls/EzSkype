@@ -83,18 +83,5 @@ public class SkypePollerThread extends Thread {
                 }
             }
         }
-        
-        
-        return;
-        
-        /*
-        // TODO remove
-        String resourceType = resource.get("resourceType").getAsString();
-        if (resourceType.equals("ConversationUpdate") || resourceType.equals("UserPresence") || resourceType.equals("EndpointPresence")) {
-            return;
-        }
-        
-        System.err.println("Invalid message: " + jsonObject);
-         */
     }
 }
