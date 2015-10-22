@@ -15,11 +15,10 @@ public abstract class SkypePollMessageType {
     
     public abstract void extract(EzSkype ezSkype, JsonObject jsonObject, JsonObject resource) throws Exception;
     
-    protected SkypeMessageInternal getMessageFromJson(EzSkype ezSkype, JsonObject jsonMessage) throws Exception {
+    protected SkypeMessageInternal getMessageFromJson(EzSkype ezSkype, JsonObject jsonMessage) {
         JsonObject resource = jsonMessage.getAsJsonObject("resource");
         
         String id = resource.get("clientmessageid").getAsString();
-        String conversationLink = resource.get("conversationLink").getAsString();
         String longId = getConversationLongId(resource);
         
         SkypeUserInternal sender = getFromUser(ezSkype, resource);

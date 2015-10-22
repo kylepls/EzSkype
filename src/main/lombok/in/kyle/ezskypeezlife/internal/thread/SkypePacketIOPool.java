@@ -12,7 +12,7 @@ import java.util.concurrent.Future;
  */
 public class SkypePacketIOPool {
     
-    private ExecutorService threadPool;
+    private final ExecutorService threadPool;
     
     public SkypePacketIOPool(int threads) {
         threadPool = Executors.newFixedThreadPool(threads);

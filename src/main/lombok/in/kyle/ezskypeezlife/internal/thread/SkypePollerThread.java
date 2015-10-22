@@ -5,7 +5,15 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.internal.packet.pull.SkypePullPacket;
-import in.kyle.ezskypeezlife.internal.thread.poll.*;
+import in.kyle.ezskypeezlife.internal.thread.poll.SkypeControlClearTypingType;
+import in.kyle.ezskypeezlife.internal.thread.poll.SkypeControlTypingType;
+import in.kyle.ezskypeezlife.internal.thread.poll.SkypeEventCallType;
+import in.kyle.ezskypeezlife.internal.thread.poll.SkypeTextType;
+import in.kyle.ezskypeezlife.internal.thread.poll.SkypeThreadActivityAddMemberType;
+import in.kyle.ezskypeezlife.internal.thread.poll.SkypeThreadActivityDeleteMemberType;
+import in.kyle.ezskypeezlife.internal.thread.poll.SkypeThreadActivityPictureUpdateType;
+import in.kyle.ezskypeezlife.internal.thread.poll.SkypeThreadActivityRoleUpdateType;
+import in.kyle.ezskypeezlife.internal.thread.poll.SkypeThreadActivityTopicUpdate;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,9 +26,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class SkypePollerThread extends Thread {
     
-    private EzSkype ezSkype;
-    private AtomicBoolean active;
-    private List<SkypePollMessageType> messageTypes;
+    private final EzSkype ezSkype;
+    private final AtomicBoolean active;
+    private final List<SkypePollMessageType> messageTypes;
     
     public SkypePollerThread(EzSkype ezSkype) {
         super("Skype-Poller-Thread-" + ezSkype.getLocalUser().getUsername());

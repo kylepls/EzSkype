@@ -12,6 +12,7 @@ import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Kyle on 10/9/2015.
@@ -90,9 +91,8 @@ public class SkypeContactsThread extends Thread {
                 // TODO this
                 List<SkypeUser> pendingContacts = localUserInternal.getPendingContacts();
                 pendingContacts.clear();
-                for (SkypeUserInternal skypeUserInternal : contacts.getPending()) {
-                    pendingContacts.add(ezSkype.getSkypeUser(skypeUserInternal.getUsername()));
-                }
+                pendingContacts.addAll(contacts.getPending().stream().map(skypeUserInternal -> ezSkype.getSkypeUser(skypeUserInternal
+                        .getUsername())).collect(Collectors.toList()));
             } catch (Exception e) {
                 EzSkype.LOGGER.error("Error while getting contacts", e);
             }

@@ -7,21 +7,20 @@ import in.kyle.ezskypeezlife.internal.obj.SkypeConversationInternalEmpty;
 import in.kyle.ezskypeezlife.internal.obj.SkypeUserConversationInternal;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeGetGroupConversationPacket;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Kyle on 10/7/2015.
  */
 public class SkypeConversationsCache {
     
-    private List<SkypeConversationInternal> skypeConversations;
-    private EzSkype ezSkype;
+    private final Map<String, SkypeConversationInternal> skypeConversations;
+    private final EzSkype ezSkype;
     
     public SkypeConversationsCache(EzSkype ezSkype) {
         this.ezSkype = ezSkype;
-        this.skypeConversations = new ArrayList<>();
+        this.skypeConversations = new HashMap<>();
     }
     
     /**
@@ -31,8 +30,9 @@ public class SkypeConversationsCache {
      * @return - The Skype user
      */
     public SkypeConversationInternal getSkypeConversation(String longId) {
-        Optional<SkypeConversationInternal> convoOptional = skypeConversations.stream().filter(skypeConvo -> skypeConvo.getLongId().equals(longId)).findAny();
-        if (!convoOptional.isPresent()) {
+        if (skypeConversations.containsKey(longId)) {
+            return skypeConversations.get(longId);
+        } else {
             SkypeConversationType conversationType = SkypeConversationType.fromLongId(longId);
             if (conversationType == SkypeConversationType.USER) {
                 return new SkypeUserConversationInternal(ezSkype, longId, "Other " +
@@ -42,19 +42,17 @@ public class SkypeConversationsCache {
     
                 try {
                     SkypeConversationInternal skypeConversationInternal = (SkypeConversationInternal) getUserInfoPacket.executeSync();
-                    skypeConversations.add(skypeConversationInternal);
+                    skypeConversations.put(skypeConversationInternal.getLongId(), skypeConversationInternal);
                     return skypeConversationInternal;
                 } catch (Exception e) {
                     e.printStackTrace();
                     return new SkypeConversationInternalEmpty(ezSkype, longId);
                 }
             }
-        } else {
-            return convoOptional.get();
         }
     }
     
-    public List<SkypeConversationInternal> getSkypeConversations() {
+    public Map<String, SkypeConversationInternal> getSkypeConversations() {
         return skypeConversations;
     }
 }

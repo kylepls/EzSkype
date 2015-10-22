@@ -21,20 +21,18 @@ import java.io.FileReader;
  */
 public class TestSkypeBot {
     
-    private EzSkype ezSkype;
-    
     public static void main(String[] args) throws Exception {
         new TestSkypeBot().startTest();
     }
     
-    public void startTest() throws Exception {
+    private void startTest() throws Exception {
         System.out.println("Logging in");
         
         // Load credentials from a file 'login.json'
         LoginCredentials loginCredentials = EzSkype.GSON.fromJson(new FileReader(new File("login.json")), LoginCredentials.class);
         
         // Enter the Skype login info here and login
-        ezSkype = new EzSkype(new SkypeCredentials(loginCredentials.getUser(), loginCredentials.getPass())).login();
+        EzSkype ezSkype = new EzSkype(new SkypeCredentials(loginCredentials.getUser(), loginCredentials.getPass())).login();
         
         // Register all the events in this class
         // Events are denoted as methods that have 1 parameter that implements SkypeEvent

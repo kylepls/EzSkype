@@ -1,5 +1,4 @@
 /EzSkypeEzLife.iml
-/credentials.json
 /login.json
 /.idea
 # Created by .ignore support plugin (hsz.mobi)
@@ -8,8 +7,5 @@
 
 # IntelliJ project files
 /pom.xml
-/settings.xml
 /dependency-reduced-pom.xml
-out
-gen
 /skype.log

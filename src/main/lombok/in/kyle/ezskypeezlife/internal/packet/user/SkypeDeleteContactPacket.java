@@ -12,9 +12,6 @@ import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
  */
 public class SkypeDeleteContactPacket extends SkypePacket {
     
-    private String username;
-    private JsonObject response;
-    
     /**
      * @param username - The username of the user you would like to remove
      *                 <p>
@@ -22,12 +19,10 @@ public class SkypeDeleteContactPacket extends SkypePacket {
      */
     public SkypeDeleteContactPacket(EzSkype ezSkype, String username) {
         super("https://api.skype.com/users/self/contacts/" + username, WebConnectionBuilder.HTTPRequest.DELETE, ezSkype, true);
-        this.username = username;
     }
     
     @Override
     protected JsonObject run(WebConnectionBuilder webConnectionBuilder) throws Exception {
-        response = EzSkype.GSON.fromJson(webConnectionBuilder.send(), JsonObject.class);
-        return response;
+        return EzSkype.GSON.fromJson(webConnectionBuilder.send(), JsonObject.class);
     }
 }

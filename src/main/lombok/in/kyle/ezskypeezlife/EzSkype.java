@@ -55,7 +55,7 @@ public class EzSkype {
     @Getter
     private SkypeLocalUserInternal localUser;
     
-    private SkypeCredentials skypeCredentials;
+    private final SkypeCredentials skypeCredentials;
     private boolean startedThreads;
     
     /**
@@ -136,7 +136,7 @@ public class EzSkype {
     
     /**
      * // TODO this needs to be looked at
-     *
+     * @param skypeStatus - The online status
      * @throws Exception
      */
     public void setStatus(SkypeStatus skypeStatus) {

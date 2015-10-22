@@ -10,8 +10,8 @@ import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
  */
 public class SkypeEditMessagePacket extends SkypePacket {
     
-    private String content;
-    private String messageId;
+    private final String content;
+    private final String messageId;
     
     public SkypeEditMessagePacket(EzSkype ezSkype, String conversationLongId, String content, String messageId) {
         super("https://client-s.gateway.messenger.live.com/v1/users/ME/conversations/" + conversationLongId + "/messages", 

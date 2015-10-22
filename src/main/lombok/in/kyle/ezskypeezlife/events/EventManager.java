@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class EventManager {
     
-    private List<HoldListener> listeners;
+    private final List<HoldListener> listeners;
     
     public EventManager() {
         this.listeners = new ArrayList();

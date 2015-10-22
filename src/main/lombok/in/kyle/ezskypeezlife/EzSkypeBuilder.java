@@ -12,9 +12,9 @@ import java.util.List;
 public class EzSkypeBuilder {
     
     
-    private SkypeCredentials credentials;
+    private final SkypeCredentials credentials;
     //private List<SkypeFeature> skypeFeatures;
-    private List<SkypeEndpoint> skypeEndpoints;
+    private final List<SkypeEndpoint> skypeEndpoints;
     
     /**
      * Constructs a new EzSkype builder, this will build a Skype instance from scratch

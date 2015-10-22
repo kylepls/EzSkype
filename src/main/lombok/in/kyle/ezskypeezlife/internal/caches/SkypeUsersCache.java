@@ -5,21 +5,20 @@ import in.kyle.ezskypeezlife.api.obj.SkypeUser;
 import in.kyle.ezskypeezlife.internal.obj.SkypeUserInternal;
 import in.kyle.ezskypeezlife.internal.packet.user.SkypeGetUserInfoPacket;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Kyle on 10/7/2015.
  */
 public class SkypeUsersCache {
     
-    private Set<SkypeUserInternal> skypeUsers;
-    private EzSkype ezSkype;
+    private final Map<String, SkypeUserInternal> skypeUsers;
+    private final EzSkype ezSkype;
     
     public SkypeUsersCache(EzSkype ezSkype) {
         this.ezSkype = ezSkype;
-        this.skypeUsers = new HashSet<>();
+        this.skypeUsers = new HashMap<>();
     }
     
     /**
@@ -32,16 +31,14 @@ public class SkypeUsersCache {
         if (username.startsWith("8:")) {
             username = username.substring(2);
         }
-        final String finalUsername = username;
-        Optional<SkypeUserInternal> any = skypeUsers.stream().filter(skypeUserInternal -> skypeUserInternal.getUsername().equals
-                (finalUsername)).findAny();
-        if (any.isPresent()) {
-            return any.get();
+    
+        if (skypeUsers.containsKey(username)) {
+            return skypeUsers.get(username);
         } else {
             SkypeGetUserInfoPacket getUserInfoPacket = new SkypeGetUserInfoPacket(ezSkype, username);
             try {
                 SkypeUserInternal skypeUserInternal = (SkypeUserInternal) getUserInfoPacket.executeSync();
-                this.skypeUsers.add(skypeUserInternal);
+                this.skypeUsers.put(skypeUserInternal.getUsername(), skypeUserInternal);
                 return skypeUserInternal;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -52,6 +49,7 @@ public class SkypeUsersCache {
     
     /**
      * Creates a new Skype user that is unloaded
+     *
      * @param username - The username to get
      * @return - The unloaded Skype user
      */
@@ -60,10 +58,8 @@ public class SkypeUsersCache {
             username = username.substring(2);
         }
         final String finalUsername = username;
-        Optional<SkypeUserInternal> any = skypeUsers.stream().filter(skypeUserInternal -> skypeUserInternal.getUsername().equals
-                (finalUsername)).findAny();
-        if (any.isPresent()) {
-            return any.get();
+        if (skypeUsers.containsKey(username)) {
+            return skypeUsers.get(username);
         } else {
             return new SkypeUserInternal(username, ezSkype);
         }
@@ -71,10 +67,11 @@ public class SkypeUsersCache {
     
     /**
      * Fully load a user if not already fully loaded
+     *
      * @param skypeUser - The user to load
      * @return - The loaded Skype user
      */
-    public SkypeUser fullyLoadUser(SkypeUserInternal skypeUser) {
+    public SkypeUser fullyLoadUser(SkypeUserInternal skypeUser) { // TODO fix
         SkypeGetUserInfoPacket getUserInfoPacket = new SkypeGetUserInfoPacket(ezSkype, skypeUser.getUsername());
         SkypeUserInternal skypeUserNew;
         try {
@@ -96,7 +93,7 @@ public class SkypeUsersCache {
         return skypeUser;
     }
     
-    public Set<SkypeUserInternal> getSkypeUsers() {
+    public Map<String, SkypeUserInternal> getSkypeUsers() {
         return skypeUsers;
     }
 }

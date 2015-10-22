@@ -9,7 +9,12 @@ import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -180,6 +185,6 @@ public class WebConnectionBuilder {
      * Sets the request type of an HTTP request
      */
     public enum HTTPRequest {
-        GET, POST, PUT, DELETE;
+        GET, POST, PUT, DELETE
     }
 }

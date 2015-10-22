@@ -24,12 +24,9 @@ import java.util.stream.Collectors;
  */
 public class SkypeGetGroupConversationPacket extends SkypePacket {
     
-    private final String longId;
-    
     public SkypeGetGroupConversationPacket(EzSkype ezSkype, String longId) {
         super("https://client-s.gateway.messenger.live.com/v1/threads/" + longId + "?view=msnp24Equivalent", WebConnectionBuilder
                 .HTTPRequest.GET, ezSkype, true);
-        this.longId = longId;
     }
     
     @Override

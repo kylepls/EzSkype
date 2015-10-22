@@ -12,7 +12,7 @@ import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
  */
 public class SkypeAcceptContactRequestMultiPacket extends SkypePacket {
     
-    private String username;
+    private final String username;
     
     public SkypeAcceptContactRequestMultiPacket(EzSkype ezSkype, String username) {
         super("https://api.skype.com/users/self/contacts/auth-request/" + username + "/accept", WebConnectionBuilder.HTTPRequest.PUT, 

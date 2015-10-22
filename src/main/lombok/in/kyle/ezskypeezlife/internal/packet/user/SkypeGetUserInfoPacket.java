@@ -15,7 +15,7 @@ import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
  */
 public class SkypeGetUserInfoPacket extends SkypePacket {
     
-    private String username;
+    private final String username;
     
     /**
      * @param username - The username of the user you want to get info about
@@ -36,10 +36,8 @@ public class SkypeGetUserInfoPacket extends SkypePacket {
         JsonArray jsonArray = EzSkype.GSON.fromJson(data, JsonArray.class);
         
         JsonObject user = jsonArray.get(0).getAsJsonObject();
-        
-        SkypeUserInternal skypeUserInternal = new SkypeUserInternal(username, ezSkype, user.get("firstname"), user.get("lastname"), user.get
+    
+        return new SkypeUserInternal(username, ezSkype, user.get("firstname"), user.get("lastname"), user.get
                 ("avatarUrl"), user.get("mood"), user.get("richMood"), user.get("displayname"), user.get("country"), user.get("city"));
-        
-        return skypeUserInternal;
     }
 }

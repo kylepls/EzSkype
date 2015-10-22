@@ -12,8 +12,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class SkypeSessionThread extends Thread {
     
-    private EzSkype ezSkype;
-    private AtomicBoolean active;
+    private final EzSkype ezSkype;
+    private final AtomicBoolean active;
     
     public SkypeSessionThread(EzSkype ezSkype) {
         super("Skype-Session-Thread-" + ezSkype.getLocalUser().getUsername());

@@ -6,5 +6,5 @@ package in.kyle.ezskypeezlife.api;
  * Role of a user in a conversation
  */
 public enum SkypeUserRole {
-    USER, ADMIN;
+    USER, ADMIN
 }
