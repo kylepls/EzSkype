@@ -46,6 +46,7 @@ public class SkypeAcceptContactRequestMultiPacket extends SkypePacket {
         
         webConnectionBuilder.setUrl("https://client-s.gateway.messenger.live.com/v1/users/ME/contacts/");
         webConnectionBuilder.setPostData(data.toString());
+        webConnectionBuilder.setContentType(WebConnectionBuilder.ContentType.JSON);
         webConnectionBuilder.setRequest(WebConnectionBuilder.HTTPRequest.POST);
         webConnectionBuilder.send();
         
