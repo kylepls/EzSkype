@@ -42,4 +42,9 @@ public class SkypeUserConversationInternal extends SkypeConversationInternal {
     public String getJoinUrl() throws Exception {
         return "";
     }
+    
+    @Override
+    public void changeTopic(String topic) {
+        throw new IllegalStateException("Cannot set topic for user conversation");
+    }
 }

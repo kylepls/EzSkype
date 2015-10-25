@@ -30,6 +30,7 @@ public class WebConnectionBuilder {
     // TODO make actual builder
     
     @Setter
+    @Getter
     private String url;
     @Setter
     private HTTPRequest request;
@@ -43,6 +44,8 @@ public class WebConnectionBuilder {
     private int timeout = -1;
     @Getter
     private HttpURLConnection connection;
+    @Setter
+    private boolean showErrors = true;
     
     public WebConnectionBuilder() {
         this.request = HTTPRequest.GET;
@@ -123,6 +126,7 @@ public class WebConnectionBuilder {
         connection.setRequestProperty("Content-Type", contentType.getValue());
         connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64)");
         connection.setRequestMethod(request.name());
+    
         if (timeout != -1) {
             connection.setConnectTimeout(timeout);
         }
@@ -142,15 +146,16 @@ public class WebConnectionBuilder {
         try {
             inputStream = connection.getInputStream();
         } catch (Exception e) {
-            if (connection != null && connection.getErrorStream() != null) {
-                StringWriter writer = new StringWriter();
-                IOUtils.copy(connection.getErrorStream(), writer);
-                String string = writer.toString();
-                EzSkype.LOGGER.error("An error occurred while sending data to server\n  Data:\n" + string, e);
-            } else {
-                EzSkype.LOGGER.error("An error occurred while sending data to server\n  In = null, Connection: " + connection, e);
+            if (showErrors) {
+                if (connection != null && connection.getErrorStream() != null) {
+                    StringWriter writer = new StringWriter();
+                    IOUtils.copy(connection.getErrorStream(), writer);
+                    String string = writer.toString();
+                    EzSkype.LOGGER.error("An error occurred while sending data to server\n  Data:\n" + string, e);
+                } else {
+                    EzSkype.LOGGER.error("An error occurred while sending data to server\n  In = null, Connection: " + connection, e);
+                }
             }
-            
             throw e;
         }
         
@@ -185,6 +190,6 @@ public class WebConnectionBuilder {
      * Sets the request type of an HTTP request
      */
     public enum HTTPRequest {
-        GET, POST, PUT, DELETE
+        GET, POST, PUT, DELETE, OPTIONS
     }
 }

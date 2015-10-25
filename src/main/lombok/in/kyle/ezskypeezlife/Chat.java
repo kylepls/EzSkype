@@ -9,7 +9,7 @@ import lombok.experimental.UtilityClass;
  */
 @UtilityClass
 public class Chat {
-    
+
     /**
      * Makes the string into a link
      *
@@ -17,27 +17,27 @@ public class Chat {
      * @param url  - The destination URL
      * @return - The formatted string
      */
-    public static String link(String text, String url) {
+    public static String link(final String text, final String url) {
         return "<a href=\"" + url + "\">" + text + "</a>";
     }
-    
+
     /**
      * Makes the text blink for the client
      *
      * @param text - The text to format
      * @return - The formatted string
      */
-    public static String blink(String text) {
+    public static String blink(final String text) {
         return "<blink>" + text + "<blink>";
     }
-    
+
     /**
      * Underline text
      *
      * @param text - The text to format
      * @return - The formatted string
      */
-    public static String underline(String text) {
+    public static String underline(final String text) {
         return "<u>" + text + "</u>";
     }
     
@@ -47,7 +47,7 @@ public class Chat {
      * @param text - The text to format
      * @return - The formatted string
      */
-    public static String italic(String text) {
+    public static String italic(final String text) {
         return "<i>" + text + "</i>";
     }
     
@@ -57,7 +57,7 @@ public class Chat {
      * @param text - The text to format
      * @return - The formatted string
      */
-    public static String strikeThrough(String text) {
+    public static String strikeThrough(final String text) {
         return "<s>" + text + "</s>";
     }
     
@@ -68,7 +68,7 @@ public class Chat {
      * @param colorHex - The hex color (eg: #000000)
      * @return - The formatted string
      */
-    public static String color(String text, String colorHex) {
+    public static String color(final String text, final String colorHex) {
         return "<font color=\"" + colorHex + "\">" + text + "</font>";
     }
     

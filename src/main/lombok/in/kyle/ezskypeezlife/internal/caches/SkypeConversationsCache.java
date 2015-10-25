@@ -6,6 +6,7 @@ import in.kyle.ezskypeezlife.internal.obj.SkypeConversationInternal;
 import in.kyle.ezskypeezlife.internal.obj.SkypeConversationInternalEmpty;
 import in.kyle.ezskypeezlife.internal.obj.SkypeUserConversationInternal;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeGetGroupConversationPacket;
+import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +16,7 @@ import java.util.Map;
  */
 public class SkypeConversationsCache {
     
+    @Getter
     private final Map<String, SkypeConversationInternal> skypeConversations;
     private final EzSkype ezSkype;
     
@@ -38,10 +40,11 @@ public class SkypeConversationsCache {
                 return new SkypeUserConversationInternal(ezSkype, longId, "Other " +
                         "user", true, false, "");
             } else {
-                SkypeGetGroupConversationPacket getUserInfoPacket = new SkypeGetGroupConversationPacket(ezSkype, longId);
+                SkypeGetGroupConversationPacket skypeGetGroupConversationPacket = new SkypeGetGroupConversationPacket(ezSkype, longId);
     
                 try {
-                    SkypeConversationInternal skypeConversationInternal = (SkypeConversationInternal) getUserInfoPacket.executeSync();
+                    SkypeConversationInternal skypeConversationInternal = (SkypeConversationInternal) skypeGetGroupConversationPacket
+                            .executeSync();
                     skypeConversations.put(skypeConversationInternal.getLongId(), skypeConversationInternal);
                     return skypeConversationInternal;
                 } catch (Exception e) {

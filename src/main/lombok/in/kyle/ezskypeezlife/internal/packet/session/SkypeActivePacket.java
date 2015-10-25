@@ -5,6 +5,7 @@ import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
+import java.io.FileNotFoundException;
 import java.net.URLEncoder;
 
 /**
@@ -27,8 +28,12 @@ public class SkypeActivePacket extends SkypePacket {
         
         webConnectionBuilder.setContentType(WebConnectionBuilder.ContentType.JSON);
         webConnectionBuilder.setPostData(data.toString());
-        
-        webConnectionBuilder.send();
+    
+        try {
+            webConnectionBuilder.send();
+        } catch (FileNotFoundException e) {
+            throw new SkypeSessionExpiredException();
+        }
         return null;
     }
 }

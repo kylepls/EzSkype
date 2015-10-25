@@ -8,4 +8,5 @@
 # IntelliJ project files
 /pom.xml
 /dependency-reduced-pom.xml
+/src/test/java/random
 /skype.log

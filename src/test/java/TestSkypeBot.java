@@ -1,5 +1,6 @@
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.api.SkypeCredentials;
+import in.kyle.ezskypeezlife.api.SkypeUserRole;
 import in.kyle.ezskypeezlife.api.obj.SkypeMessage;
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationAddedToEvent;
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationCallEndedEvent;
@@ -12,6 +13,7 @@ import in.kyle.ezskypeezlife.events.conversation.SkypeConversationUserLeaveEvent
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationUserRoleUpdate;
 import in.kyle.ezskypeezlife.events.conversation.SkypeMessageReceivedEvent;
 import in.kyle.ezskypeezlife.events.user.SkypeContactAddedEvent;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
 import java.io.FileReader;
@@ -45,8 +47,9 @@ public class TestSkypeBot {
     public void onMessage(SkypeMessageReceivedEvent e) {
         String message = e.getMessage().getMessage(); // Get the message content
         System.out.println("Got message: " + e.getMessage().getSender().getUsername() + " - " + message);
-        
-        switch (message) {
+        String[] args = message.split(" ");
+    
+        switch (args[0]) {
             case "+ping":  // Replies to a conversation with the message pong
                 e.reply("Pong!");
                 break;
@@ -61,6 +64,24 @@ public class TestSkypeBot {
             case "+contact":  // Adds the sender as a contact
                 e.getMessage().getSender().setContact(true);
                 e.reply("Sent");
+                break;
+            case "+topic": // Sets the conversation topic
+                if (args.length > 0) {
+                    String topic = StringUtils.join(args, ' ', 1, args.length);
+                    e.getMessage().getConversation().changeTopic(topic);
+                    e.reply("Topic set to '" + topic + "'");
+                } else {
+                    e.reply("Usage: +topic topic");
+                }
+                break;
+            case "+role": // Set your role
+                if (args.length > 0) {
+                    SkypeUserRole role = SkypeUserRole.valueOf(args[1].toUpperCase());
+                    e.getMessage().getConversation().setUserRole(e.getMessage().getSender(), role);
+                    e.reply("Set " + e.getMessage().getSender().getUsername() + " to " + role.name());
+                } else {
+                    e.reply("Usage: +role user|master");
+                }
                 break;
         }
     }
@@ -83,7 +104,9 @@ public class TestSkypeBot {
     // Called when a user changes role in a conversation
     public void onRole(SkypeConversationUserRoleUpdate e) {
         e.getConversation().sendMessage("Role update: " + e.getUser().getUsername() + "\nFrom: " + e.getOldRole() +
-                "\nTo: " + e.getNewRole());
+                "\nTo: " + e.getNewRole() + "\n" + "Is " + e.getUser().getUsername() + " admin: " + e.getConversation().isAdmin(e.getUser
+                ()));
+    
     }
     
     // Called when a call is initiated by a user

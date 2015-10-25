@@ -20,7 +20,6 @@ public class SkypeConversationRolePacket extends SkypePacket {
         this.skypeUserRole = skypeUserRole;
     }
     
-    // TODO
     @Override
     protected Object run(WebConnectionBuilder webConnectionBuilder) throws Exception {
         JsonObject data = new JsonObject();

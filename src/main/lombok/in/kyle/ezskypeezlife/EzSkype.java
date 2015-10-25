@@ -8,6 +8,13 @@ import in.kyle.ezskypeezlife.api.obj.SkypeConversation;
 import in.kyle.ezskypeezlife.api.obj.SkypeUser;
 import in.kyle.ezskypeezlife.events.EventManager;
 import in.kyle.ezskypeezlife.internal.caches.SkypeCacheManager;
+import in.kyle.ezskypeezlife.internal.guest.SkypeGuestGetConversationId;
+import in.kyle.ezskypeezlife.internal.guest.SkypeGuestGetSessionIdPacket;
+import in.kyle.ezskypeezlife.internal.guest.SkypeGuestGetSpaceIdPacket;
+import in.kyle.ezskypeezlife.internal.guest.SkypeGuestGetTokenPacket;
+import in.kyle.ezskypeezlife.internal.guest.SkypeGuestTempSession;
+import in.kyle.ezskypeezlife.internal.guest.SkypeWebClient;
+import in.kyle.ezskypeezlife.internal.obj.SkypeConversationInternal;
 import in.kyle.ezskypeezlife.internal.obj.SkypeLocalUserInternal;
 import in.kyle.ezskypeezlife.internal.obj.SkypeSession;
 import in.kyle.ezskypeezlife.internal.packet.auth.SkypeAuthEndpointFinalPacket;
@@ -18,6 +25,7 @@ import in.kyle.ezskypeezlife.internal.packet.auth.SkypeLoginPacket;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationAddPacket;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationJoinPacket;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationJoinUrlIdPacket;
+import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeGetConversationsPacket;
 import in.kyle.ezskypeezlife.internal.packet.pull.SkypeEndpoint;
 import in.kyle.ezskypeezlife.internal.packet.pull.SkypeRegisterEndpointsPacket;
 import in.kyle.ezskypeezlife.internal.packet.session.SkypeSetVisibilityPacket;
@@ -31,7 +39,7 @@ import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -95,14 +103,18 @@ public class EzSkype {
     public EzSkype login(SkypeEndpoint[] endpoints) throws Exception {
         LOGGER.info("Logging into Skype, user: " + skypeCredentials.getUsername());
         // Get login params
+    
         SkypeLoginInfoPacket loginInfoPacket = new SkypeLoginInfoPacket(this);
         SkypeLoginJavascriptParameters parameters = (SkypeLoginJavascriptParameters) loginInfoPacket.executeSync();
-        
         
         // Get x-token
         SkypeLoginPacket skypeLoginPacket = new SkypeLoginPacket(this, skypeCredentials, parameters);
         String xToken = (String) skypeLoginPacket.executeSync();
-        
+        finishLogin(endpoints, xToken);
+        return this;
+    }
+    
+    private void finishLogin(SkypeEndpoint[] endpoints, String xToken) throws Exception {
         // Get reg token and location
         SkypeAuthFinishPacket skypeAuthFinishPacket = new SkypeAuthFinishPacket(this, xToken);
         skypeSession = (SkypeSession) skypeAuthFinishPacket.executeSync();
@@ -117,16 +129,26 @@ public class EzSkype {
         
         EzSkype.LOGGER.info("Loading profile");
         loadLocalProfile();
-        EzSkype.LOGGER.info("Loading contacts");
-        loadContacts();
+        
+        if (!skypeCredentials.isGuestAccount()) {
+            EzSkype.LOGGER.info("Loading contacts");
+            loadContacts();
+        }
+        
         EzSkype.LOGGER.info("Starting pollers");
         startThreads();
         //setOnline();
-        return this;
+    }
+    
+    private void loadConversations() throws Exception {
+        SkypeGetConversationsPacket skypeGetConversationsPacket = new SkypeGetConversationsPacket(this);
+        Map<String, SkypeConversationInternal> conversations = (Map<String, SkypeConversationInternal>) skypeGetConversationsPacket
+                .executeSync();
+        skypeCache.getConversationsCache().getSkypeConversations().putAll(conversations);
     }
     
     /**
-     * Logs into Skype with all endpoints
+     * Logs into Skype with all endpoints and a non guest account
      *
      * @throws Exception
      */
@@ -135,9 +157,41 @@ public class EzSkype {
     }
     
     /**
+     * Logs into a guest account
+     *
+     * @param url - The URL to join, eg: https://join.skype.com/xmky6Uk4TVfs
+     */
+    public EzSkype loginGuest(SkypeEndpoint[] endpoints, String url) throws Exception {
+        String shortId = url.substring(url.lastIndexOf("/") + 1);
+    
+        SkypeWebClient webClient = new SkypeWebClient();
+    
+        SkypeGuestGetSessionIdPacket skypeGuestGetSessionIdPacket = new SkypeGuestGetSessionIdPacket(webClient, url);
+        SkypeGuestTempSession tempSession = (SkypeGuestTempSession) skypeGuestGetSessionIdPacket.run();
+        //System.out.println("Session: " + tempSession);
+    
+        SkypeGuestGetSpaceIdPacket skypeGuestGetSpaceIdPacket = new SkypeGuestGetSpaceIdPacket(webClient, shortId);
+        String spaceId = (String) skypeGuestGetSpaceIdPacket.run();
+        //System.out.println("SpaceId: " + spaceId);
+    
+        SkypeGuestGetConversationId skypeGuestGetConversationId = new SkypeGuestGetConversationId(webClient, spaceId);
+        String threadId = (String) skypeGuestGetConversationId.run();
+        //System.out.println("ThreadId: " + threadId);
+    
+        SkypeGuestGetTokenPacket skypeGuestGetTokenPacket = new SkypeGuestGetTokenPacket(webClient, tempSession, skypeCredentials
+                .getUsername(), spaceId, threadId, shortId);
+        String token = (String) skypeGuestGetTokenPacket.run();
+        //System.out.println("Token: " + token);
+        finishLogin(SkypeEndpoint.values(), token);
+        EzSkype.LOGGER.info("Loading conversations"); // TODO
+        loadConversations();
+        return this;
+    }
+    
+    /**
      * // TODO this needs to be looked at
+     *
      * @param skypeStatus - The online status
-     * @throws Exception
      */
     public void setStatus(SkypeStatus skypeStatus) {
         EzSkype.LOGGER.info("Setting online");
@@ -154,8 +208,8 @@ public class EzSkype {
         if (getSkypeCache().getUsersCache().getSkypeUsers().size() == 0) {
             SkypeGetContactsPacket skypeGetContactsPacket = new SkypeGetContactsPacket(this);
             SkypeGetContactsPacket.UserContacts contacts = (SkypeGetContactsPacket.UserContacts) skypeGetContactsPacket.executeSync();
-            getSkypeCache().getUsersCache().getSkypeUsers().addAll(contacts.getContacts());
-            localUser.getContacts().addAll(contacts.getContacts());
+            getSkypeCache().getUsersCache().getSkypeUsers().putAll(contacts.getContacts());
+            localUser.getContacts().addAll(contacts.getContacts().values());
             localUser.getPendingContacts().addAll(contacts.getPending());
         }
     }
@@ -181,8 +235,10 @@ public class EzSkype {
             skypePoller.start();
             SkypeSessionThread sessionThread = new SkypeSessionThread(this);
             sessionThread.start();
-            SkypeContactsThread contactsThread = new SkypeContactsThread(this);
-            contactsThread.start();
+            if (!skypeCredentials.isGuestAccount()) {
+                SkypeContactsThread contactsThread = new SkypeContactsThread(this);
+                contactsThread.start();
+            }
             startedThreads = true;
         }
     }
@@ -190,6 +246,7 @@ public class EzSkype {
     /**
      * Joins a Skype conversation from the URL provided by Skype
      * This should look like https://join.skype.com/zzZzzZZzZZzZ
+     *
      * @param skypeConversationUrl - The Skype conversation to join
      * @return - The Skype conversation joined
      * @throws Exception - If the conversation was unable to be joined
@@ -231,9 +288,10 @@ public class EzSkype {
     
     /**
      * Gets all the users Skype conversations
+     *
      * @return - The users Skype conversations
      */
-    public List<SkypeConversation> getConversations() {
-        return (List<SkypeConversation>) (Object) skypeCache.getConversationsCache().getSkypeConversations();
+    public Map<String, SkypeConversation> getConversations() {
+        return (Map<String, SkypeConversation>) (Object) skypeCache.getConversationsCache().getSkypeConversations();
     }
 }

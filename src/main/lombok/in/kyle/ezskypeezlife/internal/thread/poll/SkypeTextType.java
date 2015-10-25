@@ -18,13 +18,10 @@ public class SkypeTextType extends SkypePollMessageType {
     
     @Override
     public void extract(EzSkype ezSkype, JsonObject jsonObject, JsonObject resource) throws Exception {
-        if (resource.has("clientmessageid")) { // new message
+        if (resource.has("clientmessageid")) {
             SkypeMessageInternal skypeMessageInternal = getMessageFromJson(ezSkype, jsonObject);
             SkypeMessageReceivedEvent skypeMessageReceivedEvent = new SkypeMessageReceivedEvent(skypeMessageInternal);
             ezSkype.getEventManager().fire(skypeMessageReceivedEvent);
-    
-            //System.out.println("Got message: " + Thread.currentThread().getName());
-            
         } else {
             // TODO message edit
         }

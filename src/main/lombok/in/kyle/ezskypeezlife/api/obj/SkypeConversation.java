@@ -1,8 +1,10 @@
 package in.kyle.ezskypeezlife.api.obj;
 
 import in.kyle.ezskypeezlife.api.SkypeConversationType;
+import in.kyle.ezskypeezlife.api.SkypeUserRole;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Kyle on 10/10/2015.
@@ -72,8 +74,37 @@ public interface SkypeConversation {
     boolean isAdmin(SkypeUser skypeUser);
     
     /**
+     * Gets a Skype user from this conversation
+     * @param username - The username of the user
+     * @return - The user
+     */
+    Optional<SkypeUser> getUser(String username);
+    
+    /**
+     * Adds a user to the conversation
+     *
+     * @param skypeUser - The user to add
+     */
+    void addUser(SkypeUser skypeUser);
+    
+    /**
      * Gets the URL to join this conversation
      * @return - The join URL
      */
     String getJoinUrl() throws Exception;
+    
+    /**
+     * Sets the conversation topic
+     *
+     * @param topic - The conversation topic
+     */
+    void changeTopic(String topic);
+    
+    /**
+     * Sets a users role
+     *
+     * @param skypeUser - The user to set role
+     * @param role      - The role of the user
+     */
+    void setUserRole(SkypeUser skypeUser, SkypeUserRole role);
 }

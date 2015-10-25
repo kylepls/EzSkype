@@ -37,9 +37,9 @@ public class SkypeContactsThread extends Thread {
                 SkypeGetContactsPacket contactsPacket = new SkypeGetContactsPacket(ezSkype);
                 
                 SkypeGetContactsPacket.UserContacts contacts = (SkypeGetContactsPacket.UserContacts) contactsPacket.executeSync();
-                
-                
-                List<SkypeUserInternal> contactsNew = contacts.getContacts();
+    
+    
+                List<SkypeUserInternal> contactsNew = new ArrayList<>(contacts.getContacts().values());
                 List<SkypeUserInternal> contactsOld = new ArrayList<>(ezSkype.getLocalUser().getContacts());
                 
                 List<SkypeUserInternal> temp = new ArrayList<>(contactsNew);

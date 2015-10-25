@@ -18,4 +18,17 @@ public class SkypeCredentials {
     public SkypeCredentials(String username, String password) {
         this(username, password.toCharArray());
     }
+    
+    /**
+     * This constructor is used for guest accounts only
+     *
+     * @param username - The username
+     */
+    public SkypeCredentials(String username) {
+        this(username, new char[0]);
+    }
+    
+    public boolean isGuestAccount() {
+        return password.length == 0;
+    }
 }
