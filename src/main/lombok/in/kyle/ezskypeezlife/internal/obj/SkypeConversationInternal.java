@@ -24,17 +24,18 @@ import java.util.Optional;
 public abstract class SkypeConversationInternal implements SkypeConversation {
     
     protected EzSkype ezSkype;
-    protected String longId;
+    protected final SkypeMessageCacheInternal messageCache = new SkypeMessageCacheInternal();
+    protected final String longId;
     protected String topic;
     protected boolean historyEnabled;
     protected boolean joinEnabled;
     protected String pictureUrl;
-    protected SkypeConversationType conversationType;
+    protected final SkypeConversationType conversationType;
     protected List<SkypeUserInternal> users;
     
     public SkypeMessageInternal sendMessage(String message) {
         EzSkype.LOGGER.debug("Sending message \"{}\" to {}", message, longId);
-        String id = Long.toString(System.currentTimeMillis());
+        String id = Long.toString(System.currentTimeMillis()); // TODO maybe
         new SkypeSendMessagePacket(ezSkype, longId, message, id).executeAsync();
         return new SkypeMessageInternal(ezSkype, id, ezSkype.getLocalUser(), false, SkypeMessageType.RICHTEXT, message, this);
     }

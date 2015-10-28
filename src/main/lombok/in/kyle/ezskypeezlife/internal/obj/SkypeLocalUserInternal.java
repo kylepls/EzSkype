@@ -7,7 +7,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -29,7 +31,7 @@ public class SkypeLocalUserInternal extends SkypeUserInternal {
     private Optional<String> phoneMobile;
     private Optional<String> phoneHome;
     private Optional<String> phoneOffice;
-    private List<SkypeUserInternal> contacts;
+    private Map<String, SkypeUserInternal> contacts;
     private List<SkypeUserInternal> pendingContacts;
     
     public SkypeLocalUserInternal(String username, EzSkype ezSkype) {
@@ -46,7 +48,7 @@ public class SkypeLocalUserInternal extends SkypeUserInternal {
         this.phoneMobile = Optional.empty();
         this.phoneHome = Optional.empty();
         this.phoneOffice = Optional.empty();
-        this.contacts = new ArrayList<>();
+        this.contacts = new HashMap<>();
         this.pendingContacts = new ArrayList<>();
     }
     

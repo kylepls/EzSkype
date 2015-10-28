@@ -34,10 +34,14 @@ public class SkypeGetUserInfoPacket extends SkypePacket {
         
         
         JsonArray jsonArray = EzSkype.GSON.fromJson(data, JsonArray.class);
-        
-        JsonObject user = jsonArray.get(0).getAsJsonObject();
     
-        return new SkypeUserInternal(username, ezSkype, user.get("firstname"), user.get("lastname"), user.get
-                ("avatarUrl"), user.get("mood"), user.get("richMood"), user.get("displayname"), user.get("country"), user.get("city"));
+        if (jsonArray.size() != 0) {
+            JsonObject user = jsonArray.get(0).getAsJsonObject();
+        
+            return new SkypeUserInternal(username, ezSkype, user.get("firstname"), user.get("lastname"), user.get("avatarUrl"), user.get
+                    ("mood"), user.get("richMood"), user.get("displayname"), user.get("country"), user.get("city"));
+        } else {
+            throw new IllegalStateException("(This is a temporary error) Bad response: " + data);
+        }
     }
 }

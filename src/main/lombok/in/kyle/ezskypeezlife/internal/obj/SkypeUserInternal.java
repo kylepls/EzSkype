@@ -1,16 +1,18 @@
 package in.kyle.ezskypeezlife.internal.obj;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.api.obj.SkypeConversation;
 import in.kyle.ezskypeezlife.api.obj.SkypeMessage;
 import in.kyle.ezskypeezlife.api.obj.SkypeUser;
-import in.kyle.ezskypeezlife.internal.packet.user.SkypeAcceptContactRequestMultiPacket;
-import in.kyle.ezskypeezlife.internal.packet.user.SkypeDeleteContactPacket;
-import in.kyle.ezskypeezlife.internal.packet.user.SkypeSendContactRequestPacket;
+import in.kyle.ezskypeezlife.internal.packet.user.contact.SkypeContactRemovePacket;
+import in.kyle.ezskypeezlife.internal.packet.user.contact.SkypeContactRequestAcceptPacket;
+import in.kyle.ezskypeezlife.internal.packet.user.contact.SkypeContactRequestSendPacket;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.Optional;
 
@@ -19,7 +21,8 @@ import java.util.Optional;
  */
 @AllArgsConstructor
 @Data
-@EqualsAndHashCode(of = "username")
+@ToString(of = {"username", "contact"})
+@EqualsAndHashCode(of = {"username", "contact"})
 public class SkypeUserInternal implements SkypeUser {
     
     private String username;
@@ -113,11 +116,20 @@ public class SkypeUserInternal implements SkypeUser {
             //new SkypeAcceptContactRequestMultiPacket(ezSkype, username, "Add me as a contact").executeAsync();
             
             // send request
-            new SkypeSendContactRequestPacket(ezSkype, username, "Add me as a contact").executeAsync();
-            new SkypeAcceptContactRequestMultiPacket(ezSkype, username).executeAsync();
+            // new SkypeSendContactRequestPacket(ezSkype, username, "Add me as a contact").executeAsync();
+            //new SkypeAcceptContactRequestMultiPacket(ezSkype, this).executeAsync();
+    
+            new SkypeContactRequestSendPacket(ezSkype, this).executeAsync();
+            new SkypeContactRequestAcceptPacket(ezSkype, username).executeAsync();
+    
             //ezSkype.getLocalUser().getContacts().add(this);
         } else {
-            new SkypeDeleteContactPacket(ezSkype, username).executeAsync();
+            try {
+                JsonObject o = (JsonObject) new SkypeContactRemovePacket(ezSkype, username).executeSync();
+                System.out.println("Response: " + o);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             ezSkype.getLocalUser().getContacts().remove(this);
         }
     }

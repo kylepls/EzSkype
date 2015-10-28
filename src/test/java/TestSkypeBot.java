@@ -1,6 +1,7 @@
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.api.SkypeCredentials;
 import in.kyle.ezskypeezlife.api.SkypeUserRole;
+import in.kyle.ezskypeezlife.api.obj.SkypeConversation;
 import in.kyle.ezskypeezlife.api.obj.SkypeMessage;
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationAddedToEvent;
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationCallEndedEvent;
@@ -11,9 +12,11 @@ import in.kyle.ezskypeezlife.events.conversation.SkypeConversationUpdateTopicEve
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationUserJoinEvent;
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationUserLeaveEvent;
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationUserRoleUpdate;
+import in.kyle.ezskypeezlife.events.conversation.SkypeMessageEditedEvent;
 import in.kyle.ezskypeezlife.events.conversation.SkypeMessageReceivedEvent;
 import in.kyle.ezskypeezlife.events.user.SkypeContactAddedEvent;
 import org.apache.commons.lang.StringUtils;
+import org.jsoup.Jsoup;
 
 import java.io.File;
 import java.io.FileReader;
@@ -22,6 +25,8 @@ import java.io.FileReader;
  * Created by Kyle on 10/8/2015.
  */
 public class TestSkypeBot {
+    
+    private EzSkype ezSkype;
     
     public static void main(String[] args) throws Exception {
         new TestSkypeBot().startTest();
@@ -34,7 +39,7 @@ public class TestSkypeBot {
         LoginCredentials loginCredentials = EzSkype.GSON.fromJson(new FileReader(new File("login.json")), LoginCredentials.class);
         
         // Enter the Skype login info here and login
-        EzSkype ezSkype = new EzSkype(new SkypeCredentials(loginCredentials.getUser(), loginCredentials.getPass())).login();
+        ezSkype = new EzSkype(new SkypeCredentials(loginCredentials.getUser(), loginCredentials.getPass())).login();
         
         // Register all the events in this class
         // Events are denoted as methods that have 1 parameter that implements SkypeEvent
@@ -44,43 +49,62 @@ public class TestSkypeBot {
     }
     
     // Called when a new message is received from Skype
-    public void onMessage(SkypeMessageReceivedEvent e) {
-        String message = e.getMessage().getMessage(); // Get the message content
-        System.out.println("Got message: " + e.getMessage().getSender().getUsername() + " - " + message);
+    public void onMessage(SkypeMessageReceivedEvent event) {
+        String message = event.getMessage().getMessage(); // Get the message content
+        System.out.println("Got message: " + event.getMessage().getSender().getUsername() + " - " + message);
         String[] args = message.split(" ");
     
         switch (args[0]) {
             case "+ping":  // Replies to a conversation with the message pong
-                e.reply("Pong!");
+                event.reply("Pong!");
                 break;
             case "+me":  // Prints out user information
-                e.reply("You: " + e.getMessage().getSender());
+                event.reply("You: " + event.getMessage().getSender());
                 break;
             case "+edit":  // Tests message editing
-                SkypeMessage sendMessage = e.reply("Testing message " + "editing...");
+                SkypeMessage sendMessage = event.reply("Testing message " + "editing...");
                 sendMessage.edit("Message editing works!");
-                e.reply("Message edit test complete");
-                break;
-            case "+contact":  // Adds the sender as a contact
-                e.getMessage().getSender().setContact(true);
-                e.reply("Sent");
+                event.reply("Message edit test complete");
                 break;
             case "+topic": // Sets the conversation topic
                 if (args.length > 0) {
                     String topic = StringUtils.join(args, ' ', 1, args.length);
-                    e.getMessage().getConversation().changeTopic(topic);
-                    e.reply("Topic set to '" + topic + "'");
+                    event.getMessage().getConversation().changeTopic(topic);
+                    event.reply("Topic set to '" + topic + "'");
                 } else {
-                    e.reply("Usage: +topic topic");
+                    event.reply("Usage: +topic topic");
                 }
                 break;
             case "+role": // Set your role
                 if (args.length > 0) {
                     SkypeUserRole role = SkypeUserRole.valueOf(args[1].toUpperCase());
-                    e.getMessage().getConversation().setUserRole(e.getMessage().getSender(), role);
-                    e.reply("Set " + e.getMessage().getSender().getUsername() + " to " + role.name());
+                    event.getMessage().getConversation().setUserRole(event.getMessage().getSender(), role);
+                    event.reply("Set " + event.getMessage().getSender().getUsername() + " to " + role.name());
                 } else {
-                    e.reply("Usage: +role user|master");
+                    event.reply("Usage: +role user|master");
+                }
+                break;
+            case "+join": // Join a convo
+                if (args.length > 0) {
+                    String url = Jsoup.parse(StringUtils.join(args, ' ', 1, args.length)).text();
+                    try {
+                        SkypeConversation conversation = ezSkype.joinSkypeConversation(url);
+                        event.reply("Joined: " + conversation.getTopic());
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                        event.reply("Error: " + event.getMessage());
+                    }
+                } else {
+                    event.reply("Usage: +join url");
+                }
+                break;
+            case "+contact": // Set user as a contact
+                if (args.length > 0) {
+                    boolean contact = Boolean.parseBoolean(args[1]);
+                    event.getMessage().getSender().setContact(contact);
+                    event.reply("Set contact: " + contact);
+                } else {
+                    event.reply("Usage: +contact boolean");
                 }
                 break;
         }
@@ -104,8 +128,7 @@ public class TestSkypeBot {
     // Called when a user changes role in a conversation
     public void onRole(SkypeConversationUserRoleUpdate e) {
         e.getConversation().sendMessage("Role update: " + e.getUser().getUsername() + "\nFrom: " + e.getOldRole() +
-                "\nTo: " + e.getNewRole() + "\n" + "Is " + e.getUser().getUsername() + " admin: " + e.getConversation().isAdmin(e.getUser
-                ()));
+                "\nTo: " + e.getNewRole() + "\nIs admin: " + e.getConversation().isAdmin(e.getUser()));
     
     }
     
@@ -136,6 +159,12 @@ public class TestSkypeBot {
     
     // Called when a contact is added
     public void onContact(SkypeContactAddedEvent e) {
-        System.out.println("Got contact " + e.getUser().getUsername());
+        System.out.println(e.getUser().getUsername() + " added me");
+        e.getUser().setContact(true);
+        e.getUser().sendMessage("Thanks for adding me as a contact!");
+    }
+    
+    public void onEdit(SkypeMessageEditedEvent e) {
+        e.getSkypeMessage().getConversation().sendMessage("Message edited\n From: " + e.getContentOld() + "\n To: " + e.getContentNew());
     }
 }

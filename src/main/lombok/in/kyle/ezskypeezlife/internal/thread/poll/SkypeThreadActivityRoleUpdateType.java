@@ -27,8 +27,8 @@ public class SkypeThreadActivityRoleUpdateType extends SkypePollMessageType {
         
         String content = resource.get("content").getAsString();
         Document cont = Jsoup.parse(content);
-        
-        String user = cont.getElementsByTag("target").text().substring(2);
+    
+        String user = cont.getElementsByTag("id").text().substring(2);
         SkypeUserInternal skypeUser = (SkypeUserInternal) ezSkype.getSkypeUser(user);
         
         SkypeUserRole oldRole = conversation.getSkypeRole(skypeUser);

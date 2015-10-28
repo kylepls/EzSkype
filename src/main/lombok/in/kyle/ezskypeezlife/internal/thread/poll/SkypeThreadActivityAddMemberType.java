@@ -9,6 +9,8 @@ import in.kyle.ezskypeezlife.internal.obj.SkypeUserInternal;
 import in.kyle.ezskypeezlife.internal.thread.SkypePollMessageType;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 /**
  * Created by Kyle on 10/9/2015.
@@ -27,20 +29,24 @@ public class SkypeThreadActivityAddMemberType extends SkypePollMessageType {
         
         String content = resource.get("content").getAsString();
         Document cont = Jsoup.parse(content);
+    
+        Elements elements = cont.getElementsByTag("target");
+    
+        for (Element element : elements) {
+            String user = element.text().substring(2);
+            SkypeUserInternal skypeUser = (SkypeUserInternal) ezSkype.getSkypeUser(user);
         
-        String user = cont.getElementsByTag("target").text().substring(2);
-        SkypeUserInternal skypeUser = (SkypeUserInternal) ezSkype.getSkypeUser(user);
+            conversation.getUsers().add(skypeUser);
         
-        conversation.getUsers().add(skypeUser);
-        
-        if (skypeUser.getUsername().equals(ezSkype.getLocalUser().getUsername())) {
-            String username = cont.getElementsByTag("initiator").text();
-            SkypeUserInternal initiator = (SkypeUserInternal) ezSkype.getSkypeUser(username);
-            SkypeConversationAddedToEvent addedToEvent = new SkypeConversationAddedToEvent(skypeUser, conversation, initiator);
-            ezSkype.getEventManager().fire(addedToEvent);
-        } else {
-            SkypeConversationUserJoinEvent joinEvent = new SkypeConversationUserJoinEvent(conversation, skypeUser);
-            ezSkype.getEventManager().fire(joinEvent);
+            if (skypeUser.getUsername().equals(ezSkype.getLocalUser().getUsername())) {
+                String initiatorUsername = cont.getElementsByTag("initiator").text();
+                SkypeUserInternal initiator = (SkypeUserInternal) ezSkype.getSkypeUser(initiatorUsername);
+                SkypeConversationAddedToEvent addedToEvent = new SkypeConversationAddedToEvent(skypeUser, conversation, initiator);
+                ezSkype.getEventManager().fire(addedToEvent);
+            } else {
+                SkypeConversationUserJoinEvent joinEvent = new SkypeConversationUserJoinEvent(conversation, skypeUser);
+                ezSkype.getEventManager().fire(joinEvent);
+            }
         }
     }
 }

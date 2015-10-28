@@ -42,17 +42,22 @@ public class EventManager {
     }
     
     public void fire(SkypeEvent event) {
-        listeners.stream().filter(l->l.getEvent().equals(event.getClass())).forEach(holdListener -> {
-            try {
-                holdListener.getMethod().invoke(holdListener.getObject(), event);
-            } catch (Exception e) {
-                EzSkype.LOGGER.error("Error while firing event: " + holdListener, e);
+        HoldListener holdListener;
+        for (int i = 0; i < listeners.size(); i++) {
+            holdListener = listeners.get(i);
+            if (holdListener.getEvent().equals(event.getClass())) {
+                try {
+                    holdListener.getMethod().invoke(holdListener.getObject(), event);
+                } catch (Exception e) {
+                    EzSkype.LOGGER.error("Error while firing event: " + holdListener, e);
+                }
             }
-        });
+        }
     }
     
     @Data
     private static class HoldListener {
+    
         private final Object object;
         private final Method method;
         private final Class event;

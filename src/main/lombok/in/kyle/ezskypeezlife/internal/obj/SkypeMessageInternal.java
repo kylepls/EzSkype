@@ -27,4 +27,8 @@ public class SkypeMessageInternal implements SkypeMessage {
         this.message = message;
         this.edited = true;
     }
+    
+    public String toString() {
+        return message;
+    }
 }

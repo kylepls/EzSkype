@@ -209,7 +209,7 @@ public class EzSkype {
             SkypeGetContactsPacket skypeGetContactsPacket = new SkypeGetContactsPacket(this);
             SkypeGetContactsPacket.UserContacts contacts = (SkypeGetContactsPacket.UserContacts) skypeGetContactsPacket.executeSync();
             getSkypeCache().getUsersCache().getSkypeUsers().putAll(contacts.getContacts());
-            localUser.getContacts().addAll(contacts.getContacts().values());
+            localUser.getContacts().putAll(contacts.getContacts());
             localUser.getPendingContacts().addAll(contacts.getPending());
         }
     }
