@@ -12,16 +12,9 @@ import lombok.Getter;
  * Created by Kyle on 10/8/2015.
  */
 @Data
-@AllArgsConstructor
 public class SkypeConversationUserRoleUpdate implements SkypeEvent {
-    
-    @Getter
     private final SkypeConversation conversation;
-    @Getter
     private final SkypeUser user;
-    @Getter
     private final SkypeUserRole oldRole;
-    @Getter
     private final SkypeUserRole newRole;
-    
 }

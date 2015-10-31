@@ -8,20 +8,11 @@ import in.kyle.ezskypeezlife.api.obj.SkypeConversation;
 import in.kyle.ezskypeezlife.api.obj.SkypeUser;
 import in.kyle.ezskypeezlife.events.EventManager;
 import in.kyle.ezskypeezlife.internal.caches.SkypeCacheManager;
-import in.kyle.ezskypeezlife.internal.guest.SkypeGuestGetConversationId;
-import in.kyle.ezskypeezlife.internal.guest.SkypeGuestGetSessionIdPacket;
-import in.kyle.ezskypeezlife.internal.guest.SkypeGuestGetSpaceIdPacket;
-import in.kyle.ezskypeezlife.internal.guest.SkypeGuestGetTokenPacket;
-import in.kyle.ezskypeezlife.internal.guest.SkypeGuestTempSession;
-import in.kyle.ezskypeezlife.internal.guest.SkypeWebClient;
+import in.kyle.ezskypeezlife.internal.guest.*;
 import in.kyle.ezskypeezlife.internal.obj.SkypeConversationInternal;
 import in.kyle.ezskypeezlife.internal.obj.SkypeLocalUserInternal;
 import in.kyle.ezskypeezlife.internal.obj.SkypeSession;
-import in.kyle.ezskypeezlife.internal.packet.auth.SkypeAuthEndpointFinalPacket;
-import in.kyle.ezskypeezlife.internal.packet.auth.SkypeAuthFinishPacket;
-import in.kyle.ezskypeezlife.internal.packet.auth.SkypeLoginInfoPacket;
-import in.kyle.ezskypeezlife.internal.packet.auth.SkypeLoginJavascriptParameters;
-import in.kyle.ezskypeezlife.internal.packet.auth.SkypeLoginPacket;
+import in.kyle.ezskypeezlife.internal.packet.auth.*;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationAddPacket;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationJoinPacket;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationJoinUrlIdPacket;
@@ -42,9 +33,6 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-/**
- * Created by Kyle on 10/5/2015.
- */
 public class EzSkype {
     
     public static final Gson GSON = new Gson();
@@ -162,22 +150,26 @@ public class EzSkype {
      * @param url - The URL to join, eg: https://join.skype.com/xmky6Uk4TVfs
      */
     public EzSkype loginGuest(SkypeEndpoint[] endpoints, String url) throws Exception {
+        return loginGuest(url);
+    }
+
+    public EzSkype loginGuest(String url) throws Exception {
         String shortId = url.substring(url.lastIndexOf("/") + 1);
-    
+
         SkypeWebClient webClient = new SkypeWebClient();
-    
+
         SkypeGuestGetSessionIdPacket skypeGuestGetSessionIdPacket = new SkypeGuestGetSessionIdPacket(webClient, url);
         SkypeGuestTempSession tempSession = (SkypeGuestTempSession) skypeGuestGetSessionIdPacket.run();
         //System.out.println("Session: " + tempSession);
-    
+
         SkypeGuestGetSpaceIdPacket skypeGuestGetSpaceIdPacket = new SkypeGuestGetSpaceIdPacket(webClient, shortId);
         String spaceId = (String) skypeGuestGetSpaceIdPacket.run();
         //System.out.println("SpaceId: " + spaceId);
-    
+
         SkypeGuestGetConversationId skypeGuestGetConversationId = new SkypeGuestGetConversationId(webClient, spaceId);
         String threadId = (String) skypeGuestGetConversationId.run();
         //System.out.println("ThreadId: " + threadId);
-    
+
         SkypeGuestGetTokenPacket skypeGuestGetTokenPacket = new SkypeGuestGetTokenPacket(webClient, tempSession, skypeCredentials
                 .getUsername(), spaceId, threadId, shortId);
         String token = (String) skypeGuestGetTokenPacket.run();

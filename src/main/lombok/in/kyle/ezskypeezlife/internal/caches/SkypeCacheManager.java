@@ -9,9 +9,9 @@ import lombok.Getter;
 public class SkypeCacheManager {
     
     @Getter
-    private SkypeConversationsCache conversationsCache;
+    private final SkypeConversationsCache conversationsCache;
     @Getter
-    private SkypeUsersCache usersCache;
+    private final SkypeUsersCache usersCache;
     
     public SkypeCacheManager(EzSkype ezSkype) {
         this.conversationsCache = new SkypeConversationsCache(ezSkype);

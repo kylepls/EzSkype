@@ -54,8 +54,4 @@ public class SkypeConversationsCache {
             }
         }
     }
-    
-    public Map<String, SkypeConversationInternal> getSkypeConversations() {
-        return skypeConversations;
-    }
 }

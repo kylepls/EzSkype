@@ -10,7 +10,6 @@ import lombok.Data;
  * Created by Kyle on 10/8/2015.
  */
 @Data
-@AllArgsConstructor
 public class SkypeConversationUserLeaveEvent implements SkypeEvent {
     
     private final SkypeConversation conversation;
