@@ -8,15 +8,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * Created by Kyle on 9/5/2015.
- */
 public class EventManager {
     
     private final List<HoldListener> listeners;
     
     public EventManager() {
-        this.listeners = new ArrayList();
+        this.listeners = new ArrayList<>();
     }
     
     public void registerEvents(Object o) {
@@ -42,17 +39,14 @@ public class EventManager {
     }
     
     public void fire(SkypeEvent event) {
-        HoldListener holdListener;
-        for (int i = 0; i < listeners.size(); i++) {
-            holdListener = listeners.get(i);
-            if (holdListener.getEvent().equals(event.getClass())) {
-                try {
-                    holdListener.getMethod().invoke(holdListener.getObject(), event);
-                } catch (Exception e) {
-                    EzSkype.LOGGER.error("Error while firing event: " + holdListener, e);
-                }
+        //Will fire for abstracted events too if you choose to add them.
+        listeners.stream().filter(listener -> listener.getEvent().isInstance(event)).forEach(listener -> {
+            try {
+                listener.getMethod().invoke(listener.getObject(), event);
+            } catch (Exception e) {
+                EzSkype.LOGGER.error("Error while firing event: " + listener, e);
             }
-        }
+        });
     }
     
     @Data

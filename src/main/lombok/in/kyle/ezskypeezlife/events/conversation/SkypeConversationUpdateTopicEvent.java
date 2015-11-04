@@ -9,7 +9,6 @@ import lombok.Data;
 /**
  * Created by Kyle on 10/8/2015.
  */
-@AllArgsConstructor
 @Data
 public class SkypeConversationUpdateTopicEvent implements SkypeEvent {
     

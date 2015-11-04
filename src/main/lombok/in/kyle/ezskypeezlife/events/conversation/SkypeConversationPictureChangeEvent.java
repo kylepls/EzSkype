@@ -11,14 +11,10 @@ import lombok.Getter;
  * Created by Kyle on 10/8/2015.
  */
 @Data
-@AllArgsConstructor
 public class SkypeConversationPictureChangeEvent implements SkypeEvent {
 
-    @Getter
     private final SkypeUser user;
-    @Getter
     private final SkypeConversation conversation;
-    @Getter
     private final String oldPicture, newPicture;
     
 }

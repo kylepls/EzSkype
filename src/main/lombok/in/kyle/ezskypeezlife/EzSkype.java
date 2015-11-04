@@ -47,9 +47,6 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
-/**
- * Created by Kyle on 10/5/2015.
- */
 public class EzSkype {
     
     public static final Gson GSON = new Gson();
@@ -177,22 +174,26 @@ public class EzSkype {
      * @param url - The URL to join, eg: https://join.skype.com/xmky6Uk4TVfs
      */
     public EzSkype loginGuest(SkypeEndpoint[] endpoints, String url) throws Exception {
+        return loginGuest(url);
+    }
+
+    public EzSkype loginGuest(String url) throws Exception {
         String shortId = url.substring(url.lastIndexOf("/") + 1);
-    
+
         SkypeWebClient webClient = new SkypeWebClient();
-    
+
         SkypeGuestGetSessionIdPacket skypeGuestGetSessionIdPacket = new SkypeGuestGetSessionIdPacket(webClient, url);
         SkypeGuestTempSession tempSession = (SkypeGuestTempSession) skypeGuestGetSessionIdPacket.run();
         //System.out.println("Session: " + tempSession);
-    
+
         SkypeGuestGetSpaceIdPacket skypeGuestGetSpaceIdPacket = new SkypeGuestGetSpaceIdPacket(webClient, shortId);
         String spaceId = (String) skypeGuestGetSpaceIdPacket.run();
         //System.out.println("SpaceId: " + spaceId);
-    
+
         SkypeGuestGetConversationId skypeGuestGetConversationId = new SkypeGuestGetConversationId(webClient, spaceId);
         String threadId = (String) skypeGuestGetConversationId.run();
         //System.out.println("ThreadId: " + threadId);
-    
+
         SkypeGuestGetTokenPacket skypeGuestGetTokenPacket = new SkypeGuestGetTokenPacket(webClient, tempSession, skypeCredentials
                 .getUsername(), spaceId, threadId, shortId);
         String token = (String) skypeGuestGetTokenPacket.run();
