@@ -5,6 +5,8 @@ import in.kyle.ezskypeezlife.internal.obj.SkypeSession;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
+import java.util.UUID;
+
 /**
  * Created by Kyle on 10/5/2015.
  */
@@ -31,7 +33,7 @@ public class SkypeAuthFinishPacket extends SkypePacket {
         String regToken = tokenOre[0];
         
         String endpoint = tokenOre[2].substring(tokenOre[2].indexOf("=") + 1);
-        
-        return new SkypeSession(regToken, token, location, endpoint);
+    
+        return new SkypeSession(regToken, token, location, endpoint, UUID.randomUUID());
     }
 }

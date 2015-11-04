@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.UUID;
 
 /**
  * Created by Kyle on 10/6/2015.
@@ -17,6 +18,7 @@ public class SkypeSession {
     private String xToken;
     private String location;
     private String sessionId;
+    private UUID sessionUuid;
     
     public String getEncodedSessionId() {
         try {

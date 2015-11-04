@@ -15,11 +15,13 @@ import in.kyle.ezskypeezlife.events.conversation.SkypeConversationUserRoleUpdate
 import in.kyle.ezskypeezlife.events.conversation.SkypeMessageEditedEvent;
 import in.kyle.ezskypeezlife.events.conversation.SkypeMessageReceivedEvent;
 import in.kyle.ezskypeezlife.events.user.SkypeContactAddedEvent;
+import in.kyle.ezskypeezlife.events.user.SkypeContactRequestEvent;
 import org.apache.commons.lang.StringUtils;
 import org.jsoup.Jsoup;
 
 import java.io.File;
 import java.io.FileReader;
+import java.net.URL;
 
 /**
  * Created by Kyle on 10/8/2015.
@@ -39,13 +41,16 @@ public class TestSkypeBot {
         LoginCredentials loginCredentials = EzSkype.GSON.fromJson(new FileReader(new File("login.json")), LoginCredentials.class);
         
         // Enter the Skype login info here and login
-        ezSkype = new EzSkype(new SkypeCredentials(loginCredentials.getUser(), loginCredentials.getPass())).login();
+        ezSkype = new EzSkype(new SkypeCredentials(loginCredentials.getUser(), loginCredentials.getPass()));
+        ezSkype.login();
         
         // Register all the events in this class
         // Events are denoted as methods that have 1 parameter that implements SkypeEvent
         ezSkype.getEventManager().registerEvents(this);
     
         System.out.println("Complete");
+    
+        ezSkype.setDebug(false);
     }
     
     // Called when a new message is received from Skype
@@ -107,6 +112,29 @@ public class TestSkypeBot {
                     event.reply("Usage: +contact boolean");
                 }
                 break;
+            case "+info":
+                event.reply(event.getMessage().getConversation().toString());
+                // test convo loading
+                event.getMessage().getConversation().fullyLoad();
+                event.reply(event.getMessage().getConversation().toString());
+                break;
+            case "+convos":
+                event.reply(ezSkype.getConversations().toString());
+                break;
+            case "+pic":
+                if (args.length != 0) {
+                    try {
+                        String url = Jsoup.parse(StringUtils.join(args, ' ', 1, args.length)).text();
+                        event.getMessage().getConversation().sendImage(new URL(url).openStream());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        event.reply("Could not send image, check console");
+                    }
+                    event.reply("Sent");
+                } else {
+                    event.reply("Usage: +pic url");
+                }
+                break;
         }
     }
     
@@ -162,6 +190,10 @@ public class TestSkypeBot {
         System.out.println(e.getUser().getUsername() + " added me");
         e.getUser().setContact(true);
         e.getUser().sendMessage("Thanks for adding me as a contact!");
+    }
+    
+    public void onContactPending(SkypeContactRequestEvent e) {
+        System.out.println("Contact request: " + e.getSkypeUser().getUsername());
     }
     
     public void onEdit(SkypeMessageEditedEvent e) {

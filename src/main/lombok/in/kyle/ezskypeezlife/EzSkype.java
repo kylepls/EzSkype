@@ -36,11 +36,16 @@ import in.kyle.ezskypeezlife.internal.thread.SkypePacketIOPool;
 import in.kyle.ezskypeezlife.internal.thread.SkypePollerThread;
 import in.kyle.ezskypeezlife.internal.thread.SkypeSessionThread;
 import lombok.Getter;
+import lombok.Setter;
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.Proxy;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Created by Kyle on 10/5/2015.
@@ -50,6 +55,8 @@ public class EzSkype {
     public static final Gson GSON = new Gson();
     public static final Logger LOGGER = LoggerFactory.getLogger(EzSkype.class);
     
+    @Getter
+    private AtomicLong messageId;
     @Getter
     private SkypePacketIOPool packetIOPool;
     @Getter
@@ -62,6 +69,9 @@ public class EzSkype {
     private SkypeCacheManager skypeCache;
     @Getter
     private SkypeLocalUserInternal localUser;
+    @Getter
+    @Setter
+    private Proxy proxy;
     
     private final SkypeCredentials skypeCredentials;
     private boolean startedThreads;
@@ -77,6 +87,7 @@ public class EzSkype {
         this.skypeCache = new SkypeCacheManager(this);
         this.eventManager = new EventManager();
         this.packetIOPool = new SkypePacketIOPool(2);
+        this.messageId = new AtomicLong(System.currentTimeMillis());
     }
     
     /**
@@ -111,6 +122,10 @@ public class EzSkype {
         SkypeLoginPacket skypeLoginPacket = new SkypeLoginPacket(this, skypeCredentials, parameters);
         String xToken = (String) skypeLoginPacket.executeSync();
         finishLogin(endpoints, xToken);
+    
+        EzSkype.LOGGER.info("Loading conversations"); // TODO
+        loadConversations();
+        
         return this;
     }
     
@@ -182,7 +197,7 @@ public class EzSkype {
                 .getUsername(), spaceId, threadId, shortId);
         String token = (String) skypeGuestGetTokenPacket.run();
         //System.out.println("Token: " + token);
-        finishLogin(SkypeEndpoint.values(), token);
+        finishLogin(endpoints, token);
         EzSkype.LOGGER.info("Loading conversations"); // TODO
         loadConversations();
         return this;
@@ -210,7 +225,7 @@ public class EzSkype {
             SkypeGetContactsPacket.UserContacts contacts = (SkypeGetContactsPacket.UserContacts) skypeGetContactsPacket.executeSync();
             getSkypeCache().getUsersCache().getSkypeUsers().putAll(contacts.getContacts());
             localUser.getContacts().putAll(contacts.getContacts());
-            localUser.getPendingContacts().addAll(contacts.getPending());
+            localUser.getPendingContacts().putAll(contacts.getPending());
         }
     }
     
@@ -293,5 +308,13 @@ public class EzSkype {
      */
     public Map<String, SkypeConversation> getConversations() {
         return (Map<String, SkypeConversation>) (Object) skypeCache.getConversationsCache().getSkypeConversations();
+    }
+    
+    public void setDebug(boolean debug) {
+        if (debug) {
+            LogManager.getRootLogger().setLevel(Level.DEBUG);
+        } else {
+            LogManager.getRootLogger().setLevel(Level.INFO);
+        }
     }
 }

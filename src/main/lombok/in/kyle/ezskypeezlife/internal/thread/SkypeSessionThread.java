@@ -5,6 +5,7 @@ import in.kyle.ezskypeezlife.internal.packet.session.SkypeActivePacket;
 import in.kyle.ezskypeezlife.internal.packet.session.SkypeSessionExpiredException;
 import in.kyle.ezskypeezlife.internal.packet.session.SkypeSessionPingPacket;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -44,7 +45,7 @@ public class SkypeSessionThread extends Thread {
             }
     
             try {
-                Thread.sleep(10000);
+                Thread.sleep(TimeUnit.SECONDS.toMillis(30));
             } catch (InterruptedException ignored) {
             }
         }

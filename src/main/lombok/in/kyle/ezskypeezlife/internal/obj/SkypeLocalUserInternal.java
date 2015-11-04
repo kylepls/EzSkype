@@ -32,7 +32,7 @@ public class SkypeLocalUserInternal extends SkypeUserInternal {
     private Optional<String> phoneHome;
     private Optional<String> phoneOffice;
     private Map<String, SkypeUserInternal> contacts;
-    private List<SkypeUserInternal> pendingContacts;
+    private Map<String, SkypeUserInternal> pendingContacts;
     
     public SkypeLocalUserInternal(String username, EzSkype ezSkype) {
         super(username, ezSkype);
@@ -49,7 +49,7 @@ public class SkypeLocalUserInternal extends SkypeUserInternal {
         this.phoneHome = Optional.empty();
         this.phoneOffice = Optional.empty();
         this.contacts = new HashMap<>();
-        this.pendingContacts = new ArrayList<>();
+        this.pendingContacts = new HashMap<>();
     }
     
     /**
@@ -57,7 +57,7 @@ public class SkypeLocalUserInternal extends SkypeUserInternal {
      *
      * @return - A list of pending contacts
      */
-    public List<SkypeUser> getPendingContacts() {
-        return (List<SkypeUser>) (Object) pendingContacts;
+    public Map<String, SkypeUser> getPendingContacts() {
+        return (Map<String, SkypeUser>) (Object) pendingContacts;
     }
 }

@@ -58,6 +58,7 @@ public class SkypeGetConversationsPacket extends SkypePacket {
             } else {
                 skypeConversationInternal = new SkypeGroupConversationInternal(ezSkype, longId, topic, false, new ArrayList<>(), false, 
                         null, null, new ArrayList<>(), new ArrayList<>());
+                skypeConversationInternal.setFullyLoaded(false);
             }
     
             skypeConversations.put(skypeConversationInternal.getLongId(), skypeConversationInternal);

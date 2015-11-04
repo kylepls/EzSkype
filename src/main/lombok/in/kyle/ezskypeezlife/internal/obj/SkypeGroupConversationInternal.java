@@ -9,6 +9,7 @@ import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationGetJo
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationKickPacket;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationRolePacket;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationTopicPacket;
+import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeGetGroupConversationPacket;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -21,10 +22,10 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class SkypeGroupConversationInternal extends SkypeConversationInternal {
     
-    private final List<SkypeConversationPermission> permissions;
-    private final boolean joinEnabled;
-    private final SkypeUserInternal creator;
-    private final List<SkypeUserInternal> admins;
+    private List<SkypeConversationPermission> permissions;
+    private boolean joinEnabled;
+    private SkypeUserInternal creator;
+    private List<SkypeUserInternal> admins;
     
     // @formatter:off
     public SkypeGroupConversationInternal(
@@ -38,7 +39,7 @@ public class SkypeGroupConversationInternal extends SkypeConversationInternal {
             String url, 
             List<SkypeUserInternal> users,
             List<SkypeUserInternal> admins) {
-        super(ezSkype, longId, topic, historyEnabled, joinEnabled, url, SkypeConversationType.GROUP, users);
+        super(ezSkype, longId, topic, historyEnabled, joinEnabled, url, SkypeConversationType.GROUP, users, true);
         this.permissions = permissions;
         this.joinEnabled = joinEnabled;
         this.creator = creator;
@@ -73,6 +74,36 @@ public class SkypeGroupConversationInternal extends SkypeConversationInternal {
     @Override
     public String getJoinUrl() throws Exception {
         return (String) new SkypeConversationGetJoinUrl(ezSkype, longId).executeSync();
+    }
+    
+    @Override
+    public void fullyLoad() {
+        if (!fullyLoaded) {
+            SkypeGetGroupConversationPacket groupConversationPacket = new SkypeGetGroupConversationPacket(ezSkype, longId);
+            SkypeGroupConversationInternal skypeConversationInternal = null;
+            try {
+                skypeConversationInternal = (SkypeGroupConversationInternal) groupConversationPacket.executeSync();
+            } catch (Exception e) {
+                EzSkype.LOGGER.error("Error loading conversation " + this, e);
+                return;
+            }
+            topic = skypeConversationInternal.getTopic();
+            setHistoryEnabled(skypeConversationInternal.isHistoryEnabled());
+            setPermissions(skypeConversationInternal.getPermissions());
+            setJoinEnabled(skypeConversationInternal.isJoinEnabled());
+            setCreator(skypeConversationInternal.getCreator());
+            setJoinEnabled(skypeConversationInternal.isJoinEnabled());
+            setPictureUrl(skypeConversationInternal.getPictureUrl());
+            getUsers().clear();
+            getUsers().addAll(skypeConversationInternal.getUsers());
+            setAdmins(skypeConversationInternal.getAdmins());
+            setFullyLoaded(true);
+        }
+    }
+    
+    @Override
+    public boolean isLoaded() {
+        return fullyLoaded;
     }
     
     @Override

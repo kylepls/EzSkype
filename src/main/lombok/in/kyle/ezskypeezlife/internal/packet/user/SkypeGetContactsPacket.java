@@ -9,9 +9,7 @@ import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -37,7 +35,7 @@ public class SkypeGetContactsPacket extends SkypePacket {
         JsonObject response = EzSkype.GSON.fromJson(webConnectionBuilder.send(), JsonObject.class);
         JsonArray contactsArray = response.getAsJsonArray("contacts");
         Map<String, SkypeUserInternal> contacts = new HashMap<>();
-        List<SkypeUserInternal> pending = new ArrayList<>();
+        Map<String, SkypeUserInternal> pending = new HashMap<>();
         
         for (JsonElement contactElement : contactsArray) {
             JsonObject contactJson = contactElement.getAsJsonObject();
@@ -82,7 +80,7 @@ public class SkypeGetContactsPacket extends SkypePacket {
             if (contactJson.get("authorized").getAsBoolean()) {
                 contacts.put(skypeUser.getUsername(), skypeUser);
             } else {
-                pending.add(skypeUser);
+                pending.put(skypeUser.getUsername(), skypeUser);
             }
         }
         
@@ -93,6 +91,6 @@ public class SkypeGetContactsPacket extends SkypePacket {
     public static class UserContacts {
     
         private final Map<String, SkypeUserInternal> contacts;
-        private final List<SkypeUserInternal> pending;
+        private final Map<String, SkypeUserInternal> pending;
     }
 }

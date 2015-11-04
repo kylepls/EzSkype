@@ -24,7 +24,7 @@ public class SkypeUserConversationInternal extends SkypeConversationInternal {
             boolean joinEnabled,
             String url
     ) {
-        super(ezSkype, longId, topic, historyEnabled, joinEnabled, url, SkypeConversationType.USER, new ArrayList<>());
+        super(ezSkype, longId, topic, historyEnabled, joinEnabled, url, SkypeConversationType.USER, new ArrayList<>(), true);
     }
     // @formatter:on
     
@@ -46,5 +46,14 @@ public class SkypeUserConversationInternal extends SkypeConversationInternal {
     @Override
     public void changeTopic(String topic) {
         throw new IllegalStateException("Cannot set topic for user conversation");
+    }
+    
+    @Override
+    public void fullyLoad() {
+    }
+    
+    @Override
+    public boolean isLoaded() {
+        return true;
     }
 }

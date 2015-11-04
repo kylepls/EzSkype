@@ -6,7 +6,6 @@ import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.api.SkypeConversationPermission;
 import in.kyle.ezskypeezlife.api.SkypeUserRole;
-import in.kyle.ezskypeezlife.internal.obj.SkypeConversationInternal;
 import in.kyle.ezskypeezlife.internal.obj.SkypeGroupConversationInternal;
 import in.kyle.ezskypeezlife.internal.obj.SkypeUserInternal;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
@@ -30,8 +29,7 @@ public class SkypeGetGroupConversationPacket extends SkypePacket {
     }
     
     @Override
-    protected SkypeConversationInternal run(WebConnectionBuilder webConnectionBuilder) throws Exception {
-        webConnectionBuilder.setTimeout(5000);
+    protected SkypeGroupConversationInternal run(WebConnectionBuilder webConnectionBuilder) throws Exception {
         JsonObject convoJson = EzSkype.GSON.fromJson(webConnectionBuilder.send(), JsonObject.class);
         
         JsonObject propertiesJson = convoJson.getAsJsonObject("properties");
@@ -65,8 +63,6 @@ public class SkypeGetGroupConversationPacket extends SkypePacket {
         for (JsonElement jsonElement : propertiesJson.getAsJsonArray("capabilities")) {
             permissions.add(SkypeConversationPermission.getFromSkypeString(jsonElement.getAsString()));
         }
-        
-        // TODO returned json offers more capabilities for received members & possibly extract some stuffs
         
         List<SkypeUserInternal> members = new ArrayList<>();
         List<SkypeUserInternal> admins = new ArrayList<>();

@@ -10,12 +10,14 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.Proxy;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -24,10 +26,8 @@ import java.util.Map;
 /**
  * Created by Kyle on 10/5/2015.
  */
-@ToString
+@ToString(of = {"url", "request", "postData", "contentType", "timeout", "proxy"})
 public class WebConnectionBuilder {
-    
-    // TODO make actual builder
     
     @Setter
     @Getter
@@ -46,12 +46,21 @@ public class WebConnectionBuilder {
     private HttpURLConnection connection;
     @Setter
     private boolean showErrors = true;
+    @Setter
+    private Proxy proxy;
+    @Setter
+    private InputStream writeStream;
     
     public WebConnectionBuilder() {
         this.request = HTTPRequest.GET;
         this.postData = new StringBuilder();
         this.headers = new HashMap<>();
         this.contentType = ContentType.WWW_FORM;
+    }
+    
+    public void addHeaders(EzSkype ezSkype) {
+        addHeader("RegistrationToken", ezSkype.getSkypeSession().getRegToken());
+        addHeader("X-Skypetoken", ezSkype.getSkypeSession().getXToken());
     }
     
     /**
@@ -122,7 +131,11 @@ public class WebConnectionBuilder {
      * @throws IOException
      */
     public String send() throws IOException {
-        connection = (HttpURLConnection) new URL(url).openConnection();
+        if (proxy == null) {
+            connection = (HttpURLConnection) new URL(url).openConnection();
+        } else {
+            connection = (HttpURLConnection) new URL(url).openConnection(proxy);
+        }
         connection.setRequestProperty("Content-Type", contentType.getValue());
         connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64)");
         connection.setRequestMethod(request.name());
@@ -135,7 +148,16 @@ public class WebConnectionBuilder {
         
         if (request == HTTPRequest.POST || request == HTTPRequest.PUT) {
             connection.setDoOutput(true);
-            byte[] data = postData.toString().getBytes();
+            byte[] data;
+    
+            if (writeStream != null) {
+                ByteArrayOutputStream os = new ByteArrayOutputStream();
+                IOUtils.copy(writeStream, os);
+                data = os.toByteArray();
+            } else {
+                data = postData.toString().getBytes("UTF-8");
+            }
+    
             connection.addRequestProperty("Content-Length", Integer.toString(data.length));
             connection.getOutputStream().write(data);
             connection.getOutputStream().close();
@@ -180,7 +202,9 @@ public class WebConnectionBuilder {
      */
     @AllArgsConstructor
     public enum ContentType {
-        JSON("application/json"), WWW_FORM("application/x-www-form-urlencoded");
+        JSON("application/json"),
+        WWW_FORM("application/x-www-form-urlencoded"),
+        OCTET_STREAM("application/octet-stream");
         
         @Getter
         private final String value;

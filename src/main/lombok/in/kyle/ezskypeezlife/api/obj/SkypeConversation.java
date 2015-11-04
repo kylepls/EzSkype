@@ -3,6 +3,9 @@ package in.kyle.ezskypeezlife.api.obj;
 import in.kyle.ezskypeezlife.api.SkypeConversationType;
 import in.kyle.ezskypeezlife.api.SkypeUserRole;
 
+import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 
@@ -107,4 +110,20 @@ public interface SkypeConversation {
      * @param role      - The role of the user
      */
     void setUserRole(SkypeUser skypeUser, SkypeUserRole role);
+    
+    /**
+     * // TODO
+     */
+    void fullyLoad();
+    
+    /**
+     * @return
+     */
+    boolean isLoaded();
+    
+    void sendImage(File image) throws Exception;
+    
+    void sendImage(InputStream inputStream) throws Exception;
+    
+    void sendImage(URL url) throws Exception;
 }

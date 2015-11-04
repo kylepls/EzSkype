@@ -3,6 +3,7 @@ package in.kyle.ezskypeezlife.internal.thread;
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.events.user.SkypeContactAddedEvent;
 import in.kyle.ezskypeezlife.events.user.SkypeContactRemovedEvent;
+import in.kyle.ezskypeezlife.events.user.SkypeContactRequestEvent;
 import in.kyle.ezskypeezlife.internal.obj.SkypeLocalUserInternal;
 import in.kyle.ezskypeezlife.internal.obj.SkypeUserInternal;
 import in.kyle.ezskypeezlife.internal.packet.user.SkypeGetContactsPacket;
@@ -41,6 +42,10 @@ public class SkypeContactsThread extends Thread {
                 Map<String, SkypeUserInternal> contactsOld = ezSkype.getLocalUser().getContacts();
                 Map<String, SkypeUserInternal> contactsNew = contacts.getContacts();
     
+                Map<String, SkypeUserInternal> contactPendingOld = (Map<String, SkypeUserInternal>) (Object) ezSkype.getLocalUser()
+                        .getPendingContacts();
+                Map<String, SkypeUserInternal> contactPendingNew = contacts.getPending();
+    
                 Set<Map.Entry<String, SkypeUserInternal>> added = new HashSet<>(contactsOld.entrySet());
                 added.removeAll(contactsNew.entrySet());
     
@@ -71,6 +76,17 @@ public class SkypeContactsThread extends Thread {
         
                     //System.out.println("removed " + removed);
                 }
+    
+    
+                Set<Map.Entry<String, SkypeUserInternal>> pendingAdded = new HashSet<>(contactPendingOld.entrySet());
+                pendingAdded.removeAll(contactPendingNew.entrySet());
+    
+                pendingAdded.forEach(entry -> {
+                    SkypeUserInternal skypeUser = (SkypeUserInternal) ezSkype.getSkypeUser(entry.getKey());
+                    localUserInternal.getPendingContacts().put(entry.getKey(), skypeUser);
+                    SkypeContactRequestEvent requestEvent = new SkypeContactRequestEvent(skypeUser);
+                    ezSkype.getEventManager().fire(requestEvent);
+                });
                 
                 /*
                 List<SkypeUserInternal> temp = new ArrayList<>(contactsNew);

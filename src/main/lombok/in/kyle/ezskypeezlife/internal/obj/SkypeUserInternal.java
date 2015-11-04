@@ -155,4 +155,9 @@ public class SkypeUserInternal implements SkypeUser {
     public SkypeConversation getConversation() {
         return ezSkype.getSkypeConversation("8:" + username);
     }
+    
+    @Override
+    public boolean isGuest() {
+        return getUsername().startsWith("guest:");
+    }
 }

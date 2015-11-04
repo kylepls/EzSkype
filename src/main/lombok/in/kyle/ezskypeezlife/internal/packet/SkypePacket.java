@@ -1,7 +1,6 @@
 package in.kyle.ezskypeezlife.internal.packet;
 
 import in.kyle.ezskypeezlife.EzSkype;
-import lombok.AllArgsConstructor;
 import lombok.ToString;
 
 import java.util.concurrent.Future;
@@ -9,7 +8,6 @@ import java.util.concurrent.Future;
 /**
  * Created by Kyle on 10/5/2015.
  */
-@AllArgsConstructor
 @ToString
 public abstract class SkypePacket {
     
@@ -17,6 +15,13 @@ public abstract class SkypePacket {
     private WebConnectionBuilder.HTTPRequest httpRequest;
     protected EzSkype ezSkype;
     private boolean useHeaders;
+    
+    public SkypePacket(String url, WebConnectionBuilder.HTTPRequest httpRequest, EzSkype ezSkype, boolean useHeaders) {
+        this.url = url;
+        this.httpRequest = httpRequest;
+        this.ezSkype = ezSkype;
+        this.useHeaders = useHeaders;
+    }
     
     /**
      * Executes the request
@@ -36,11 +41,13 @@ public abstract class SkypePacket {
     
     private WebConnectionBuilder getConnectionBuilder() {
         WebConnectionBuilder builder = new WebConnectionBuilder();
+        if (ezSkype.getProxy() != null) {
+            builder.setProxy(ezSkype.getProxy());
+        }
         builder.setUrl(url);
         builder.setRequest(httpRequest);
         if (useHeaders) {
-            builder.addHeader("RegistrationToken", ezSkype.getSkypeSession().getRegToken());
-            builder.addHeader("X-Skypetoken", ezSkype.getSkypeSession().getXToken());
+            builder.addHeaders(ezSkype);
         }
         return builder;
     }

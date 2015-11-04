@@ -19,10 +19,9 @@ public class SkypeSessionPingPacket extends SkypePacket {
     @Override
     protected Object run(WebConnectionBuilder webConnectionBuilder) throws Exception {
         webConnectionBuilder.setContentType(WebConnectionBuilder.ContentType.WWW_FORM);
-        String session = ezSkype.getSkypeSession().getSessionId();
-        session = session.substring(1, session.length() - 1);
+        String session = ezSkype.getSkypeSession().getSessionUuid().toString();
         webConnectionBuilder.setPostData("sessionId=" + session);
-        
+        EzSkype.LOGGER.debug("Sending session ping, sessionId={}", session);
         try {
             webConnectionBuilder.send();
         } catch (IOException exception) {

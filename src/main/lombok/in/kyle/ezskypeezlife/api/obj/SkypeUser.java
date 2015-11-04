@@ -84,4 +84,10 @@ public interface SkypeUser {
      * @return - the users conversation
      */
     SkypeConversation getConversation();
+    
+    /**
+     *
+     */
+    boolean isGuest();
+    
 }

@@ -36,6 +36,9 @@ public abstract class SkypePollMessageType {
         String content = StringEscapeUtils.unescapeXml(resource.get("content").getAsString());
         
         SkypeConversationInternal conversation = (SkypeConversationInternal) ezSkype.getSkypeConversation(longId);
+        if (!conversation.isFullyLoaded()) {
+            conversation.fullyLoad();
+        }
         
         return new SkypeMessageInternal(ezSkype, id, sender, false, messageType, content, conversation);
     }

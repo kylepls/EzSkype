@@ -24,10 +24,12 @@ public class SkypeActivePacket extends SkypePacket {
         webConnectionBuilder.setUrl(url);
         
         JsonObject data = new JsonObject();
-        data.addProperty("timeout", 20);
+        data.addProperty("timeout", 12);
         
         webConnectionBuilder.setContentType(WebConnectionBuilder.ContentType.JSON);
         webConnectionBuilder.setPostData(data.toString());
+    
+        EzSkype.LOGGER.debug("Sending skype active packet, url: {}", url);
     
         try {
             webConnectionBuilder.send();

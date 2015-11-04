@@ -6,6 +6,7 @@ import in.kyle.ezskypeezlife.internal.obj.SkypeUserInternal;
 import in.kyle.ezskypeezlife.internal.packet.user.SkypeGetUserInfoPacket;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,7 +38,9 @@ public class SkypeUsersCache {
         } else {
             SkypeGetUserInfoPacket getUserInfoPacket = new SkypeGetUserInfoPacket(ezSkype, username);
             try {
-                SkypeUserInternal skypeUserInternal = (SkypeUserInternal) getUserInfoPacket.executeSync();
+                List<SkypeUserInternal> skypeUserInternalList = (List<SkypeUserInternal>) getUserInfoPacket.executeSync();
+                EzSkype.LOGGER.debug("Getting user {} user list {}", username, skypeUserInternalList);
+                SkypeUserInternal skypeUserInternal = skypeUserInternalList.get(0);
                 this.skypeUsers.put(skypeUserInternal.getUsername(), skypeUserInternal);
                 return skypeUserInternal;
             } catch (Exception e) {
@@ -75,7 +78,7 @@ public class SkypeUsersCache {
         SkypeGetUserInfoPacket getUserInfoPacket = new SkypeGetUserInfoPacket(ezSkype, skypeUser.getUsername());
         SkypeUserInternal skypeUserNew;
         try {
-            skypeUserNew = (SkypeUserInternal) getUserInfoPacket.executeSync();
+            skypeUserNew = ((List<SkypeUserInternal>) getUserInfoPacket.executeSync()).get(0);
         } catch (Exception e) {
             e.printStackTrace();
             return skypeUser;
