@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.api.SkypeCredentials;
 import in.kyle.ezskypeezlife.api.SkypeStatus;
+import in.kyle.ezskypeezlife.api.captcha.SkypeCaptchaHandler;
 import in.kyle.ezskypeezlife.api.obj.SkypeConversation;
 import in.kyle.ezskypeezlife.api.obj.SkypeUser;
 import in.kyle.ezskypeezlife.events.EventManager;
@@ -54,7 +55,7 @@ public class EzSkype {
     
     public static final Gson GSON = new Gson();
     public static final Logger LOGGER = LoggerFactory.getLogger(EzSkype.class);
-    
+    private final SkypeCredentials skypeCredentials;
     @Getter
     private AtomicLong messageId;
     @Getter
@@ -72,8 +73,9 @@ public class EzSkype {
     @Getter
     @Setter
     private Proxy proxy;
-    
-    private final SkypeCredentials skypeCredentials;
+    @Getter
+    @Setter
+    private SkypeCaptchaHandler captchaHandler;
     private boolean startedThreads;
     
     /**
@@ -100,11 +102,6 @@ public class EzSkype {
         this(new SkypeCredentials(user, pass.toCharArray()));
     }
     
-    public void logout() {
-        // TODO add logout packet
-        active.set(false);
-    }
-    
     /**
      * Logs into Skype with specific endpoints
      *
@@ -123,7 +120,7 @@ public class EzSkype {
         String xToken = (String) skypeLoginPacket.executeSync();
         finishLogin(endpoints, xToken);
     
-        EzSkype.LOGGER.info("Loading conversations"); // TODO
+        EzSkype.LOGGER.info("Loading conversations");
         loadConversations();
         
         return this;
@@ -201,6 +198,11 @@ public class EzSkype {
         EzSkype.LOGGER.info("Loading conversations"); // TODO
         loadConversations();
         return this;
+    }
+    
+    public void logout() {
+        // TODO add logout packet
+        active.set(false);
     }
     
     /**

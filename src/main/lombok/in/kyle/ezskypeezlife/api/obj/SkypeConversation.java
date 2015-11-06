@@ -15,7 +15,6 @@ import java.util.Optional;
 public interface SkypeConversation {
     
     /**
-     * 
      * Gets the conversation id
      * The id should look like this
      * "19:3000ebdcfcca4b42b9f6964f4066e1ad@thread.skype"
@@ -31,7 +30,7 @@ public interface SkypeConversation {
     String getTopic();
     
     /**
-     * @return - If loading conversation history loading is enabled 
+     * @return - If loading conversation history loading is enabled
      */
     boolean isHistoryEnabled();
     
@@ -57,6 +56,7 @@ public interface SkypeConversation {
     
     /**
      * Sends a message to the conversation
+     *
      * @param message - The message to send
      * @return - The message send
      */
@@ -64,6 +64,7 @@ public interface SkypeConversation {
     
     /**
      * Kicks a user from the conversation
+     *
      * @param skypeUser - The user to kick
      * @return - If the user was kicked
      */
@@ -71,6 +72,7 @@ public interface SkypeConversation {
     
     /**
      * Checks if a user has admin privileges
+     *
      * @param skypeUser - The user to check
      * @return - True if the user has admin privileges
      */
@@ -78,6 +80,7 @@ public interface SkypeConversation {
     
     /**
      * Gets a Skype user from this conversation
+     *
      * @param username - The username of the user
      * @return - The user
      */
@@ -92,6 +95,7 @@ public interface SkypeConversation {
     
     /**
      * Gets the URL to join this conversation
+     *
      * @return - The join URL
      */
     String getJoinUrl() throws Exception;
@@ -112,18 +116,38 @@ public interface SkypeConversation {
     void setUserRole(SkypeUser skypeUser, SkypeUserRole role);
     
     /**
-     * // TODO
+     * Load all fields other than the ID
      */
     void fullyLoad();
     
     /**
-     * @return
+     * @return - If the conversation has all fields loaded, if this returns false then you must call fullyLoad before accessing any of
+     * the fields inside this object
      */
     boolean isLoaded();
     
+    /**
+     * Sends an image ping to this conversation
+     *
+     * @param image - The image to send
+     * @throws Exception - If the image could not be sent
+     */
     void sendImage(File image) throws Exception;
     
+    /**
+     * Sends an image ping to this conversation
+     *
+     * @param inputStream - And image inputstream
+     * @throws Exception - If the image could not be sent
+     */
     void sendImage(InputStream inputStream) throws Exception;
     
+    /**
+     * Sends an image ping to this conversation
+     *
+     * @param url - The URL of an image you would like to ping
+     * @throws Exception - If the image could not be sent
+     */
     void sendImage(URL url) throws Exception;
+    
 }

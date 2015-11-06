@@ -11,4 +11,6 @@ import lombok.EqualsAndHashCode;
 public class SkypeUnknownLoginErrorException extends Exception {
     
     private final String html;
+    private final String fullHtml;
+    
 }

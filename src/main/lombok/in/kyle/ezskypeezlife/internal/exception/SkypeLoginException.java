@@ -11,5 +11,6 @@ import lombok.EqualsAndHashCode;
 public class SkypeLoginException extends Exception {
     
     private final String html;
+    private final String htmlPage;
     
 }

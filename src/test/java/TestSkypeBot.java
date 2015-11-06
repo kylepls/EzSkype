@@ -1,6 +1,8 @@
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.api.SkypeCredentials;
 import in.kyle.ezskypeezlife.api.SkypeUserRole;
+import in.kyle.ezskypeezlife.api.captcha.SkypeCaptcha;
+import in.kyle.ezskypeezlife.api.captcha.SkypeCaptchaHandler;
 import in.kyle.ezskypeezlife.api.obj.SkypeConversation;
 import in.kyle.ezskypeezlife.api.obj.SkypeMessage;
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationAddedToEvent;
@@ -22,11 +24,12 @@ import org.jsoup.Jsoup;
 import java.io.File;
 import java.io.FileReader;
 import java.net.URL;
+import java.util.Scanner;
 
 /**
  * Created by Kyle on 10/8/2015.
  */
-public class TestSkypeBot {
+public class TestSkypeBot implements SkypeCaptchaHandler {
     
     private EzSkype ezSkype;
     
@@ -42,6 +45,8 @@ public class TestSkypeBot {
         
         // Enter the Skype login info here and login
         ezSkype = new EzSkype(new SkypeCredentials(loginCredentials.getUser(), loginCredentials.getPass()));
+        ezSkype.setDebug(true);
+        ezSkype.setCaptchaHandler(this);
         ezSkype.login();
         
         // Register all the events in this class
@@ -49,8 +54,6 @@ public class TestSkypeBot {
         ezSkype.getEventManager().registerEvents(this);
     
         System.out.println("Complete");
-    
-        ezSkype.setDebug(false);
     }
     
     // Called when a new message is received from Skype
@@ -198,5 +201,12 @@ public class TestSkypeBot {
     
     public void onEdit(SkypeMessageEditedEvent e) {
         e.getSkypeMessage().getConversation().sendMessage("Message edited\n From: " + e.getContentOld() + "\n To: " + e.getContentNew());
+    }
+    
+    @Override
+    public String solve(SkypeCaptcha skypeCaptcha) {
+        System.out.println("Enter the solution to " + skypeCaptcha.getUrl() + " then click enter");
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextLine();
     }
 }
