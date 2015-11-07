@@ -1,6 +1,8 @@
 package in.kyle.ezskypeezlife.internal.packet.messages.image;
 
 import in.kyle.ezskypeezlife.EzSkype;
+import in.kyle.ezskypeezlife.internal.packet.ContentType;
+import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
@@ -14,14 +16,14 @@ public class SkypeWriteImagePacket extends SkypePacket {
     private final InputStream inputStream;
     
     public SkypeWriteImagePacket(EzSkype ezSkype, String imageId, InputStream inputStream) {
-        super("https://api.asm.skype.com/v1/objects/" + imageId + "/content/imgpsh", WebConnectionBuilder.HTTPRequest.PUT, ezSkype, false);
+        super("https://api.asm.skype.com/v1/objects/" + imageId + "/content/imgpsh", HTTPRequest.PUT, ezSkype, false);
         this.inputStream = inputStream;
     }
     
     @Override
     protected Object run(WebConnectionBuilder webConnectionBuilder) throws Exception {
-        
-        webConnectionBuilder.setContentType(WebConnectionBuilder.ContentType.OCTET_STREAM);
+    
+        webConnectionBuilder.setContentType(ContentType.OCTET_STREAM);
         webConnectionBuilder.addHeader("Authorization", "skype_token " + ezSkype.getSkypeSession().getXToken());
         webConnectionBuilder.setWriteStream(inputStream);
         

@@ -2,6 +2,7 @@ package in.kyle.ezskypeezlife.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Created by Kyle on 10/7/2015.
@@ -11,8 +12,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public class SkypeCredentials {
     @Getter
-    String username;
+    private String username;
     @Getter
+    @Setter
     private char[] password;
     
     public SkypeCredentials(String username, String password) {

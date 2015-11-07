@@ -2,6 +2,7 @@ package in.kyle.ezskypeezlife.internal.packet.messages;
 
 import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
+import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 import lombok.ToString;
@@ -23,8 +24,8 @@ public class SkypeSendMessagePacket extends SkypePacket {
      * @param message - The message content
      */
     public SkypeSendMessagePacket(EzSkype ezSkype, String convoId, String message, String id) {
-        super("https://client-s.gateway.messenger.live.com/v1/users/ME/conversations/" + convoId + "/messages", WebConnectionBuilder
-                .HTTPRequest.POST, ezSkype, true);
+        super("https://client-s.gateway.messenger.live.com/v1/users/ME/conversations/" + convoId + "/messages", HTTPRequest.POST, 
+                ezSkype, true);
         this.message = message;
         this.id = id;
     }

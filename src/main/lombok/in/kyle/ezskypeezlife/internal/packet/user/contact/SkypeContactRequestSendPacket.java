@@ -3,6 +3,7 @@ package in.kyle.ezskypeezlife.internal.packet.user.contact;
 import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.api.obj.SkypeUser;
+import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
@@ -14,7 +15,7 @@ public class SkypeContactRequestSendPacket extends SkypePacket {
     private final String greeting;
     
     public SkypeContactRequestSendPacket(EzSkype ezSkype, String username, String greeting) {
-        super("https://api.skype.com/users/self/contacts/auth-request/" + username, WebConnectionBuilder.HTTPRequest.PUT, ezSkype, true);
+        super("https://api.skype.com/users/self/contacts/auth-request/" + username, HTTPRequest.PUT, ezSkype, true);
         this.greeting = greeting;
     }
     

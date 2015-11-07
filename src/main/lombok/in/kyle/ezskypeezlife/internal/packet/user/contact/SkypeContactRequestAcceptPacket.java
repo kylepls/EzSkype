@@ -1,6 +1,7 @@
 package in.kyle.ezskypeezlife.internal.packet.user.contact;
 
 import in.kyle.ezskypeezlife.EzSkype;
+import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
@@ -10,7 +11,7 @@ import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 public class SkypeContactRequestAcceptPacket extends SkypePacket {
     
     public SkypeContactRequestAcceptPacket(EzSkype ezSkype, String username) {
-        super("https://api.skype.com/users/self/contacts/auth-request/" + username + "/accept", WebConnectionBuilder.HTTPRequest.PUT, 
+        super("https://api.skype.com/users/self/contacts/auth-request/" + username + "/accept", HTTPRequest.PUT, 
                 ezSkype, true);
     }
     

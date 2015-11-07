@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.internal.obj.SkypeUserInternal;
+import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
@@ -26,7 +27,7 @@ public class SkypeGetUserInfoPacket extends SkypePacket {
      * @param username - The username of the user you want to get info about
      */
     public SkypeGetUserInfoPacket(EzSkype ezSkype, String username) {
-        super("https://api.skype.com/users/self/contacts/profiles", WebConnectionBuilder.HTTPRequest.POST, ezSkype, true);
+        super("https://api.skype.com/users/self/contacts/profiles", HTTPRequest.POST, ezSkype, true);
         users = Arrays.asList(username);
     }
     

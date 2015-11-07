@@ -2,7 +2,7 @@ import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.api.SkypeCredentials;
 import in.kyle.ezskypeezlife.api.SkypeUserRole;
 import in.kyle.ezskypeezlife.api.captcha.SkypeCaptcha;
-import in.kyle.ezskypeezlife.api.captcha.SkypeCaptchaHandler;
+import in.kyle.ezskypeezlife.api.captcha.SkypeErrorHandler;
 import in.kyle.ezskypeezlife.api.obj.SkypeConversation;
 import in.kyle.ezskypeezlife.api.obj.SkypeMessage;
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationAddedToEvent;
@@ -29,7 +29,7 @@ import java.util.Scanner;
 /**
  * Created by Kyle on 10/8/2015.
  */
-public class TestSkypeBot implements SkypeCaptchaHandler {
+public class TestSkypeBot implements SkypeErrorHandler {
     
     private EzSkype ezSkype;
     
@@ -46,7 +46,7 @@ public class TestSkypeBot implements SkypeCaptchaHandler {
         // Enter the Skype login info here and login
         ezSkype = new EzSkype(new SkypeCredentials(loginCredentials.getUser(), loginCredentials.getPass()));
         ezSkype.setDebug(true);
-        ezSkype.setCaptchaHandler(this);
+        ezSkype.setErrorHandler(this);
         ezSkype.login();
         
         // Register all the events in this class
@@ -208,5 +208,11 @@ public class TestSkypeBot implements SkypeCaptchaHandler {
         System.out.println("Enter the solution to " + skypeCaptcha.getUrl() + " then click enter");
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
+    }
+    
+    @Override
+    public String setNewPassword() {
+        System.out.println("Set new password!");
+        return null;
     }
 }

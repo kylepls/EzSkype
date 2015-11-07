@@ -3,6 +3,8 @@ package in.kyle.ezskypeezlife.internal.packet.session;
 import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.api.SkypeStatus;
+import in.kyle.ezskypeezlife.internal.packet.ContentType;
+import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 import org.apache.commons.lang.StringUtils;
@@ -15,7 +17,7 @@ public class SkypeSetVisibilityPacket extends SkypePacket {
     private final SkypeStatus status;
     
     public SkypeSetVisibilityPacket(EzSkype ezSkype, SkypeStatus status) {
-        super("https://client-s.gateway.messenger.live.com/v1/users/ME/presenceDocs/messagingService", WebConnectionBuilder.HTTPRequest
+        super("https://client-s.gateway.messenger.live.com/v1/users/ME/presenceDocs/messagingService", HTTPRequest
                 .PUT, ezSkype, true);
         this.status = status;
     }
@@ -25,7 +27,7 @@ public class SkypeSetVisibilityPacket extends SkypePacket {
         JsonObject data = new JsonObject();
         data.addProperty("status", StringUtils.capitalize(status.name().toLowerCase()));
         webConnectionBuilder.setPostData(data.toString());
-        webConnectionBuilder.setContentType(WebConnectionBuilder.ContentType.JSON);
+        webConnectionBuilder.setContentType(ContentType.JSON);
         webConnectionBuilder.send();
         return null;
     }

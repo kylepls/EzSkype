@@ -8,6 +8,7 @@ import in.kyle.ezskypeezlife.api.SkypeConversationType;
 import in.kyle.ezskypeezlife.internal.obj.SkypeConversationInternal;
 import in.kyle.ezskypeezlife.internal.obj.SkypeGroupConversationInternal;
 import in.kyle.ezskypeezlife.internal.obj.SkypeUserConversationInternal;
+import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
@@ -24,7 +25,7 @@ public class SkypeGetConversationsPacket extends SkypePacket {
             ".com/v1/users/ME/conversations?startTime=0&pageSize=200&view=msnp24Equivalent&targetType=Passport|Skype|Lync|Thread";
     
     public SkypeGetConversationsPacket(EzSkype ezSkype) {
-        super(URL, WebConnectionBuilder.HTTPRequest.GET, ezSkype, true);
+        super(URL, HTTPRequest.GET, ezSkype, true);
     }
     
     @Override

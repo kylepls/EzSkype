@@ -3,6 +3,8 @@ package in.kyle.ezskypeezlife.internal.packet.messages;
 import com.google.gson.JsonObject;
 import com.jamesmurty.utils.XMLBuilder;
 import in.kyle.ezskypeezlife.EzSkype;
+import in.kyle.ezskypeezlife.internal.packet.ContentType;
+import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
@@ -15,8 +17,8 @@ public class SkypeSendImagePacket extends SkypePacket {
     private final String imageName;
     
     public SkypeSendImagePacket(EzSkype ezSkype, String longId, String imageId, String imageName) {
-        super("https://client-s.gateway.messenger.live.com/v1/users/ME/conversations/" + longId + "/messages", WebConnectionBuilder
-                .HTTPRequest.POST, ezSkype, true);
+        super("https://client-s.gateway.messenger.live.com/v1/users/ME/conversations/" + longId + "/messages", HTTPRequest.POST, ezSkype,
+                true);
         this.imageId = imageId;
         this.imageName = imageName;
     }
@@ -43,7 +45,7 @@ public class SkypeSendImagePacket extends SkypePacket {
         data.addProperty("content", xml);
         data.addProperty("messagetype", "RichText/UriObject");
         data.addProperty("clientmessageid", messageId);
-        webConnectionBuilder.setContentType(WebConnectionBuilder.ContentType.JSON);
+        webConnectionBuilder.setContentType(ContentType.JSON);
     
         webConnectionBuilder.setPostData(data.toString());
         webConnectionBuilder.send();

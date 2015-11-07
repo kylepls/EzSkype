@@ -1,7 +1,6 @@
 package in.kyle.ezskypeezlife.internal.packet;
 
 import in.kyle.ezskypeezlife.EzSkype;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -131,6 +130,8 @@ public class WebConnectionBuilder {
      * @throws IOException
      */
     public String send() throws IOException {
+        EzSkype.LOGGER.debug("Opening connection {} to: {}", request.name(), url);
+    
         if (proxy == null) {
             connection = (HttpURLConnection) new URL(url).openConnection();
         } else {
@@ -155,6 +156,7 @@ public class WebConnectionBuilder {
                 IOUtils.copy(writeStream, os);
                 data = os.toByteArray();
             } else {
+                EzSkype.LOGGER.debug("Posting data: {}", postData);
                 data = postData.toString().getBytes("UTF-8");
             }
     
@@ -195,25 +197,4 @@ public class WebConnectionBuilder {
         return Jsoup.parse(send());
     }
     
-    /**
-     * Created by Kyle on 10/5/2015.
-     * <p>
-     * Sets the Content-Type field of an HTTP request
-     */
-    @AllArgsConstructor
-    public enum ContentType {
-        JSON("application/json"),
-        WWW_FORM("application/x-www-form-urlencoded"),
-        OCTET_STREAM("application/octet-stream");
-        
-        @Getter
-        private final String value;
-    }
-    
-    /**
-     * Sets the request type of an HTTP request
-     */
-    public enum HTTPRequest {
-        GET, POST, PUT, DELETE, OPTIONS
-    }
 }

@@ -2,6 +2,7 @@ package in.kyle.ezskypeezlife.internal.packet.conversation;
 
 import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
+import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
@@ -11,7 +12,7 @@ import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 public class SkypeConversationJoinPacket extends SkypePacket {
     
     public SkypeConversationJoinPacket(EzSkype ezSkype, String longId) {
-        super("https://api.scheduler.skype.com/conversation/" + longId, WebConnectionBuilder.HTTPRequest.GET, ezSkype, true);
+        super("https://api.scheduler.skype.com/conversation/" + longId, HTTPRequest.GET, ezSkype, true);
     }
     
     @Override

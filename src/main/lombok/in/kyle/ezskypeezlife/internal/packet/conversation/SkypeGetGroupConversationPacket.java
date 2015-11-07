@@ -8,6 +8,7 @@ import in.kyle.ezskypeezlife.api.SkypeConversationPermission;
 import in.kyle.ezskypeezlife.api.SkypeUserRole;
 import in.kyle.ezskypeezlife.internal.obj.SkypeGroupConversationInternal;
 import in.kyle.ezskypeezlife.internal.obj.SkypeUserInternal;
+import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 import org.apache.commons.lang.StringUtils;
@@ -24,8 +25,8 @@ import java.util.stream.Collectors;
 public class SkypeGetGroupConversationPacket extends SkypePacket {
     
     public SkypeGetGroupConversationPacket(EzSkype ezSkype, String longId) {
-        super("https://client-s.gateway.messenger.live.com/v1/threads/" + longId + "?view=msnp24Equivalent", WebConnectionBuilder
-                .HTTPRequest.GET, ezSkype, true);
+        super("https://client-s.gateway.messenger.live.com/v1/threads/" + longId + "?view=msnp24Equivalent", HTTPRequest.GET, ezSkype, 
+                true);
     }
     
     @Override

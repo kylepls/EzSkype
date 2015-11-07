@@ -1,6 +1,7 @@
 package in.kyle.ezskypeezlife.internal.packet.user.contact;
 
 import in.kyle.ezskypeezlife.EzSkype;
+import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
@@ -10,7 +11,7 @@ import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 public class SkypeContactEditPacket extends SkypePacket {
     
     public SkypeContactEditPacket(EzSkype ezSkype, String username) {
-        super("https://client-s.gateway.messenger.live.com/v1/users/ME/contacts/8:" + username, WebConnectionBuilder.HTTPRequest.OPTIONS,
+        super("https://client-s.gateway.messenger.live.com/v1/users/ME/contacts/8:" + username, HTTPRequest.OPTIONS,
                 ezSkype, true);
     }
     

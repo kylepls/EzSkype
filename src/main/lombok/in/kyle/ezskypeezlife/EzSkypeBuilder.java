@@ -1,7 +1,7 @@
 package in.kyle.ezskypeezlife;
 
 import in.kyle.ezskypeezlife.api.SkypeCredentials;
-import in.kyle.ezskypeezlife.api.captcha.SkypeCaptchaHandler;
+import in.kyle.ezskypeezlife.api.captcha.SkypeErrorHandler;
 import in.kyle.ezskypeezlife.internal.packet.pull.SkypeEndpoint;
 
 import java.net.Proxy;
@@ -16,7 +16,7 @@ public class EzSkypeBuilder {
     private final SkypeCredentials credentials;
     private final List<SkypeEndpoint> skypeEndpoints;
     private String url;
-    private SkypeCaptchaHandler skypeCaptchaHandler;
+    private SkypeErrorHandler skypeErrorHandler;
     private boolean debug;
     private Proxy proxy;
     
@@ -63,10 +63,10 @@ public class EzSkypeBuilder {
     /**
      * Adds a handler that is called when EzSkype encounters a captcha on login
      *
-     * @param skypeCaptchaHandler - The captcha solver
+     * @param skypeErrorHandler - The captcha solver
      */
-    public EzSkypeBuilder setCaptchaHandler(SkypeCaptchaHandler skypeCaptchaHandler) {
-        this.skypeCaptchaHandler = skypeCaptchaHandler;
+    public EzSkypeBuilder setCaptchaHandler(SkypeErrorHandler skypeErrorHandler) {
+        this.skypeErrorHandler = skypeErrorHandler;
         return this;
     }
     
@@ -92,7 +92,7 @@ public class EzSkypeBuilder {
         if (proxy != null) {
             ezSkype.setProxy(proxy);
         }
-        ezSkype.setCaptchaHandler(skypeCaptchaHandler);
+        ezSkype.setErrorHandler(skypeErrorHandler);
         SkypeEndpoint[] endpoints = skypeEndpoints.toArray(new SkypeEndpoint[skypeEndpoints.size()]);
         if (credentials.isGuestAccount()) {
             ezSkype.loginGuest(endpoints, url);

@@ -4,6 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import in.kyle.ezskypeezlife.EzSkype;
+import in.kyle.ezskypeezlife.internal.packet.ContentType;
+import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
@@ -19,7 +21,7 @@ public class SkypeRegisterEndpointsPacket extends SkypePacket {
     private final SkypeEndpoint[] endpoints;
     
     public SkypeRegisterEndpointsPacket(EzSkype ezSkype, SkypeEndpoint[] endpoints) {
-        super("https://client-s.gateway.messenger.live.com/v1/users/ME/endpoints/SELF/subscriptions", WebConnectionBuilder.HTTPRequest
+        super("https://client-s.gateway.messenger.live.com/v1/users/ME/endpoints/SELF/subscriptions", HTTPRequest
                 .POST, ezSkype, true);
         this.endpoints = endpoints;
     }
@@ -37,7 +39,7 @@ public class SkypeRegisterEndpointsPacket extends SkypePacket {
         EzSkype.LOGGER.debug("Endpoints: {}", endpoints);
         EzSkype.LOGGER.debug("Data {}", data);
         webConnectionBuilder.locationPrefix(ezSkype.getSkypeSession().getLocation());
-        webConnectionBuilder.setContentType(WebConnectionBuilder.ContentType.JSON);
+        webConnectionBuilder.setContentType(ContentType.JSON);
         webConnectionBuilder.setPostData(data.toString());
         
         webConnectionBuilder.send();

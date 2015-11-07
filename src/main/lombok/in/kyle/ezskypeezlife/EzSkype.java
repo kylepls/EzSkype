@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.api.SkypeCredentials;
 import in.kyle.ezskypeezlife.api.SkypeStatus;
-import in.kyle.ezskypeezlife.api.captcha.SkypeCaptchaHandler;
+import in.kyle.ezskypeezlife.api.captcha.SkypeErrorHandler;
 import in.kyle.ezskypeezlife.api.obj.SkypeConversation;
 import in.kyle.ezskypeezlife.api.obj.SkypeUser;
 import in.kyle.ezskypeezlife.events.EventManager;
@@ -20,8 +20,8 @@ import in.kyle.ezskypeezlife.internal.obj.SkypeLocalUserInternal;
 import in.kyle.ezskypeezlife.internal.obj.SkypeSession;
 import in.kyle.ezskypeezlife.internal.packet.auth.SkypeAuthEndpointFinalPacket;
 import in.kyle.ezskypeezlife.internal.packet.auth.SkypeAuthFinishPacket;
+import in.kyle.ezskypeezlife.internal.packet.auth.SkypeJavascriptParams;
 import in.kyle.ezskypeezlife.internal.packet.auth.SkypeLoginInfoPacket;
-import in.kyle.ezskypeezlife.internal.packet.auth.SkypeLoginJavascriptParameters;
 import in.kyle.ezskypeezlife.internal.packet.auth.SkypeLoginPacket;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationAddPacket;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationJoinPacket;
@@ -55,6 +55,8 @@ public class EzSkype {
     
     public static final Gson GSON = new Gson();
     public static final Logger LOGGER = LoggerFactory.getLogger(EzSkype.class);
+    
+    @Getter
     private final SkypeCredentials skypeCredentials;
     @Getter
     private AtomicLong messageId;
@@ -75,7 +77,7 @@ public class EzSkype {
     private Proxy proxy;
     @Getter
     @Setter
-    private SkypeCaptchaHandler captchaHandler;
+    private SkypeErrorHandler errorHandler;
     private boolean startedThreads;
     
     /**
@@ -113,7 +115,7 @@ public class EzSkype {
         // Get login params
     
         SkypeLoginInfoPacket loginInfoPacket = new SkypeLoginInfoPacket(this);
-        SkypeLoginJavascriptParameters parameters = (SkypeLoginJavascriptParameters) loginInfoPacket.executeSync();
+        SkypeJavascriptParams parameters = (SkypeJavascriptParams) loginInfoPacket.executeSync();
         
         // Get x-token
         SkypeLoginPacket skypeLoginPacket = new SkypeLoginPacket(this, skypeCredentials, parameters);

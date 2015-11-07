@@ -3,6 +3,8 @@ package in.kyle.ezskypeezlife.internal.packet.messages.image;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
+import in.kyle.ezskypeezlife.internal.packet.ContentType;
+import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
@@ -14,7 +16,7 @@ public class SkypeSetImagePermissionsPacket extends SkypePacket {
     private final String longId;
     
     public SkypeSetImagePermissionsPacket(EzSkype ezSkype, String imageId, String longId) {
-        super("https://api.asm.skype.com/v1/objects/" + imageId + "/permissions", WebConnectionBuilder.HTTPRequest.PUT, ezSkype, false);
+        super("https://api.asm.skype.com/v1/objects/" + imageId + "/permissions", HTTPRequest.PUT, ezSkype, false);
         this.longId = longId;
     }
     
@@ -28,7 +30,7 @@ public class SkypeSetImagePermissionsPacket extends SkypePacket {
         data.addProperty("type", "pish/image");
         
         webConnectionBuilder.setPostData(data.toString());
-        webConnectionBuilder.setContentType(WebConnectionBuilder.ContentType.JSON);
+        webConnectionBuilder.setContentType(ContentType.JSON);
         webConnectionBuilder.addHeader("Authorization", "skype_token " + ezSkype.getSkypeSession().getXToken());
         webConnectionBuilder.send();
         return null;

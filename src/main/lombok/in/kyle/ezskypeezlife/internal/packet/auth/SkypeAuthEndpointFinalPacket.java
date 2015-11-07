@@ -2,6 +2,7 @@ package in.kyle.ezskypeezlife.internal.packet.auth;
 
 import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
+import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
@@ -11,8 +12,8 @@ import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 public class SkypeAuthEndpointFinalPacket extends SkypePacket {
     
     public SkypeAuthEndpointFinalPacket(EzSkype ezSkype) {
-        super("https://client-s.gateway.messenger.live.com/v1/users/ME/endpoints/" + ezSkype.getSkypeSession().getEncodedSessionId() + 
-                "/presenceDocs/messagingService", WebConnectionBuilder.HTTPRequest.PUT, ezSkype, true);
+        super("https://client-s.gateway.messenger.live.com/v1/users/ME/endpoints/" + ezSkype.getSkypeSession().getEncodedSessionId() +
+                "/presenceDocs/messagingService", HTTPRequest.PUT, ezSkype, true);
     }
     
     @Override

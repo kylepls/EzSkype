@@ -1,6 +1,7 @@
 package in.kyle.ezskypeezlife.internal.packet.conversation;
 
 import in.kyle.ezskypeezlife.EzSkype;
+import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
@@ -10,8 +11,8 @@ import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 public class SkypeConversationKickPacket extends SkypePacket {
     
     public SkypeConversationKickPacket(EzSkype ezSkype, String longId, String username) {
-        super("https://client-s.gateway.messenger.live.com/v1/threads/" + longId + "/members/8:" + username, WebConnectionBuilder
-                .HTTPRequest.DELETE, ezSkype, true);
+        super("https://client-s.gateway.messenger.live.com/v1/threads/" + longId + "/members/8:" + username, HTTPRequest.DELETE, ezSkype,
+                true);
     }
     
     @Override

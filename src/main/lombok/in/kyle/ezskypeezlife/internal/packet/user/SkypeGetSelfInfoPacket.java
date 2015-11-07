@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.api.SkypeGender;
 import in.kyle.ezskypeezlife.internal.obj.SkypeLocalUserInternal;
+import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
@@ -19,7 +20,7 @@ import java.util.Optional;
 public class SkypeGetSelfInfoPacket extends SkypePacket {
     
     public SkypeGetSelfInfoPacket(EzSkype ezSkype) {
-        super("https://api.skype.com/users/self/profile", WebConnectionBuilder.HTTPRequest.GET, ezSkype, true);
+        super("https://api.skype.com/users/self/profile", HTTPRequest.GET, ezSkype, true);
     }
     
     @Override

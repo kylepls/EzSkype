@@ -2,6 +2,8 @@ package in.kyle.ezskypeezlife.internal.packet.pull;
 
 import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
+import in.kyle.ezskypeezlife.internal.packet.ContentType;
+import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 import org.apache.commons.io.IOUtils;
@@ -18,13 +20,13 @@ import java.io.StringWriter;
 public class SkypePullPacket extends SkypePacket {
     
     public SkypePullPacket(EzSkype ezSkype) {
-        super("https://client-s.gateway.messenger.live.com/v1/users/ME/endpoints/SELF/subscriptions/0/poll", WebConnectionBuilder
-                .HTTPRequest.POST, ezSkype, true);
+        super("https://client-s.gateway.messenger.live.com/v1/users/ME/endpoints/SELF/subscriptions/0/poll", HTTPRequest.POST, ezSkype, 
+                true);
     }
     
     @Override
     protected JsonObject run(WebConnectionBuilder webConnectionBuilder) throws Exception {
-        webConnectionBuilder.setContentType(WebConnectionBuilder.ContentType.JSON);
+        webConnectionBuilder.setContentType(ContentType.JSON);
         String result = "";
         try {
             result = webConnectionBuilder.send();

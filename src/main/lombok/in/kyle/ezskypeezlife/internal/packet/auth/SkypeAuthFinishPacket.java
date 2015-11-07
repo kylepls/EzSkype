@@ -2,6 +2,7 @@ package in.kyle.ezskypeezlife.internal.packet.auth;
 
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.internal.obj.SkypeSession;
+import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
@@ -15,7 +16,7 @@ public class SkypeAuthFinishPacket extends SkypePacket {
     private final String token;
     
     public SkypeAuthFinishPacket(EzSkype ezSkype, String token) {
-        super("https://client-s.gateway.messenger.live.com/v1/users/ME/endpoints", WebConnectionBuilder.HTTPRequest.POST, ezSkype, false);
+        super("https://client-s.gateway.messenger.live.com/v1/users/ME/endpoints", HTTPRequest.POST, ezSkype, false);
         this.token = token;
     }
     

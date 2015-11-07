@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.internal.obj.SkypeUserInternal;
+import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 import lombok.Data;
@@ -19,7 +20,7 @@ import java.util.Optional;
 public class SkypeGetContactsPacket extends SkypePacket {
     
     public SkypeGetContactsPacket(EzSkype ezSkype) {
-        super("tbd", WebConnectionBuilder.HTTPRequest.GET, ezSkype, true);
+        super("tbd", HTTPRequest.GET, ezSkype, true);
     }
     
     @Override

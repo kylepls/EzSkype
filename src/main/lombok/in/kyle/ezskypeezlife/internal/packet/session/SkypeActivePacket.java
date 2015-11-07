@@ -2,6 +2,8 @@ package in.kyle.ezskypeezlife.internal.packet.session;
 
 import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
+import in.kyle.ezskypeezlife.internal.packet.ContentType;
+import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
@@ -14,7 +16,7 @@ import java.net.URLEncoder;
 public class SkypeActivePacket extends SkypePacket {
     
     public SkypeActivePacket(EzSkype ezSkype) {
-        super("tbd", WebConnectionBuilder.HTTPRequest.POST, ezSkype, true);
+        super("tbd", HTTPRequest.POST, ezSkype, true);
     }
     
     @Override
@@ -25,8 +27,8 @@ public class SkypeActivePacket extends SkypePacket {
         
         JsonObject data = new JsonObject();
         data.addProperty("timeout", 12);
-        
-        webConnectionBuilder.setContentType(WebConnectionBuilder.ContentType.JSON);
+    
+        webConnectionBuilder.setContentType(ContentType.JSON);
         webConnectionBuilder.setPostData(data.toString());
     
         EzSkype.LOGGER.debug("Sending skype active packet, url: {}", url);

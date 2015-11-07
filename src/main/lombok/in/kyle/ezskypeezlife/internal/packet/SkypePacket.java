@@ -11,12 +11,12 @@ import java.util.concurrent.Future;
 @ToString
 public abstract class SkypePacket {
     
-    private String url;
-    private WebConnectionBuilder.HTTPRequest httpRequest;
     protected EzSkype ezSkype;
+    private String url;
+    private HTTPRequest httpRequest;
     private boolean useHeaders;
     
-    public SkypePacket(String url, WebConnectionBuilder.HTTPRequest httpRequest, EzSkype ezSkype, boolean useHeaders) {
+    public SkypePacket(String url, HTTPRequest httpRequest, EzSkype ezSkype, boolean useHeaders) {
         this.url = url;
         this.httpRequest = httpRequest;
         this.ezSkype = ezSkype;

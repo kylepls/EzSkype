@@ -2,6 +2,7 @@ package in.kyle.ezskypeezlife.internal.packet.messages.image;
 
 import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
+import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
@@ -11,7 +12,7 @@ import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 public class SkypeGetImageIdPacket extends SkypePacket {
     
     public SkypeGetImageIdPacket(EzSkype ezSkype) {
-        super("https://api.asm.skype.com/v1/objects", WebConnectionBuilder.HTTPRequest.POST, ezSkype, false);
+        super("https://api.asm.skype.com/v1/objects", HTTPRequest.POST, ezSkype, false);
     }
     
     @Override
