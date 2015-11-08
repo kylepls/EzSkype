@@ -28,12 +28,19 @@ public class SkypeTextType extends SkypePollMessageType {
         } else {
             SkypeMessageInternal messageNew = getMessageFromJson(ezSkype, jsonObject);
     
-            String msg = messageNew.getMessage();
+            String msgText = messageNew.getMessage();
             String search = "Edited previous message: ";
-            msg = msg.substring(msg.indexOf(search) + search.length()).trim();
     
-            if (msg.contains("<e_m")) {
-                msg = msg.substring(0, msg.indexOf("<e_m"));
+            int searchIndex = msgText.indexOf(search);
+    
+            if (searchIndex < 0) {
+                return;
+            }
+    
+            msgText = msgText.substring(searchIndex + search.length()).trim();
+    
+            if (msgText.contains("<e_m")) {
+                msgText = msgText.substring(0, msgText.indexOf("<e_m"));
             }
     
             SkypeConversationInternal conversation = messageNew.getConversation();
@@ -46,10 +53,9 @@ public class SkypeTextType extends SkypePollMessageType {
             String oldMessageContent = oldMessage.getMessage();
     
             oldMessage.setEdited(true);
-            oldMessage.setMessage(msg);
+            oldMessage.setMessage(msgText);
     
-            SkypeMessageEditedEvent skypeMessageEditedEvent = new SkypeMessageEditedEvent(oldMessage.getSender(), oldMessage, 
-                    oldMessageContent, msg);
+            SkypeMessageEditedEvent skypeMessageEditedEvent = new SkypeMessageEditedEvent(oldMessage.getSender(), oldMessage, oldMessageContent, msgText);
             ezSkype.getEventManager().fire(skypeMessageEditedEvent);
         }
     }
