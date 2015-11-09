@@ -34,14 +34,12 @@ public class SkypeSessionThread extends Thread {
                     EzSkype.LOGGER.info("Skype session expired, logging in again...");
                     ezSkype.login();
                 } catch (Exception e) {
-                    EzSkype.LOGGER.info("Could not login to Skype again, shutting down");
-                    e.printStackTrace();
+                    EzSkype.LOGGER.error("Could not login to Skype again, shutting down", e);
                     active.set(false);
                     return;
                 }
             } catch (Exception e) {
-                EzSkype.LOGGER.info("Error sending session ping packet");
-                e.printStackTrace();
+                EzSkype.LOGGER.error("Error sending session ping packet", e);
             }
     
             try {
