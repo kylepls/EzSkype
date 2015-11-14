@@ -6,6 +6,7 @@ import in.kyle.ezskypeezlife.internal.packet.pull.SkypeEndpoint;
 
 import java.net.Proxy;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -55,6 +56,14 @@ public class EzSkypeBuilder {
         return this;
     }
     
+    /**
+     * Adds all Skype endpoints to the builder
+     */
+    public EzSkypeBuilder withAll() {
+        skypeEndpoints.addAll(Arrays.asList(SkypeEndpoint.values()));
+        return this;
+    }
+    
     public EzSkypeBuilder debug(boolean debugMode) {
         debug = debugMode;
         return this;
@@ -87,6 +96,10 @@ public class EzSkypeBuilder {
      * @throws Exception
      */
     public EzSkype buildAndLogin() throws Exception {
+        if (skypeEndpoints.size() == 0) {
+            throw new RuntimeException("Cannot build Skype instance with 0 endpoints, use .with to add an endpoint");
+        }
+        
         EzSkype ezSkype = new EzSkype(credentials);
         ezSkype.setDebug(debug);
         if (proxy != null) {
