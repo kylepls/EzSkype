@@ -167,7 +167,6 @@ public class EzSkype {
         
         EzSkype.LOGGER.info("Starting pollers");
         startThreads();
-        //setOnline();
     }
     
     private void loadConversations() throws Exception {

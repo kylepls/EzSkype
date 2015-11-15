@@ -38,7 +38,7 @@ public class SkypeConversationsCache {
         } else {
             SkypeConversationType conversationType = SkypeConversationType.fromLongId(longId);
             if (conversationType == SkypeConversationType.USER) {
-                return new SkypeUserConversationInternal(ezSkype, longId, "Other " + "user", true, false, "");
+                return new SkypeUserConversationInternal(ezSkype, longId, longId, true, false, "");
             } else {
                 SkypeGetGroupConversationPacket skypeGetGroupConversationPacket = new SkypeGetGroupConversationPacket(ezSkype, longId);
     
