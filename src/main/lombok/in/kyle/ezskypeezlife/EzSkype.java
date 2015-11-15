@@ -36,10 +36,8 @@ import in.kyle.ezskypeezlife.internal.thread.SkypeContactsThread;
 import in.kyle.ezskypeezlife.internal.thread.SkypePacketIOPool;
 import in.kyle.ezskypeezlife.internal.thread.SkypePollerThread;
 import in.kyle.ezskypeezlife.internal.thread.SkypeSessionThread;
-import lombok.Cleanup;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
@@ -47,17 +45,10 @@ import org.apache.logging.log4j.core.config.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.Proxy;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.zip.GZIPOutputStream;
 
 /**
  * Created by Kyle on 10/5/2015.
@@ -97,11 +88,6 @@ public class EzSkype {
      * @param skypeCredentials - The Skype login credentials
      */
     public EzSkype(SkypeCredentials skypeCredentials) {
-        try {
-            rotateLog();
-        } catch (IOException e) {
-            LOGGER.error("Error rotating log file", e);
-        }
         this.skypeCredentials = skypeCredentials;
         this.active = new AtomicBoolean();
         this.skypeCache = new SkypeCacheManager(this);
@@ -185,24 +171,6 @@ public class EzSkype {
         return login(SkypeEndpoint.values());
     }
     
-    public void rotateLog() throws IOException {
-        File logFile = new File("logs", "skype.log");
-        if (logFile.exists() && logFile.length() != 0) {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            File saveFile = null;
-            String date = simpleDateFormat.format(new Date());
-            int i = 0;
-            while (saveFile == null || saveFile.exists()) {
-                saveFile = new File("logs", date + "-" + (++i == 0 ? "" : i) + ".log.gz");
-            }
-            
-            @Cleanup GZIPOutputStream zipOutputStream = new GZIPOutputStream(new FileOutputStream(saveFile));
-            @Cleanup FileInputStream fin = new FileInputStream(logFile);
-            IOUtils.copy(fin, zipOutputStream);
-            logFile.delete();
-        }
-    }
-    
     /**
      * Logs into a guest account
      *
@@ -230,7 +198,7 @@ public class EzSkype {
         String token = (String) skypeGuestGetTokenPacket.run();
         //System.out.println("Token: " + token);
         finishLogin(endpoints, token);
-        EzSkype.LOGGER.info("Loading conversations"); // TODO
+        EzSkype.LOGGER.info("Loading conversations");
         loadConversations();
         return this;
     }
@@ -241,8 +209,6 @@ public class EzSkype {
     }
     
     /**
-     * // TODO this needs to be looked at
-     *
      * @param skypeStatus - The online status
      */
     public void setStatus(SkypeStatus skypeStatus) {
@@ -354,13 +320,10 @@ public class EzSkype {
         } else {
             level = Level.INFO;
         }
-        LOGGER.info("Setting log level to: " + level);
-        System.out.println("DEBUG LEVEL: " + level);
         LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
         Configuration conf = ctx.getConfiguration();
         conf.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(level);
         ctx.updateLoggers(conf);
-        LOGGER.info("Set log level to: " + level);
-        LOGGER.debug("Set log level to: " + level);
+        LOGGER.info("Log level set to: " + level);
     }
 }

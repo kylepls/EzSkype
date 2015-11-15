@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN" packages="com.mojang.util">
+<Configuration status="WARN">
     <Appenders>
-        <Console name="WINDOWS_COMPAT" target="SYSTEM_OUT"></Console>
-        <Queue name="TerminalConsole">
-            <PatternLayout pattern="d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"/>
-        </Queue>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%d{HH:mm:ss}] %-5p %c{1}:%L - %msg%n"/>
+        </Console>
         <RollingRandomAccessFile name="File" fileName="logs/skype.log" filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz">
-            <PatternLayout pattern="d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"/>
+            <PatternLayout pattern="[%d{HH:mm:ss}] %-5p %c{1}:%L - %msg%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy/>
                 <OnStartupTriggeringPolicy/>
@@ -15,13 +14,8 @@
     </Appenders>
     <Loggers>
         <Root level="info">
-            <filters>
-                <MarkerFilter marker="NETWORK_PACKETS" onMatch="DENY" onMismatch="NEUTRAL"/>
-            </filters>
-            <AppenderRef ref="WINDOWS_COMPAT" level="info"/>
             <AppenderRef ref="File"/>
-            <AppenderRef ref="TerminalConsole" level="info"/>
+            <AppenderRef ref="Console" level="info"/>
         </Root>
     </Loggers>
 </Configuration>
-
