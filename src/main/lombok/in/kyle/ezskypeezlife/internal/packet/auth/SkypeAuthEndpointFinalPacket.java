@@ -12,7 +12,7 @@ import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 public class SkypeAuthEndpointFinalPacket extends SkypePacket {
     
     public SkypeAuthEndpointFinalPacket(EzSkype ezSkype) {
-        super("https://client-s.gateway.messenger.live.com/v1/users/ME/endpoints/" + ezSkype.getSkypeSession().getEncodedSessionId() +
+        super("https://client-s.gateway.messenger.live.com/v1/users/ME/endpoints/" + ezSkype.getSkypeSession().getSessionId() +
                 "/presenceDocs/messagingService", HTTPRequest.PUT, ezSkype, true);
     }
     

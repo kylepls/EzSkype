@@ -45,7 +45,7 @@ public class TestSkypeBot implements SkypeErrorHandler {
         
         // Enter the Skype login info here and login
         ezSkype = new EzSkype(new SkypeCredentials(loginCredentials.getUser(), loginCredentials.getPass()));
-        ezSkype.setDebug(true);
+        ezSkype.setDebug(false);
         ezSkype.setErrorHandler(this);
         ezSkype.login();
         

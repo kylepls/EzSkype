@@ -140,7 +140,7 @@ public class EzSkype {
     
         EzSkype.LOGGER.info("Loading conversations");
         loadConversations();
-        
+        setStatus(SkypeStatus.ONLINE);
         return this;
     }
     
