@@ -16,7 +16,6 @@ import in.kyle.ezskypeezlife.events.conversation.SkypeConversationUserLeaveEvent
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationUserRoleUpdate;
 import in.kyle.ezskypeezlife.events.conversation.SkypeMessageEditedEvent;
 import in.kyle.ezskypeezlife.events.conversation.SkypeMessageReceivedEvent;
-import in.kyle.ezskypeezlife.events.user.SkypeContactAddedEvent;
 import in.kyle.ezskypeezlife.events.user.SkypeContactRequestEvent;
 import org.apache.commons.lang.StringUtils;
 import org.jsoup.Jsoup;
@@ -189,14 +188,10 @@ public class TestSkypeBot implements SkypeErrorHandler {
     }
     
     // Called when a contact is added
-    public void onContact(SkypeContactAddedEvent e) {
-        System.out.println(e.getUser().getUsername() + " added me");
-        e.getUser().setContact(true);
-        e.getUser().sendMessage("Thanks for adding me as a contact!");
-    }
-    
-    public void onContactPending(SkypeContactRequestEvent e) {
-        System.out.println("Contact request: " + e.getSkypeUser().getUsername());
+    public void onContact(SkypeContactRequestEvent e) {
+        System.out.println(e.getSkypeUser().getUsername() + " added me");
+        e.getSkypeUser().setContact(true);
+        e.getSkypeUser().sendMessage("Thanks for adding me as a contact!");
     }
     
     public void onEdit(SkypeMessageEditedEvent e) {
