@@ -189,9 +189,9 @@ public class TestSkypeBot implements SkypeErrorHandler {
     
     // Called when a contact is added
     public void onContact(SkypeContactRequestEvent e) {
-        System.out.println(e.getSkypeUser().getUsername() + " added me");
-        e.getSkypeUser().setContact(true);
-        e.getSkypeUser().sendMessage("Thanks for adding me as a contact!");
+        System.out.println(e.getUser().getUsername() + " added me");
+        e.getUser().setContact(true);
+        e.getUser().sendMessage("Thanks for adding me as a contact!");
     }
     
     public void onEdit(SkypeMessageEditedEvent e) {

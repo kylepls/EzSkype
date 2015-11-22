@@ -36,7 +36,7 @@ public class SkypeRegisterEndpointsPacket extends SkypePacket {
         Arrays.stream(endpoints).forEach(endpoint -> resources.add(new JsonPrimitive(endpoint.getUrlAppend())));
         data.add("interestedResources", resources);
     
-        EzSkype.LOGGER.debug("Endpoints: {}", endpoints);
+        EzSkype.LOGGER.debug("Endpoints: {}", Arrays.asList(endpoints));
         EzSkype.LOGGER.debug("Data {}", data);
         webConnectionBuilder.locationPrefix(ezSkype.getSkypeSession().getLocation());
         webConnectionBuilder.setContentType(ContentType.JSON);

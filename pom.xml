@@ -6,12 +6,13 @@
 
     <groupId>in.kyle</groupId>
     <artifactId>EzSkypeEzLife</artifactId>
-    <version>1.2.8-SNAPSHOT</version>
+    <version>1.2.9-SNAPSHOT</version>
 
     <properties>
         <slf4j.version>1.7.6</slf4j.version>
         <log4j.version>2.0-rc1</log4j.version>
         <github.global.server>github</github.global.server>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
@@ -155,10 +156,6 @@
                         <phase>deploy</phase>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
