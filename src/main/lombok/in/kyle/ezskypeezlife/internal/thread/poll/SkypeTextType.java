@@ -23,7 +23,8 @@ public class SkypeTextType extends SkypePollMessageType {
         if (resource.has("clientmessageid")) {
             SkypeMessageInternal skypeMessageInternal = getMessageFromJson(ezSkype, jsonObject);
             skypeMessageInternal.getConversation().getMessageCache().addMessage(skypeMessageInternal);
-            SkypeMessageReceivedEvent skypeMessageReceivedEvent = new SkypeMessageReceivedEvent(skypeMessageInternal);
+            SkypeMessageReceivedEvent skypeMessageReceivedEvent = new SkypeMessageReceivedEvent(skypeMessageInternal, 
+                    skypeMessageInternal.getSender(), skypeMessageInternal.getConversation());
             ezSkype.getEventManager().fire(skypeMessageReceivedEvent);
         } else {
             SkypeMessageInternal messageNew = getMessageFromJson(ezSkype, jsonObject);
@@ -55,7 +56,8 @@ public class SkypeTextType extends SkypePollMessageType {
             oldMessage.setEdited(true);
             oldMessage.setMessage(msgText);
     
-            SkypeMessageEditedEvent skypeMessageEditedEvent = new SkypeMessageEditedEvent(oldMessage.getSender(), oldMessage, oldMessageContent, msgText);
+            SkypeMessageEditedEvent skypeMessageEditedEvent = new SkypeMessageEditedEvent(oldMessage.getSender(), conversation, 
+                    oldMessage, oldMessageContent, msgText);
             ezSkype.getEventManager().fire(skypeMessageEditedEvent);
         }
     }

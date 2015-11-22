@@ -8,11 +8,11 @@ import in.kyle.ezskypeezlife.EzSkype;
 /**
  * Created by Kyle on 10/23/2015.
  */
-public class SkypeGuestGetConversationId extends SkypeGuestPacket {
+public class SkypeGuestGetConversationIdPacket extends SkypeGuestPacket {
     
     private final String spaceId;
     
-    public SkypeGuestGetConversationId(SkypeWebClient webClient, String spaceId) {
+    public SkypeGuestGetConversationIdPacket(SkypeWebClient webClient, String spaceId) {
         super(webClient);
         this.spaceId = spaceId;
     }

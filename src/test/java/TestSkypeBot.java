@@ -195,7 +195,7 @@ public class TestSkypeBot implements SkypeErrorHandler {
     }
     
     public void onEdit(SkypeMessageEditedEvent e) {
-        e.getSkypeMessage().getConversation().sendMessage("Message edited\n From: " + e.getContentOld() + "\n To: " + e.getContentNew());
+        e.getMessage().getConversation().sendMessage("Message edited\n From: " + e.getContentOld() + "\n To: " + e.getContentNew());
     }
     
     @Override

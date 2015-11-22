@@ -9,7 +9,7 @@ import in.kyle.ezskypeezlife.api.obj.SkypeConversation;
 import in.kyle.ezskypeezlife.api.obj.SkypeUser;
 import in.kyle.ezskypeezlife.events.EventManager;
 import in.kyle.ezskypeezlife.internal.caches.SkypeCacheManager;
-import in.kyle.ezskypeezlife.internal.guest.SkypeGuestGetConversationId;
+import in.kyle.ezskypeezlife.internal.guest.SkypeGuestGetConversationIdPacket;
 import in.kyle.ezskypeezlife.internal.guest.SkypeGuestGetSessionIdPacket;
 import in.kyle.ezskypeezlife.internal.guest.SkypeGuestGetSpaceIdPacket;
 import in.kyle.ezskypeezlife.internal.guest.SkypeGuestGetTokenPacket;
@@ -189,7 +189,7 @@ public class EzSkype {
         String spaceId = (String) skypeGuestGetSpaceIdPacket.run();
         //System.out.println("SpaceId: " + spaceId);
     
-        SkypeGuestGetConversationId skypeGuestGetConversationId = new SkypeGuestGetConversationId(webClient, spaceId);
+        SkypeGuestGetConversationIdPacket skypeGuestGetConversationId = new SkypeGuestGetConversationIdPacket(webClient, spaceId);
         String threadId = (String) skypeGuestGetConversationId.run();
         //System.out.println("ThreadId: " + threadId);
     

@@ -32,24 +32,29 @@ public class EventManager {
     }
     
     public void unregisterEvents(Object o) {
-        Iterator<HoldListener> listenerIterator = listeners.iterator();
-        while (listenerIterator.hasNext()) {
-            HoldListener listener = listenerIterator.next();
-            if (o.equals(listener.getObject())) {
-                listenerIterator.remove();
+        synchronized (listeners) {
+            Iterator<HoldListener> listenerIterator = listeners.iterator();
+            while (listenerIterator.hasNext()) {
+                HoldListener listener = listenerIterator.next();
+                if (o.equals(listener.getObject())) {
+                    listenerIterator.remove();
+                }
             }
         }
     }
     
+    @SuppressWarnings("ForLoopReplaceableByForEach")
     public void fire(SkypeEvent event) {
         HoldListener holdListener;
         for (int i = 0; i < listeners.size(); i++) {
             holdListener = listeners.get(i);
-            if (holdListener.getEvent().equals(event.getClass())) {
-                try {
-                    holdListener.getMethod().invoke(holdListener.getObject(), event);
-                } catch (Exception e) {
-                    EzSkype.LOGGER.error("Error while firing event: " + holdListener, e);
+            synchronized (holdListener.getObject()) {
+                if (holdListener.getEvent().equals(event.getClass())) {
+                    try {
+                        holdListener.getMethod().invoke(holdListener.getObject(), event);
+                    } catch (Exception e) {
+                        EzSkype.LOGGER.error("Error while firing event: " + holdListener, e);
+                    }
                 }
             }
         }
