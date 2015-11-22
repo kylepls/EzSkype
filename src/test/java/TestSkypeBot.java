@@ -5,6 +5,7 @@ import in.kyle.ezskypeezlife.api.captcha.SkypeCaptcha;
 import in.kyle.ezskypeezlife.api.captcha.SkypeErrorHandler;
 import in.kyle.ezskypeezlife.api.obj.SkypeConversation;
 import in.kyle.ezskypeezlife.api.obj.SkypeMessage;
+import in.kyle.ezskypeezlife.api.obj.SkypeUser;
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationAddedToEvent;
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationCallEndedEvent;
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationCallStartedEvent;
@@ -44,7 +45,8 @@ public class TestSkypeBot implements SkypeErrorHandler {
         
         // Enter the Skype login info here and login
         ezSkype = new EzSkype(new SkypeCredentials(loginCredentials.getUser(), loginCredentials.getPass()));
-        ezSkype.setDebug(false);
+    
+        // A error handler is a class that will be called to solve issues with the bot
         ezSkype.setErrorHandler(this);
         ezSkype.login();
         
@@ -52,7 +54,7 @@ public class TestSkypeBot implements SkypeErrorHandler {
         // Events are denoted as methods that have 1 parameter that implements SkypeEvent
         ezSkype.getEventManager().registerEvents(this);
     
-        System.out.println("Complete");
+        System.out.println("Logged in");
     }
     
     // Called when a new message is received from Skype
@@ -61,7 +63,8 @@ public class TestSkypeBot implements SkypeErrorHandler {
         System.out.println("Got message: " + event.getMessage().getSender().getUsername() + " - " + message);
         String[] args = message.split(" ");
     
-        switch (args[0]) {
+        // Some basic command implementations
+        switch (args[0].toLowerCase()) {
             case "+ping":  // Replies to a conversation with the message pong
                 event.reply("Pong!");
                 break;
@@ -91,7 +94,7 @@ public class TestSkypeBot implements SkypeErrorHandler {
                     event.reply("Usage: +role user|master");
                 }
                 break;
-            case "+join": // Join a convo
+            case "+join": // Join a conversation by the Skype join URL, eg: https://join.skype.com/rbjoWQCc9b8l
                 if (args.length > 0) {
                     String url = Jsoup.parse(StringUtils.join(args, ' ', 1, args.length)).text();
                     try {
@@ -114,16 +117,17 @@ public class TestSkypeBot implements SkypeErrorHandler {
                     event.reply("Usage: +contact boolean");
                 }
                 break;
-            case "+info":
+            case "+info": // Get current conversation information
                 event.reply(event.getMessage().getConversation().toString());
-                // test convo loading
+                // Specific details about a conversation (The topic, who made it, all the users in it) may not have already been loaded
+                // Calling fullyLoad will load in the important data we need if it is not already loaded
                 event.getMessage().getConversation().fullyLoad();
                 event.reply(event.getMessage().getConversation().toString());
                 break;
-            case "+convos":
+            case "+convos": // List all the conversations the bot is in
                 event.reply(ezSkype.getConversations().toString());
                 break;
-            case "+pic":
+            case "+pic": // Send a ping of an image from a URL
                 if (args.length != 0) {
                     try {
                         String url = Jsoup.parse(StringUtils.join(args, ' ', 1, args.length)).text();
@@ -141,63 +145,68 @@ public class TestSkypeBot implements SkypeErrorHandler {
     }
     
     // Called when the topic of a conversation changes
-    public void onTopic(SkypeConversationUpdateTopicEvent e) {
-        e.getConversation().sendMessage("Topic changed\nFrom: " + e.getOldTopic() + "\nNew: " + e.getNewTopic());
+    public void onTopic(SkypeConversationUpdateTopicEvent event) {
+        event.getConversation().sendMessage("Topic changed\nFrom: " + event.getOldTopic() + "\nNew: " + event.getNewTopic());
     }
     
     // Called when a user joins a conversation
-    public void onUserJoin(SkypeConversationUserJoinEvent e) {
-        e.getConversation().sendMessage("User joined: " + e.getUser().getUsername());
+    public void onUserJoin(SkypeConversationUserJoinEvent event) {
+        event.getConversation().sendMessage("User joined: " + event.getUser().getUsername());
     }
     
     // Called when a user leaves a conversation
-    public void onUserLeave(SkypeConversationUserLeaveEvent e) {
-        e.getConversation().sendMessage("User left: " + e.getUser().getUsername());
+    public void onUserLeave(SkypeConversationUserLeaveEvent event) {
+        event.getConversation().sendMessage("User left: " + event.getUser().getUsername());
     }
     
     // Called when a user changes role in a conversation
-    public void onRole(SkypeConversationUserRoleUpdate e) {
-        e.getConversation().sendMessage("Role update: " + e.getUser().getUsername() + "\nFrom: " + e.getOldRole() +
-                "\nTo: " + e.getNewRole() + "\nIs admin: " + e.getConversation().isAdmin(e.getUser()));
-    
+    public void onRole(SkypeConversationUserRoleUpdate event) {
+        event.getConversation().sendMessage("Role update: " + event.getUser().getUsername() + "\nFrom: " + event.getOldRole() +
+                "\nTo: " + event.getNewRole() + "\nIs admin: " + event.getConversation().isAdmin(event.getUser()));
+        
     }
     
     // Called when a call is initiated by a user
-    public void onCallStart(SkypeConversationCallStartedEvent e) {
-        e.getConversation().sendMessage("Call started by " + e.getUser().getUsername());
+    public void onCallStart(SkypeConversationCallStartedEvent event) {
+        event.getConversation().sendMessage("Call started by " + event.getUser().getUsername());
     }
     
     // Called when a call is ended
-    public void onCallEnd(SkypeConversationCallEndedEvent e) {
-        e.getConversation().sendMessage("Call ended by " + e.getUser().getUsername());
+    public void onCallEnd(SkypeConversationCallEndedEvent event) {
+        event.getConversation().sendMessage("Call ended by " + event.getUser().getUsername());
     }
     
     // Called when the bot is added to a conversation
-    public void onAdd(SkypeConversationAddedToEvent e) {
-        e.getConversation().sendMessage("Thanks for adding me to this conversation!");
+    public void onAdd(SkypeConversationAddedToEvent event) {
+        event.getConversation().sendMessage("Thanks for adding me to this conversation!");
     }
     
     // Called when the bot is removed from a conversation
-    public void onRemove(SkypeConversationKickedFromEvent e) {
-        System.out.println("I got removed from a conversation by " + e.getUser().getUsername());
+    public void onRemove(SkypeConversationKickedFromEvent event) {
+        System.out.println("I got removed from a conversation by " + event.getUser().getUsername());
     }
     
     // Called when a conversation picture is changed
-    public void onPicture(SkypeConversationPictureChangeEvent e) {
-        e.getConversation().sendMessage("Conversation picture changed\nFrom: " + e.getOldPicture() + "\nTo: " + e.getNewPicture());
+    public void onPicture(SkypeConversationPictureChangeEvent event) {
+        event.getConversation().sendMessage("Conversation picture changed\nFrom: " + event.getOldPicture() + "\nTo: " + event
+                .getNewPicture());
     }
     
-    // Called when a contact is added
-    public void onContact(SkypeContactRequestEvent e) {
-        System.out.println(e.getUser().getUsername() + " added me");
-        e.getUser().setContact(true);
-        e.getUser().sendMessage("Thanks for adding me as a contact!");
+    // Called when someone sends a contact request
+    public void onContact(SkypeContactRequestEvent event) {
+        SkypeUser user = event.getUser();
+        System.out.println(user.getUsername() + " added me");
+        user.setContact(true);
+        user.sendMessage("Thanks for adding me as a contact!");
     }
     
-    public void onEdit(SkypeMessageEditedEvent e) {
-        e.getMessage().getConversation().sendMessage("Message edited\n From: " + e.getContentOld() + "\n To: " + e.getContentNew());
+    // Called when a user edits a message
+    public void onEdit(SkypeMessageEditedEvent event) {
+        event.getConversation().sendMessage("Message edited\n From: " + event.getContentOld() + "\n To: " + event.getContentNew());
     }
     
+    // Called when a captcha needs to be solved
+    // Returns the solution to the captcha
     @Override
     public String solve(SkypeCaptcha skypeCaptcha) {
         System.out.println("Enter the solution to " + skypeCaptcha.getUrl() + " then click enter");
@@ -205,6 +214,8 @@ public class TestSkypeBot implements SkypeErrorHandler {
         return scanner.nextLine();
     }
     
+    // Called when the Skype password needs to be changed (Skype forces you)
+    // Returns the new password and null if no new password will be set
     @Override
     public String setNewPassword() {
         System.out.println("Set new password!");
