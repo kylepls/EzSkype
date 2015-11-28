@@ -3,17 +3,21 @@ package in.kyle.ezskypeezlife.internal.obj;
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.api.SkypeConversationType;
 import in.kyle.ezskypeezlife.api.obj.SkypeUser;
+import in.kyle.ezskypeezlife.api.obj.SkypeUserConversation;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Created by Kyle on 10/7/2015.
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class SkypeUserConversationInternal extends SkypeConversationInternal {
+public class SkypeUserConversationInternal extends SkypeConversationInternal implements SkypeUserConversation {
+    
+    private SkypeUserInternal participant;
     
     // @formatter:off
     public SkypeUserConversationInternal(
@@ -24,7 +28,10 @@ public class SkypeUserConversationInternal extends SkypeConversationInternal {
             boolean joinEnabled,
             String url
     ) {
-        super(ezSkype, longId, topic, historyEnabled, joinEnabled, url, SkypeConversationType.USER, new ArrayList<>(), true);
+        super(ezSkype, longId, topic, historyEnabled, joinEnabled, url, SkypeConversationType.USER, Collections.emptyList(), true);
+        participant = (SkypeUserInternal) ezSkype.getSkypeUser(longId.substring(longId.indexOf(":")+1));
+        setUsers(Arrays.asList(participant, 
+                (SkypeUserInternal) ezSkype.getLocalUser()));
     }
     // @formatter:on
     
@@ -44,16 +51,21 @@ public class SkypeUserConversationInternal extends SkypeConversationInternal {
     }
     
     @Override
-    public void changeTopic(String topic) {
-        throw new IllegalStateException("Cannot set topic for user conversation");
-    }
-    
-    @Override
     public void fullyLoad() {
     }
     
     @Override
     public boolean isLoaded() {
         return true;
+    }
+    
+    @Override
+    public void changeTopic(String topic) {
+        throw new IllegalStateException("Cannot set topic for user conversation");
+    }
+    
+    @Override
+    public SkypeUser getParticipant() {
+        return participant;
     }
 }

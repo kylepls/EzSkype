@@ -3,6 +3,7 @@ package in.kyle.ezskypeezlife;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.api.SkypeCredentials;
+import in.kyle.ezskypeezlife.api.SkypeLocalUser;
 import in.kyle.ezskypeezlife.api.SkypeStatus;
 import in.kyle.ezskypeezlife.api.captcha.SkypeErrorHandler;
 import in.kyle.ezskypeezlife.api.obj.SkypeConversation;
@@ -73,7 +74,7 @@ public class EzSkype {
     @Getter
     private SkypeCacheManager skypeCache;
     @Getter
-    private SkypeLocalUserInternal localUser;
+    private SkypeLocalUser localUser;
     @Getter
     @Setter
     private Proxy proxy;

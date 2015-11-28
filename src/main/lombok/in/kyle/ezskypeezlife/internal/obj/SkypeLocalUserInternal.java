@@ -2,6 +2,7 @@ package in.kyle.ezskypeezlife.internal.obj;
 
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.api.SkypeGender;
+import in.kyle.ezskypeezlife.api.SkypeLocalUser;
 import in.kyle.ezskypeezlife.api.obj.SkypeUser;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,7 +18,7 @@ import java.util.Optional;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class SkypeLocalUserInternal extends SkypeUserInternal {
+public class SkypeLocalUserInternal extends SkypeUserInternal implements SkypeLocalUser {
     
     private String username;
     private Optional<String> about;

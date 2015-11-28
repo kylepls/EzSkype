@@ -17,6 +17,7 @@ public class SkypeUsersCache {
     private final Map<String, SkypeUserInternal> skypeUsers;
     private final EzSkype ezSkype;
     
+    
     public SkypeUsersCache(EzSkype ezSkype) {
         this.ezSkype = ezSkype;
         this.skypeUsers = new HashMap<>();
