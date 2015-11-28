@@ -28,7 +28,7 @@ public class Chat {
      * @return - The formatted string
      */
     public static String blink(final String text) {
-        return "<blink>" + text + "<blink>";
+        return "<blink>" + text + "</blink>";
     }
 
     /**

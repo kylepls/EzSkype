@@ -2,6 +2,7 @@ package in.kyle.ezskypeezlife.events;
 
 import in.kyle.ezskypeezlife.EzSkype;
 import lombok.Data;
+import lombok.Getter;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
  */
 public class EventManager {
     
+    @Getter
     private final List<HoldListener> listeners;
     
     public EventManager() {
@@ -24,6 +26,7 @@ public class EventManager {
             if (m.getParameterCount() == 1) {
                 Class type = m.getParameterTypes()[0];
                 if (SkypeEvent.class.isAssignableFrom(type)) {
+                    m.setAccessible(true);
                     HoldListener holdListener = new HoldListener(o, m, type);
                     listeners.add(holdListener);
                 }
@@ -61,8 +64,8 @@ public class EventManager {
     }
     
     @Data
-    private static class HoldListener {
-    
+    public static class HoldListener {
+        
         private final Object object;
         private final Method method;
         private final Class event;
