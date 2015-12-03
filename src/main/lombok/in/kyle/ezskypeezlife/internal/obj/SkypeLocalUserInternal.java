@@ -53,6 +53,10 @@ public class SkypeLocalUserInternal extends SkypeUserInternal implements SkypeLo
         this.pendingContacts = new HashMap<>();
     }
     
+    public Map<String, SkypeUserInternal> getContacts() {
+        return contacts;
+    }
+    
     /**
      * Gets a list of people waiting for contact acceptance
      *

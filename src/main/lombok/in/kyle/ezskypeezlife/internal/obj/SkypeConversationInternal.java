@@ -31,37 +31,38 @@ import java.util.Optional;
 @AllArgsConstructor
 public abstract class SkypeConversationInternal implements SkypeConversation {
     
-    protected EzSkype ezSkype;
     protected final SkypeMessageCacheInternal messageCache = new SkypeMessageCacheInternal();
     protected final String longId;
+    protected final SkypeConversationType conversationType;
+    protected EzSkype ezSkype;
     protected String topic;
     protected boolean historyEnabled;
     protected boolean joinEnabled;
     protected String pictureUrl;
-    protected final SkypeConversationType conversationType;
     protected List<SkypeUserInternal> users;
     protected boolean fullyLoaded;
-    
-    public SkypeMessageInternal sendMessage(String message) {
-        EzSkype.LOGGER.debug("Sending message \"{}\" to {}", message, longId);
-        String id = Long.toString(ezSkype.getMessageId().incrementAndGet());
-        new SkypeSendMessagePacket(ezSkype, longId, message, id).executeAsync();
-        return new SkypeMessageInternal(ezSkype, id, ezSkype.getLocalUser(), false, SkypeMessageType.RICHTEXT, message, this);
-    }
     
     @Override
     public List<SkypeUser> getUsers() {
         return (List<SkypeUser>) (Object) users;
     }
     
-    @Override
-    public void addUser(SkypeUser skypeUser) {
-        new SkypeConversationAddPacket(ezSkype, longId, skypeUser.getUsername()).executeAsync();
+    public SkypeMessageInternal sendMessage(String message) {
+        EzSkype.LOGGER.debug("Sending message \"{}\" to {}", message, longId);
+        String id = Long.toString(ezSkype.getMessageId().incrementAndGet());
+        new SkypeSendMessagePacket(ezSkype, longId, message, id).executeAsync();
+        return new SkypeMessageInternal(ezSkype, id, (SkypeUserInternal) ezSkype.getLocalUser(), false, SkypeMessageType.RICHTEXT, 
+                message, this);
     }
     
     @Override
     public Optional<SkypeUser> getUser(String username) {
         return getUsers().stream().filter(skypeUser -> skypeUser.getUsername().equals(username)).findAny();
+    }
+    
+    @Override
+    public void addUser(SkypeUser skypeUser) {
+        new SkypeConversationAddPacket(ezSkype, longId, skypeUser.getUsername()).executeAsync();
     }
     
     @Override
@@ -80,22 +81,22 @@ public abstract class SkypeConversationInternal implements SkypeConversation {
     }
     
     @Override
-    public void sendImage(URL url) throws Exception {
-        sendImage(url.openStream());
-    }
-    
-    @Override
     public void sendImage(InputStream imageInputStream) throws Exception {
         SkypeGetImageIdPacket getImageIdPacket = new SkypeGetImageIdPacket(ezSkype);
         String imageId = (String) getImageIdPacket.executeSync();
-        
+    
         SkypeSetImagePermissionsPacket skypeSetImagePermissionsPacket = new SkypeSetImagePermissionsPacket(ezSkype, imageId, longId);
         skypeSetImagePermissionsPacket.executeSync();
-        
+    
         SkypeWriteImagePacket skypeWriteImagePacket = new SkypeWriteImagePacket(ezSkype, imageId, imageInputStream);
         skypeWriteImagePacket.executeSync();
-        
+    
         SkypeSendImagePacket skypeSendImagePacket = new SkypeSendImagePacket(ezSkype, longId, imageId, "asd.png");
         skypeSendImagePacket.executeSync();
+    }
+    
+    @Override
+    public void sendImage(URL url) throws Exception {
+        sendImage(url.openStream());
     }
 }

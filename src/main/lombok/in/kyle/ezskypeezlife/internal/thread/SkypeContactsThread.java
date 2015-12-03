@@ -27,7 +27,7 @@ public class SkypeContactsThread extends Thread {
     public SkypeContactsThread(EzSkype ezSkype) {
         super("Skype-Contact-Poller-" + ezSkype.getLocalUser().getUsername());
         this.ezSkype = ezSkype;
-        this.localUserInternal = ezSkype.getLocalUser();
+        this.localUserInternal = (SkypeLocalUserInternal) ezSkype.getLocalUser();
     }
     
     @Override
