@@ -83,6 +83,11 @@ public class Chat {
         return "<font size=\"" + size + "\">" + text + "</font>";
     }
     
+    public static String encodeTags(String text) {
+        return text.replace("<", StringEscapeUtils.escapeXml11((StringEscapeUtils.escapeJson("<"))))
+                .replace(">", StringEscapeUtils.escapeXml11((StringEscapeUtils.escapeJson(">"))));
+    }
+    
     /**
      * Makes the text monospace meaning that each character will occupy the same amount of space
      *
