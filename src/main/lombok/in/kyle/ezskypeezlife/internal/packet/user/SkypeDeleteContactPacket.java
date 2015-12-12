@@ -15,9 +15,6 @@ import java.io.IOException;
  */
 public class SkypeDeleteContactPacket extends SkypePacket {
     
-    private String username;
-    private JsonObject response;
-    
     /**
      * @param username - The username of the user you would like to remove
      *                 <p>
@@ -25,7 +22,6 @@ public class SkypeDeleteContactPacket extends SkypePacket {
      */
     public SkypeDeleteContactPacket(EzSkype ezSkype, String username) {
         super("https://api.skype.com/users/self/contacts/" + username, HTTPRequest.DELETE, ezSkype, true);
-        this.username = username;
     }
     
     @Override

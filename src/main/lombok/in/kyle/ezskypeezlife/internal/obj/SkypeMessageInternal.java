@@ -1,8 +1,8 @@
 package in.kyle.ezskypeezlife.internal.obj;
 
 import in.kyle.ezskypeezlife.EzSkype;
-import in.kyle.ezskypeezlife.api.SkypeMessageType;
-import in.kyle.ezskypeezlife.api.obj.SkypeMessage;
+import in.kyle.ezskypeezlife.api.conversation.message.SkypeMessage;
+import in.kyle.ezskypeezlife.api.conversation.message.SkypeMessageType;
 import in.kyle.ezskypeezlife.internal.packet.messages.SkypeEditMessagePacket;
 import lombok.AllArgsConstructor;
 import lombok.Data;

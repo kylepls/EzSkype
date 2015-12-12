@@ -9,7 +9,7 @@ import java.io.IOException;
  */
 public abstract class SkypeGuestPacket {
     
-    private SkypeWebClient webClient;
+    private final SkypeWebClient webClient;
     
     public SkypeGuestPacket(SkypeWebClient webClient) {
         this.webClient = webClient;

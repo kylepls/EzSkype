@@ -2,13 +2,13 @@ package in.kyle.ezskypeezlife;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import in.kyle.ezskypeezlife.api.SkypeCredentials;
-import in.kyle.ezskypeezlife.api.captcha.SkypeErrorHandler;
-import in.kyle.ezskypeezlife.api.obj.SkypeConversation;
-import in.kyle.ezskypeezlife.api.obj.SkypeData;
-import in.kyle.ezskypeezlife.api.obj.SkypeEndpoint;
-import in.kyle.ezskypeezlife.api.obj.SkypeLocalUser;
-import in.kyle.ezskypeezlife.api.obj.SkypeUser;
+import in.kyle.ezskypeezlife.api.conversation.SkypeConversation;
+import in.kyle.ezskypeezlife.api.errors.SkypeErrorHandler;
+import in.kyle.ezskypeezlife.api.skype.SkypeCredentials;
+import in.kyle.ezskypeezlife.api.skype.SkypeData;
+import in.kyle.ezskypeezlife.api.skype.SkypeEndpoint;
+import in.kyle.ezskypeezlife.api.user.SkypeLocalUser;
+import in.kyle.ezskypeezlife.api.user.SkypeUser;
 import in.kyle.ezskypeezlife.events.EventManager;
 import in.kyle.ezskypeezlife.exception.SkypeException;
 import in.kyle.ezskypeezlife.internal.caches.SkypeCacheManager;
@@ -64,17 +64,17 @@ public class EzSkype {
     @Getter
     private final SkypeCredentials skypeCredentials;
     @Getter
-    private AtomicLong messageId;
+    private final AtomicLong messageId;
     @Getter
-    private SkypePacketIOPool packetIOPool;
+    private final SkypePacketIOPool packetIOPool;
+    @Getter
+    private final EventManager eventManager;
+    @Getter
+    private final AtomicBoolean active;
+    @Getter
+    private final SkypeCacheManager skypeCache;
     @Getter
     private in.kyle.ezskypeezlife.internal.obj.SkypeSession skypeSession;
-    @Getter
-    private EventManager eventManager;
-    @Getter
-    private AtomicBoolean active;
-    @Getter
-    private SkypeCacheManager skypeCache;
     @Getter
     private SkypeLocalUser localUser;
     @Getter
@@ -209,7 +209,7 @@ public class EzSkype {
             new Thread(sessionThread).start();
             if (!skypeCredentials.isGuestAccount()) {
                 SkypeContactsThread contactsThread = new SkypeContactsThread(this);
-                contactsThread.start();
+                new Thread(contactsThread).start();
             }
         }
     }

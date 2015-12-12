@@ -1,6 +1,6 @@
 package in.kyle.ezskypeezlife.internal.packet.auth;
 
-import in.kyle.ezskypeezlife.api.captcha.SkypeCaptcha;
+import in.kyle.ezskypeezlife.api.errors.SkypeCaptcha;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 import lombok.experimental.UtilityClass;
 import org.jsoup.nodes.Document;

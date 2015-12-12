@@ -3,9 +3,9 @@ package in.kyle.ezskypeezlife.internal.obj;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
-import in.kyle.ezskypeezlife.api.obj.SkypeConversation;
-import in.kyle.ezskypeezlife.api.obj.SkypeMessage;
-import in.kyle.ezskypeezlife.api.obj.SkypeUser;
+import in.kyle.ezskypeezlife.api.conversation.SkypeConversation;
+import in.kyle.ezskypeezlife.api.conversation.message.SkypeMessage;
+import in.kyle.ezskypeezlife.api.user.SkypeUser;
 import in.kyle.ezskypeezlife.internal.packet.user.contact.SkypeContactRemovePacket;
 import in.kyle.ezskypeezlife.internal.packet.user.contact.SkypeContactRequestAcceptPacket;
 import in.kyle.ezskypeezlife.internal.packet.user.contact.SkypeContactRequestSendPacket;
@@ -39,19 +39,6 @@ public class SkypeUserInternal implements SkypeUser {
     private boolean contact;
     private boolean blocked;
     private boolean loaded;
-    
-    public SkypeUserInternal(String username, EzSkype ezSkype) {
-        this.username = username;
-        this.ezSkype = ezSkype;
-        this.firstName = Optional.empty();
-        this.lastName = Optional.empty();
-        this.mood = Optional.empty();
-        this.richMood = Optional.empty();
-        this.displayName = Optional.empty();
-        this.country = Optional.empty();
-        this.city = Optional.empty();
-        this.avatarUrl = Optional.empty();
-    }
     
     public SkypeUserInternal(
             // @formatter:off
@@ -93,6 +80,19 @@ public class SkypeUserInternal implements SkypeUser {
             this.avatarUrl = Optional.of(avatarUrl.getAsString());
         }
         this.loaded = true;
+    }
+    
+    public SkypeUserInternal(String username, EzSkype ezSkype) {
+        this.username = username;
+        this.ezSkype = ezSkype;
+        this.firstName = Optional.empty();
+        this.lastName = Optional.empty();
+        this.mood = Optional.empty();
+        this.richMood = Optional.empty();
+        this.displayName = Optional.empty();
+        this.country = Optional.empty();
+        this.city = Optional.empty();
+        this.avatarUrl = Optional.empty();
     }
     
     /**

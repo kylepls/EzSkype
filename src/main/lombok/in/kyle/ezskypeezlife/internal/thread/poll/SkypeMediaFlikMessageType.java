@@ -2,8 +2,8 @@ package in.kyle.ezskypeezlife.internal.thread.poll;
 
 import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
-import in.kyle.ezskypeezlife.api.obj.emoji.SkypeFlik;
-import in.kyle.ezskypeezlife.api.obj.emoji.SkypeMessageElement;
+import in.kyle.ezskypeezlife.api.conversation.message.SkypeFlik;
+import in.kyle.ezskypeezlife.api.conversation.message.SkypeMessageElement;
 import in.kyle.ezskypeezlife.events.conversation.SkypeFlikMessageReceivedEvent;
 import in.kyle.ezskypeezlife.internal.obj.SkypeFlikMessageInternal;
 import in.kyle.ezskypeezlife.internal.obj.SkypeMessageInternal;

@@ -1,9 +1,9 @@
 package in.kyle.ezskypeezlife.internal.obj;
 
 import in.kyle.ezskypeezlife.EzSkype;
-import in.kyle.ezskypeezlife.api.SkypeConversationType;
-import in.kyle.ezskypeezlife.api.obj.SkypeUser;
-import in.kyle.ezskypeezlife.api.obj.SkypeUserConversation;
+import in.kyle.ezskypeezlife.api.conversation.SkypeConversationType;
+import in.kyle.ezskypeezlife.api.conversation.SkypeUserConversation;
+import in.kyle.ezskypeezlife.api.user.SkypeUser;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

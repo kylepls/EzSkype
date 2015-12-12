@@ -1,10 +1,10 @@
 package in.kyle.ezskypeezlife.internal.packet.ui;
 
 import in.kyle.ezskypeezlife.EzSkype;
-import in.kyle.ezskypeezlife.api.obj.SkypeData;
+import in.kyle.ezskypeezlife.api.skype.SkypeData;
 import in.kyle.ezskypeezlife.exception.SkypeException;
 import in.kyle.ezskypeezlife.internal.obj.SkypeLyncExperiences;
-import in.kyle.ezskypeezlife.internal.obj.SkypeTextElementManager;
+import in.kyle.ezskypeezlife.internal.obj.SkypeTextElementManagerInternal;
 import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
@@ -65,9 +65,9 @@ public class SkypeGetPagePackets extends SkypePacket {
                     SkypeGetPesConfigPacket.PesReturnObject pesConfig = (SkypeGetPesConfigPacket.PesReturnObject) new 
                             SkypeGetPesConfigPacket(ezSkype, skypeLyncExperiences.getPlatformId(), skypeLyncExperiences.getSwxVersion())
                             .executeSync();
-                    
-                    return new SkypeData(document, javascript, bootStrapJavascript, skypeLyncExperiences, version, pesConfig
-                            .getPesConfigUrl(), new SkypeTextElementManager(pesConfig.getData()));
+    
+                    return new SkypeData(document, javascript, bootStrapJavascript, version, pesConfig.getPesConfigUrl(), new 
+                            SkypeTextElementManagerInternal(pesConfig.getData()));
                 } else {
                     throw new SkypeException("Could not get Skype Lync version, please try again later. If the error persists, please " +
                             "open an issue on Github");

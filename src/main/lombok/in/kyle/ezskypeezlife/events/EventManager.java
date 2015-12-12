@@ -12,6 +12,7 @@ import java.util.List;
 /**
  * Created by Kyle on 9/5/2015.
  */
+@SuppressWarnings("unchecked")
 public class EventManager {
     
     @Getter

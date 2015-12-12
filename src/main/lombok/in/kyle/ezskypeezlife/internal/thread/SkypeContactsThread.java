@@ -8,7 +8,6 @@ import in.kyle.ezskypeezlife.internal.obj.SkypeLocalUserInternal;
 import in.kyle.ezskypeezlife.internal.obj.SkypeUserInternal;
 import in.kyle.ezskypeezlife.internal.packet.user.SkypeGetContactsPacket;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -18,14 +17,13 @@ import java.util.Set;
  * Created by Kyle on 10/9/2015.
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class SkypeContactsThread extends Thread {
+public class SkypeContactsThread implements Runnable {
     
     private final EzSkype ezSkype;
-    private SkypeLocalUserInternal localUserInternal;
+    private final SkypeLocalUserInternal localUserInternal;
     
     public SkypeContactsThread(EzSkype ezSkype) {
-        super("Skype-Contact-Poller-" + ezSkype.getLocalUser().getUsername());
+        Thread.currentThread().setName("Skype-Contact-Poller-" + ezSkype.getLocalUser().getUsername());
         this.ezSkype = ezSkype;
         this.localUserInternal = (SkypeLocalUserInternal) ezSkype.getLocalUser();
     }
@@ -38,12 +36,11 @@ public class SkypeContactsThread extends Thread {
                 // Don't use the users returned from the packet
                 
                 SkypeGetContactsPacket.UserContacts contacts = (SkypeGetContactsPacket.UserContacts) contactsPacket.executeSync();
-                
-                Map<String, SkypeUserInternal> contactsOld = ezSkype.getLocalUser().getContacts();
+                SkypeLocalUserInternal localUserInternal = (SkypeLocalUserInternal) ezSkype.getLocalUser();
+                Map<String, SkypeUserInternal> contactsOld = localUserInternal.getContactsInternal();
                 Map<String, SkypeUserInternal> contactsNew = contacts.getContacts();
-                
-                Map<String, SkypeUserInternal> contactPendingOld = (Map<String, SkypeUserInternal>) (Object) ezSkype.getLocalUser()
-                        .getPendingContacts();
+    
+                Map<String, SkypeUserInternal> contactPendingOld = localUserInternal.getPendingContactsInternal();
                 Map<String, SkypeUserInternal> contactPendingNew = contacts.getPending();
                 
                 Set<Map.Entry<String, SkypeUserInternal>> added = new HashSet<>(contactsOld.entrySet());

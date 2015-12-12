@@ -2,7 +2,7 @@ package in.kyle.ezskypeezlife.internal.thread.poll;
 
 import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
-import in.kyle.ezskypeezlife.api.SkypeMessageType;
+import in.kyle.ezskypeezlife.api.conversation.message.SkypeMessageType;
 import in.kyle.ezskypeezlife.internal.obj.SkypeConversationInternal;
 import in.kyle.ezskypeezlife.internal.obj.SkypeMessageInternal;
 import in.kyle.ezskypeezlife.internal.obj.SkypeUserInternal;

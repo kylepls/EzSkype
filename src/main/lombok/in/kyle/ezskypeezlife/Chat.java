@@ -1,6 +1,6 @@
 package in.kyle.ezskypeezlife;
 
-import in.kyle.ezskypeezlife.api.obj.emoji.SkypeEmoji;
+import in.kyle.ezskypeezlife.api.conversation.message.SkypeEmoji;
 import lombok.experimental.UtilityClass;
 
 /**

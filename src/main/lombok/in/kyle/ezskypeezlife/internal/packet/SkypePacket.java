@@ -13,7 +13,7 @@ import java.util.concurrent.Future;
 @ToString
 public abstract class SkypePacket {
     
-    protected EzSkype ezSkype;
+    protected final EzSkype ezSkype;
     private String url;
     private HTTPRequest httpRequest;
     private boolean useHeaders;

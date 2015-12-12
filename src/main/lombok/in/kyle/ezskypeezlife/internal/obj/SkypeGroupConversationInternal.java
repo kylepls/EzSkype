@@ -1,10 +1,10 @@
 package in.kyle.ezskypeezlife.internal.obj;
 
 import in.kyle.ezskypeezlife.EzSkype;
-import in.kyle.ezskypeezlife.api.SkypeConversationPermission;
-import in.kyle.ezskypeezlife.api.SkypeConversationType;
-import in.kyle.ezskypeezlife.api.SkypeUserRole;
-import in.kyle.ezskypeezlife.api.obj.SkypeUser;
+import in.kyle.ezskypeezlife.api.conversation.SkypeConversationPermission;
+import in.kyle.ezskypeezlife.api.conversation.SkypeConversationType;
+import in.kyle.ezskypeezlife.api.user.SkypeUser;
+import in.kyle.ezskypeezlife.api.user.SkypeUserRole;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationGetJoinUrl;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationKickPacket;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationRolePacket;

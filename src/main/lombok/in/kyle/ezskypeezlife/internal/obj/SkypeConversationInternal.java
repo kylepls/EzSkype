@@ -2,12 +2,12 @@ package in.kyle.ezskypeezlife.internal.obj;
 
 import com.jamesmurty.utils.XMLBuilder;
 import in.kyle.ezskypeezlife.EzSkype;
-import in.kyle.ezskypeezlife.api.SkypeConversationType;
-import in.kyle.ezskypeezlife.api.SkypeMessageType;
-import in.kyle.ezskypeezlife.api.SkypeUserRole;
-import in.kyle.ezskypeezlife.api.obj.SkypeConversation;
-import in.kyle.ezskypeezlife.api.obj.SkypeUser;
-import in.kyle.ezskypeezlife.api.obj.emoji.SkypeFlik;
+import in.kyle.ezskypeezlife.api.conversation.SkypeConversation;
+import in.kyle.ezskypeezlife.api.conversation.SkypeConversationType;
+import in.kyle.ezskypeezlife.api.conversation.message.SkypeFlik;
+import in.kyle.ezskypeezlife.api.conversation.message.SkypeMessageType;
+import in.kyle.ezskypeezlife.api.user.SkypeUser;
+import in.kyle.ezskypeezlife.api.user.SkypeUserRole;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationAddPacket;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationRolePacket;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationTopicPacket;

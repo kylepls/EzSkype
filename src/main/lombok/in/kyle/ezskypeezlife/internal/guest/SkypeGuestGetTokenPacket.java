@@ -16,14 +16,12 @@ public class SkypeGuestGetTokenPacket extends SkypeGuestPacket {
     private final String username;
     private final String spaceId;
     private final String threadId;
-    private final SkypeWebClient webClient;
     private final SkypeGuestTempSession tempSession;
-    private String shortId;
+    private final String shortId;
     
     public SkypeGuestGetTokenPacket(SkypeWebClient webClient, SkypeGuestTempSession tempSession, String username, String spaceId, String 
             threadId, String shortId) {
         super(webClient);
-        this.webClient = webClient;
         this.tempSession = tempSession;
         this.username = username;
         this.spaceId = spaceId;

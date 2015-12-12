@@ -1,13 +1,13 @@
 import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
-import in.kyle.ezskypeezlife.api.SkypeCredentials;
-import in.kyle.ezskypeezlife.api.SkypeStatus;
-import in.kyle.ezskypeezlife.api.SkypeUserRole;
-import in.kyle.ezskypeezlife.api.captcha.SkypeCaptcha;
-import in.kyle.ezskypeezlife.api.captcha.SkypeErrorHandler;
-import in.kyle.ezskypeezlife.api.obj.SkypeConversation;
-import in.kyle.ezskypeezlife.api.obj.SkypeMessage;
-import in.kyle.ezskypeezlife.api.obj.SkypeUser;
+import in.kyle.ezskypeezlife.api.conversation.SkypeConversation;
+import in.kyle.ezskypeezlife.api.conversation.message.SkypeMessage;
+import in.kyle.ezskypeezlife.api.errors.SkypeCaptcha;
+import in.kyle.ezskypeezlife.api.errors.SkypeErrorHandler;
+import in.kyle.ezskypeezlife.api.skype.SkypeCredentials;
+import in.kyle.ezskypeezlife.api.user.SkypeStatus;
+import in.kyle.ezskypeezlife.api.user.SkypeUser;
+import in.kyle.ezskypeezlife.api.user.SkypeUserRole;
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationAddedToEvent;
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationCallEndedEvent;
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationCallStartedEvent;
@@ -17,8 +17,8 @@ import in.kyle.ezskypeezlife.events.conversation.SkypeConversationUpdateTopicEve
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationUserJoinEvent;
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationUserLeaveEvent;
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationUserRoleUpdate;
-import in.kyle.ezskypeezlife.events.conversation.SkypeMessageEditedEvent;
-import in.kyle.ezskypeezlife.events.conversation.SkypeMessageReceivedEvent;
+import in.kyle.ezskypeezlife.events.conversation.message.SkypeMessageEditedEvent;
+import in.kyle.ezskypeezlife.events.conversation.message.SkypeMessageReceivedEvent;
 import in.kyle.ezskypeezlife.events.user.SkypeContactRequestEvent;
 import in.kyle.ezskypeezlife.exception.SkypeException;
 import org.apache.commons.lang.StringUtils;
@@ -211,8 +211,8 @@ public class TestSkypeBot implements SkypeErrorHandler {
         event.getConversation().sendMessage("Message edited\n From: " + event.getContentOld() + "\n To: " + event.getContentNew());
     }
     
-    // Called when a captcha needs to be solved
-    // Returns the solution to the captcha
+    // Called when a errors needs to be solved
+    // Returns the solution to the errors
     @Override
     public String solve(SkypeCaptcha skypeCaptcha) {
         System.out.println("Enter the solution to " + skypeCaptcha.getUrl() + " then click enter");

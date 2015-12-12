@@ -12,7 +12,7 @@ import java.io.IOException;
  */
 public class SkypeGuestGetSpaceIdPacket extends SkypeGuestPacket {
     
-    private String shortId;
+    private final String shortId;
     
     public SkypeGuestGetSpaceIdPacket(SkypeWebClient webClient, String shortId) {
         super(webClient);

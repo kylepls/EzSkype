@@ -2,7 +2,7 @@ package in.kyle.ezskypeezlife.internal.packet.messages;
 
 import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
-import in.kyle.ezskypeezlife.api.SkypeMessageType;
+import in.kyle.ezskypeezlife.api.conversation.message.SkypeMessageType;
 import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;

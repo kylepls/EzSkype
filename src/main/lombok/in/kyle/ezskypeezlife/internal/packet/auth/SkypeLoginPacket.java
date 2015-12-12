@@ -1,9 +1,9 @@
 package in.kyle.ezskypeezlife.internal.packet.auth;
 
 import in.kyle.ezskypeezlife.EzSkype;
-import in.kyle.ezskypeezlife.api.SkypeCredentials;
-import in.kyle.ezskypeezlife.api.captcha.SkypeCaptcha;
-import in.kyle.ezskypeezlife.api.captcha.SkypeErrorHandler;
+import in.kyle.ezskypeezlife.api.errors.SkypeCaptcha;
+import in.kyle.ezskypeezlife.api.errors.SkypeErrorHandler;
+import in.kyle.ezskypeezlife.api.skype.SkypeCredentials;
 import in.kyle.ezskypeezlife.exception.SkypeException;
 import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
@@ -54,7 +54,7 @@ public class SkypeLoginPacket extends SkypePacket {
         webConnectionBuilder.addEncodedPostData("redirect_uri", "https://web.skype.com");
     
         if (captcha.isPresent()) {
-            EzSkype.LOGGER.debug("Setting captcha parameters");
+            EzSkype.LOGGER.debug("Setting errors parameters");
             SkypeCaptcha skypeCaptcha = captcha.get();
             webConnectionBuilder.addEncodedPostData("&hip_solution", skypeCaptcha.getSolution());
             webConnectionBuilder.addEncodedPostData("&hip_token", skypeCaptcha.getToken());
@@ -88,11 +88,11 @@ public class SkypeLoginPacket extends SkypePacket {
                     SkypeLoginPacket loginPacket = new SkypeLoginPacket(ezSkype, skypeCredentials, javascriptParameters);
                     return (String) loginPacket.executeSync();
                 } else {
-                    EzSkype.LOGGER.error("Cannot solve Skype captcha, captcha handler is null");
+                    EzSkype.LOGGER.error("Cannot solve Skype errors, errors handler is null");
                     throw new SkypeChangePasswordException(document.html());
                 }
             } else if (document.html().contains("https://client.hip.live.com/GetHIP/")) {
-                EzSkype.LOGGER.debug("Has captcha");
+                EzSkype.LOGGER.debug("Has errors");
                 if (captcha.isPresent()) {
                     EzSkype.LOGGER.debug("Captcha failed, try again");
                 }
@@ -106,7 +106,7 @@ public class SkypeLoginPacket extends SkypePacket {
                     SkypeLoginPacket loginPacket = new SkypeLoginPacket(ezSkype, skypeCredentials, javascriptParameters, skypeCaptcha);
                     return (String) loginPacket.executeSync();
                 } else {
-                    EzSkype.LOGGER.error("Cannot solve Skype captcha, captcha handler is null");
+                    EzSkype.LOGGER.error("Cannot solve Skype errors, errors handler is null");
                     throw new SkypeCaptchaException(document.html());
                 }
             }

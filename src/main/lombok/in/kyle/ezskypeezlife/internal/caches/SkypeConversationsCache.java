@@ -1,7 +1,7 @@
 package in.kyle.ezskypeezlife.internal.caches;
 
 import in.kyle.ezskypeezlife.EzSkype;
-import in.kyle.ezskypeezlife.api.SkypeConversationType;
+import in.kyle.ezskypeezlife.api.conversation.SkypeConversationType;
 import in.kyle.ezskypeezlife.internal.obj.SkypeConversationInternal;
 import in.kyle.ezskypeezlife.internal.obj.SkypeGroupConversationInternal;
 import in.kyle.ezskypeezlife.internal.obj.SkypeUserConversationInternal;

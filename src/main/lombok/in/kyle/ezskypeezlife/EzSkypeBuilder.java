@@ -1,8 +1,8 @@
 package in.kyle.ezskypeezlife;
 
-import in.kyle.ezskypeezlife.api.SkypeCredentials;
-import in.kyle.ezskypeezlife.api.captcha.SkypeErrorHandler;
-import in.kyle.ezskypeezlife.api.obj.SkypeEndpoint;
+import in.kyle.ezskypeezlife.api.errors.SkypeErrorHandler;
+import in.kyle.ezskypeezlife.api.skype.SkypeCredentials;
+import in.kyle.ezskypeezlife.api.skype.SkypeEndpoint;
 
 import java.net.Proxy;
 import java.util.ArrayList;
@@ -70,9 +70,9 @@ public class EzSkypeBuilder {
     }
     
     /**
-     * Adds a handler that is called when EzSkype encounters a captcha on login
+     * Adds a handler that is called when EzSkype encounters a errors on login
      *
-     * @param skypeErrorHandler - The captcha solver
+     * @param skypeErrorHandler - The errors solver
      */
     public EzSkypeBuilder setCaptchaHandler(SkypeErrorHandler skypeErrorHandler) {
         this.skypeErrorHandler = skypeErrorHandler;

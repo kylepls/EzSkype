@@ -1,10 +1,10 @@
 package in.kyle.ezskypeezlife.internal.obj;
 
 import in.kyle.ezskypeezlife.EzSkype;
-import in.kyle.ezskypeezlife.api.SkypeGender;
-import in.kyle.ezskypeezlife.api.SkypeStatus;
-import in.kyle.ezskypeezlife.api.obj.SkypeLocalUser;
-import in.kyle.ezskypeezlife.api.obj.SkypeUser;
+import in.kyle.ezskypeezlife.api.user.SkypeGender;
+import in.kyle.ezskypeezlife.api.user.SkypeLocalUser;
+import in.kyle.ezskypeezlife.api.user.SkypeStatus;
+import in.kyle.ezskypeezlife.api.user.SkypeUser;
 import in.kyle.ezskypeezlife.internal.packet.session.SkypeSetVisibilityPacket;
 import in.kyle.ezskypeezlife.internal.packet.user.SkypeSetProfilePicturePacket;
 import lombok.Data;
@@ -24,7 +24,7 @@ import java.util.Optional;
 @EqualsAndHashCode(callSuper = true)
 public class SkypeLocalUserInternal extends SkypeUserInternal implements SkypeLocalUser {
     
-    private String username;
+    private final String username;
     private Optional<String> about;
     private Optional<String> birthday;
     private Optional<SkypeGender> gender;
@@ -57,15 +57,10 @@ public class SkypeLocalUserInternal extends SkypeUserInternal implements SkypeLo
         this.pendingContacts = new HashMap<>();
     }
     
-    public Map<String, SkypeUserInternal> getContacts() {
-        return contacts;
+    public Map<String, SkypeUser> getContacts() {
+        return (Map<String, SkypeUser>) (Object) contacts;
     }
     
-    /**
-     * Gets a list of people waiting for contact acceptance
-     *
-     * @return - A list of pending contacts
-     */
     public Map<String, SkypeUser> getPendingContacts() {
         return (Map<String, SkypeUser>) (Object) pendingContacts;
     }
@@ -75,13 +70,18 @@ public class SkypeLocalUserInternal extends SkypeUserInternal implements SkypeLo
         new SkypeSetProfilePicturePacket(getEzSkype(), imageSteam).executeAsync();
     }
     
-    /**
-     * @param skypeStatus - The online status
-     */
     public void setStatus(SkypeStatus skypeStatus) {
         EzSkype.LOGGER.info("Setting online status to {}", skypeStatus.name());
         SkypeSetVisibilityPacket setVisibilityPacket = new SkypeSetVisibilityPacket(getEzSkype(), skypeStatus);
         setVisibilityPacket.executeAsync();
+    }
+    
+    public Map<String, SkypeUserInternal> getContactsInternal() {
+        return contacts;
+    }
+    
+    public Map<String, SkypeUserInternal> getPendingContactsInternal() {
+        return pendingContacts;
     }
     
     @Override

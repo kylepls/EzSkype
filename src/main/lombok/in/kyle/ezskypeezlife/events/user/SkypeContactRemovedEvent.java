@@ -1,8 +1,7 @@
 package in.kyle.ezskypeezlife.events.user;
 
-import in.kyle.ezskypeezlife.api.obj.SkypeUser;
+import in.kyle.ezskypeezlife.api.user.SkypeUser;
 import in.kyle.ezskypeezlife.events.SkypeEvent;
-import in.kyle.ezskypeezlife.events.SkypeUserEvent;
 import lombok.Data;
 
 /**

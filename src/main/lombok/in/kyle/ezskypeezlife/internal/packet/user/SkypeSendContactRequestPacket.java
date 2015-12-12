@@ -38,6 +38,7 @@ public class SkypeSendContactRequestPacket extends SkypePacket {
     @Override
     protected JsonObject run(WebConnectionBuilder webConnectionBuilder) throws IOException {
         webConnectionBuilder.setContentType(ContentType.WWW_FORM);
+        // TODO something looks wrong here
         return webConnectionBuilder.getAsJsonObject();
     }
 }

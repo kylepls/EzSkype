@@ -2,7 +2,7 @@ package in.kyle.ezskypeezlife.internal.thread.poll;
 
 import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
-import in.kyle.ezskypeezlife.api.SkypeUserRole;
+import in.kyle.ezskypeezlife.api.user.SkypeUserRole;
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationUserRoleUpdate;
 import in.kyle.ezskypeezlife.internal.obj.SkypeGroupConversationInternal;
 import in.kyle.ezskypeezlife.internal.obj.SkypeUserInternal;

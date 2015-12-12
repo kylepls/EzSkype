@@ -1,8 +1,9 @@
 package in.kyle.ezskypeezlife.events.conversation;
 
-import in.kyle.ezskypeezlife.api.obj.SkypeConversation;
-import in.kyle.ezskypeezlife.api.obj.SkypeFlikMessage;
-import in.kyle.ezskypeezlife.api.obj.SkypeUser;
+import in.kyle.ezskypeezlife.api.conversation.SkypeConversation;
+import in.kyle.ezskypeezlife.api.conversation.message.SkypeFlikMessage;
+import in.kyle.ezskypeezlife.api.user.SkypeUser;
+import in.kyle.ezskypeezlife.events.conversation.message.SkypeMessageReceivedEvent;
 import lombok.EqualsAndHashCode;
 
 /**
