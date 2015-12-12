@@ -44,7 +44,7 @@ public class TestSkypeBot implements SkypeErrorHandler {
     
     private void startTest() throws IOException, SkypeException {
         System.out.println("Logging in");
-        
+    
         // Load credentials from a file 'login.json'
         JsonObject login = EzSkype.GSON.fromJson(new FileReader(new File("login.json")), JsonObject.class);
         
