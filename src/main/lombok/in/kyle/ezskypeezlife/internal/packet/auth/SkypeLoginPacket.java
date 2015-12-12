@@ -4,9 +4,9 @@ import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.api.SkypeCredentials;
 import in.kyle.ezskypeezlife.api.captcha.SkypeCaptcha;
 import in.kyle.ezskypeezlife.api.captcha.SkypeErrorHandler;
+import in.kyle.ezskypeezlife.exception.SkypeException;
 import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
-import in.kyle.ezskypeezlife.internal.packet.SkypePacketException;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 import in.kyle.ezskypeezlife.internal.packet.auth.exception.SkypeCaptchaException;
 import in.kyle.ezskypeezlife.internal.packet.auth.exception.SkypeChangePasswordEmptyException;
@@ -42,7 +42,7 @@ public class SkypeLoginPacket extends SkypePacket {
     }
     
     @Override
-    protected String run(WebConnectionBuilder webConnectionBuilder) throws SkypePacketException, IOException {
+    protected String run(WebConnectionBuilder webConnectionBuilder) throws SkypeException, IOException {
         Date date = new Date();
         webConnectionBuilder.setRequest(HTTPRequest.POST);
         webConnectionBuilder.addEncodedPostData("username", skypeCredentials.getUsername());

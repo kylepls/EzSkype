@@ -5,7 +5,6 @@ import in.kyle.ezskypeezlife.api.obj.SkypeMessage;
 import in.kyle.ezskypeezlife.api.obj.SkypeUser;
 import in.kyle.ezskypeezlife.events.SkypeConversationEvent;
 import in.kyle.ezskypeezlife.events.SkypeEvent;
-import in.kyle.ezskypeezlife.events.SkypeMessageEvent;
 import in.kyle.ezskypeezlife.events.SkypeUserEvent;
 import lombok.Data;
 
@@ -13,7 +12,7 @@ import lombok.Data;
  * Created by Kyle on 10/6/2015.
  */
 @Data
-public class SkypeMessageReceivedEvent implements SkypeEvent, SkypeUserEvent, SkypeConversationEvent, SkypeMessageEvent {
+public class SkypeMessageReceivedEvent implements SkypeEvent, SkypeUserEvent, SkypeConversationEvent {
     
     private final SkypeMessage message;
     private final SkypeUser user;

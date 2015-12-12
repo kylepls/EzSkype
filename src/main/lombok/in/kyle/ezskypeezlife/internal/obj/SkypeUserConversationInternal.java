@@ -28,7 +28,7 @@ public class SkypeUserConversationInternal extends SkypeConversationInternal imp
             boolean joinEnabled,
             String url
     ) {
-        super(ezSkype, longId, topic, historyEnabled, joinEnabled, url, SkypeConversationType.USER, Collections.emptyList(), true);
+        super(longId, SkypeConversationType.USER, ezSkype, topic, historyEnabled, joinEnabled, url, Collections.emptyList(), true);
         participant = (SkypeUserInternal) ezSkype.getSkypeUser(longId.substring(longId.indexOf(":")+1));
         setUsers(Arrays.asList(participant, 
                 (SkypeUserInternal) ezSkype.getLocalUser()));

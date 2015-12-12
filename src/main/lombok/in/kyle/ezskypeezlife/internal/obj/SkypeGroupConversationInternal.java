@@ -39,7 +39,7 @@ public class SkypeGroupConversationInternal extends SkypeConversationInternal {
             String url, 
             List<SkypeUserInternal> users,
             List<SkypeUserInternal> admins) {
-        super(ezSkype, longId, topic, historyEnabled, joinEnabled, url, SkypeConversationType.GROUP, users, true);
+        super(longId, SkypeConversationType.GROUP, ezSkype, topic, historyEnabled, joinEnabled, url, users, true);
         this.permissions = permissions;
         this.joinEnabled = joinEnabled;
         this.creator = creator;

@@ -1,5 +1,13 @@
 package in.kyle.ezskypeezlife.internal.packet.conversation;
 
+import com.google.gson.JsonObject;
+import in.kyle.ezskypeezlife.EzSkype;
+import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
+import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
+import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
+
+import java.io.IOException;
+
 public class SkypeConversationGetJoinUrl extends SkypePacket {
     
     private final String longId;

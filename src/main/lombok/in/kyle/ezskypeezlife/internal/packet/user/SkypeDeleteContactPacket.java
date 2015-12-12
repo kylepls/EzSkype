@@ -6,6 +6,8 @@ import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
+import java.io.IOException;
+
 /**
  * Created by Kyle on 10/7/2015.
  * <p>
@@ -27,8 +29,7 @@ public class SkypeDeleteContactPacket extends SkypePacket {
     }
     
     @Override
-    protected JsonObject run(WebConnectionBuilder webConnectionBuilder) throws Exception {
-        response = EzSkype.GSON.fromJson(webConnectionBuilder.send(), JsonObject.class);
-        return response;
+    protected JsonObject run(WebConnectionBuilder webConnectionBuilder) throws IOException {
+        return webConnectionBuilder.getAsJsonObject();
     }
 }

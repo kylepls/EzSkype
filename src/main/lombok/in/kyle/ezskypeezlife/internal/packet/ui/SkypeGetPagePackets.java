@@ -10,6 +10,7 @@ import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 import org.jsoup.nodes.Document;
 
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,7 +31,7 @@ public class SkypeGetPagePackets extends SkypePacket {
     }
     
     @Override
-    protected SkypeData run(WebConnectionBuilder webConnectionBuilder) throws Exception {
+    protected SkypeData run(WebConnectionBuilder webConnectionBuilder) throws IOException, SkypeException {
         Document document = webConnectionBuilder.getAsDocument();
         
         String javascriptUrl = document.getElementsByTag("script").attr("src");

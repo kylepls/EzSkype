@@ -7,6 +7,8 @@ import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 import lombok.Data;
 
+import java.io.IOException;
+
 /**
  * Created by Kyle on 12/7/2015.
  */
@@ -18,7 +20,7 @@ public class SkypeGetPesConfigPacket extends SkypePacket {
     }
     
     @Override
-    protected PesReturnObject run(WebConnectionBuilder webConnectionBuilder) throws Exception {
+    protected PesReturnObject run(WebConnectionBuilder webConnectionBuilder) throws IOException {
         EzSkype.LOGGER.info("Getting PES version: {}", webConnectionBuilder.getUrl());
         JsonObject data = webConnectionBuilder.getAsJsonObject();
         String configUrl = data.get("pes_config").getAsString();
