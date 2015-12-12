@@ -9,6 +9,8 @@ import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 import org.apache.commons.lang.StringUtils;
 
+import java.io.IOException;
+
 /**
  * Created by Kyle on 10/8/2015.
  */
@@ -23,7 +25,7 @@ public class SkypeSetVisibilityPacket extends SkypePacket {
     }
     
     @Override
-    protected Object run(WebConnectionBuilder webConnectionBuilder) throws Exception {
+    protected Object run(WebConnectionBuilder webConnectionBuilder) throws IOException {
         JsonObject data = new JsonObject();
         data.addProperty("status", StringUtils.capitalize(status.name().toLowerCase()));
         webConnectionBuilder.setPostData(data.toString());

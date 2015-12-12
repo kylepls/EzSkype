@@ -9,8 +9,9 @@ import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -28,11 +29,11 @@ public class SkypeGetUserInfoPacket extends SkypePacket {
      */
     public SkypeGetUserInfoPacket(EzSkype ezSkype, String username) {
         super("https://api.skype.com/users/self/contacts/profiles", HTTPRequest.POST, ezSkype, true);
-        users = Arrays.asList(username);
+        users = Collections.singletonList(username);
     }
     
     @Override
-    protected List<SkypeUserInternal> run(WebConnectionBuilder webConnectionBuilder) throws Exception {
+    protected List<SkypeUserInternal> run(WebConnectionBuilder webConnectionBuilder) throws IOException {
     
         for (String user : users) {
             webConnectionBuilder.addPostData("contacts[]", user);

@@ -38,23 +38,23 @@ public class SkypeContactsThread extends Thread {
                 // Don't use the users returned from the packet
                 
                 SkypeGetContactsPacket.UserContacts contacts = (SkypeGetContactsPacket.UserContacts) contactsPacket.executeSync();
-    
+                
                 Map<String, SkypeUserInternal> contactsOld = ezSkype.getLocalUser().getContacts();
                 Map<String, SkypeUserInternal> contactsNew = contacts.getContacts();
-    
+                
                 Map<String, SkypeUserInternal> contactPendingOld = (Map<String, SkypeUserInternal>) (Object) ezSkype.getLocalUser()
                         .getPendingContacts();
                 Map<String, SkypeUserInternal> contactPendingNew = contacts.getPending();
-    
+                
                 Set<Map.Entry<String, SkypeUserInternal>> added = new HashSet<>(contactsOld.entrySet());
                 added.removeAll(contactsNew.entrySet());
-    
+                
                 Set<Map.Entry<String, SkypeUserInternal>> removed = new HashSet<>(contactsNew.entrySet());
                 removed.removeAll(contactsOld.entrySet());
-    
+                
                 //System.out.println("Contacts: " + s);
                 //System.out.println("Pending: " + contacts.getPending());
-    
+                
                 if (removed.size() != 0) {
                     removed.forEach(entry -> {
                         SkypeUserInternal skypeUser = (SkypeUserInternal) ezSkype.getSkypeUser(entry.getKey());
@@ -62,10 +62,10 @@ public class SkypeContactsThread extends Thread {
                         SkypeContactAddedEvent contactAddedEvent = new SkypeContactAddedEvent(skypeUser);
                         ezSkype.getEventManager().fire(contactAddedEvent);
                     });
-        
+                    
                     //System.out.println("added " + added);
                 }
-    
+                
                 if (added.size() != 0) {
                     added.forEach(entry -> {
                         SkypeUserInternal skypeUser = (SkypeUserInternal) ezSkype.getSkypeUser(entry.getKey());
@@ -73,14 +73,14 @@ public class SkypeContactsThread extends Thread {
                         SkypeContactRemovedEvent contactRemovedEvent = new SkypeContactRemovedEvent(skypeUser);
                         ezSkype.getEventManager().fire(contactRemovedEvent);
                     });
-        
+                    
                     //System.out.println("removed " + removed);
                 }
-    
-    
+                
+                
                 Set<Map.Entry<String, SkypeUserInternal>> pendingAdded = new HashSet<>(contactPendingOld.entrySet());
                 pendingAdded.removeAll(contactPendingNew.entrySet());
-    
+                
                 pendingAdded.forEach(entry -> {
                     SkypeUserInternal skypeUser = (SkypeUserInternal) ezSkype.getSkypeUser(entry.getKey());
                     localUserInternal.getPendingContacts().put(entry.getKey(), skypeUser);

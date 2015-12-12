@@ -5,6 +5,8 @@ import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
+import java.io.IOException;
+
 /**
  * Created by Kyle on 10/7/2015.
  */
@@ -16,8 +18,7 @@ public class SkypeConversationKickPacket extends SkypePacket {
     }
     
     @Override
-    protected Object run(WebConnectionBuilder webConnectionBuilder) throws Exception {
-        // TODO do something with this?
+    protected Object run(WebConnectionBuilder webConnectionBuilder) throws IOException {
         webConnectionBuilder.send();
         return null;
     }

@@ -7,7 +7,6 @@ import in.kyle.ezskypeezlife.events.conversation.SkypeConversationUserLeaveEvent
 import in.kyle.ezskypeezlife.events.conversation.SkypeGuestAccountExpireEvent;
 import in.kyle.ezskypeezlife.internal.obj.SkypeGroupConversationInternal;
 import in.kyle.ezskypeezlife.internal.obj.SkypeUserInternal;
-import in.kyle.ezskypeezlife.internal.thread.SkypePollMessageType;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

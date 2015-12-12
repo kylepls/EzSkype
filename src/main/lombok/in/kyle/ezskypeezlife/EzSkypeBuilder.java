@@ -2,7 +2,7 @@ package in.kyle.ezskypeezlife;
 
 import in.kyle.ezskypeezlife.api.SkypeCredentials;
 import in.kyle.ezskypeezlife.api.captcha.SkypeErrorHandler;
-import in.kyle.ezskypeezlife.internal.packet.pull.SkypeEndpoint;
+import in.kyle.ezskypeezlife.api.obj.SkypeEndpoint;
 
 import java.net.Proxy;
 import java.util.ArrayList;
@@ -22,18 +22,6 @@ public class EzSkypeBuilder {
     private Proxy proxy;
     
     /**
-     * Constructs a new EzSkype builder, this will build a Skype instance from scratch
-     * If you don't enable a feature, events related to that feature will not fire
-     *
-     * @param credentials - The login credentials
-     */
-    public EzSkypeBuilder(SkypeCredentials credentials) {
-        this.credentials = credentials;
-        this.skypeEndpoints = new ArrayList<>();
-        this.url = null;
-    }
-    
-    /**
      * This constructor is for guest accounts only, the URL is the url to join the Skype chat
      * Constructs a new EzSkype builder, this will build a Skype instance from scratch
      * If you don't enable a feature, events related to that feature will not fire
@@ -44,6 +32,18 @@ public class EzSkypeBuilder {
     public EzSkypeBuilder(String username, String url) {
         this(new SkypeCredentials(username));
         this.url = url;
+    }
+    
+    /**
+     * Constructs a new EzSkype builder, this will build a Skype instance from scratch
+     * If you don't enable a feature, events related to that feature will not fire
+     *
+     * @param credentials - The login credentials
+     */
+    public EzSkypeBuilder(SkypeCredentials credentials) {
+        this.credentials = credentials;
+        this.skypeEndpoints = new ArrayList<>();
+        this.url = null;
     }
     
     /**

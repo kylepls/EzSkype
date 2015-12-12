@@ -8,6 +8,8 @@ import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 import org.apache.commons.lang.StringUtils;
 
+import java.io.IOException;
+
 /**
  * Created by Kyle on 10/7/2015.
  */
@@ -22,7 +24,7 @@ public class SkypeConversationRolePacket extends SkypePacket {
     }
     
     @Override
-    protected Object run(WebConnectionBuilder webConnectionBuilder) throws Exception {
+    protected Object run(WebConnectionBuilder webConnectionBuilder) throws IOException {
         JsonObject data = new JsonObject();
         data.addProperty("Role", StringUtils.capitalize(skypeUserRole.name().toLowerCase()));
         webConnectionBuilder.setPostData(data.toString());

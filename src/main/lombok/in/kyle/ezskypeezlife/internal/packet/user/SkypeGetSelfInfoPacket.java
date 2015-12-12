@@ -10,6 +10,7 @@ import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +25,7 @@ public class SkypeGetSelfInfoPacket extends SkypePacket {
     }
     
     @Override
-    protected SkypeLocalUserInternal run(WebConnectionBuilder webConnectionBuilder) throws Exception {
+    protected SkypeLocalUserInternal run(WebConnectionBuilder webConnectionBuilder) throws IOException {
         JsonObject response = EzSkype.GSON.fromJson(webConnectionBuilder.send(), JsonObject.class);
         
         String username = response.get("username").getAsString();

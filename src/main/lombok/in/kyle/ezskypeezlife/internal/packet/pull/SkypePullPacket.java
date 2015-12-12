@@ -9,6 +9,7 @@ import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 import org.apache.commons.io.IOUtils;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.StringWriter;
 
 /**
@@ -25,7 +26,7 @@ public class SkypePullPacket extends SkypePacket {
     }
     
     @Override
-    protected JsonObject run(WebConnectionBuilder webConnectionBuilder) throws Exception {
+    protected JsonObject run(WebConnectionBuilder webConnectionBuilder) throws IOException {
         webConnectionBuilder.setContentType(ContentType.JSON);
         String result = "";
         try {

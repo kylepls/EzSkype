@@ -58,7 +58,7 @@ public interface SkypeConversation {
      * Sends a message to the conversation
      *
      * @param message - The message to send
-     * @return - The message send
+     * @return - The sent message
      */
     SkypeMessage sendMessage(String message);
     

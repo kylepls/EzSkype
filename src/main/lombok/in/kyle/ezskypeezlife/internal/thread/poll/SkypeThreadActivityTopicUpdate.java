@@ -5,7 +5,6 @@ import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationUpdateTopicEvent;
 import in.kyle.ezskypeezlife.internal.obj.SkypeGroupConversationInternal;
 import in.kyle.ezskypeezlife.internal.obj.SkypeUserInternal;
-import in.kyle.ezskypeezlife.internal.thread.SkypePollMessageType;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 

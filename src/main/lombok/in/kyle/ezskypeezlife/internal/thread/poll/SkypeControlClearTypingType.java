@@ -2,7 +2,6 @@ package in.kyle.ezskypeezlife.internal.thread.poll;
 
 import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
-import in.kyle.ezskypeezlife.internal.thread.SkypePollMessageType;
 
 /**
  * Created by Kyle on 10/9/2015.

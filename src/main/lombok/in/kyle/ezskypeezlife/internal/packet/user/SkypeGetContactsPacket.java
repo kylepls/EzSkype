@@ -10,6 +10,7 @@ import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 import lombok.Data;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -24,7 +25,7 @@ public class SkypeGetContactsPacket extends SkypePacket {
     }
     
     @Override
-    protected UserContacts run(WebConnectionBuilder webConnectionBuilder) throws Exception {
+    protected UserContacts run(WebConnectionBuilder webConnectionBuilder) throws IOException {
         String privateUsername = ezSkype.getLocalUser().getUsername();
         
         String append = "?$filter=type%20eq%20%27skype%27%20or%20type%20eq%20%27msn%27%20or%20type%20eq%20%27agent%27&reason=default";
