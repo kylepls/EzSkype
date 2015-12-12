@@ -1,5 +1,6 @@
 package in.kyle.ezskypeezlife.internal.packet;
 
+import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
 import lombok.Getter;
 import lombok.Setter;
@@ -63,6 +64,17 @@ public class WebConnectionBuilder {
     }
     
     /**
+     * Adds a non encoded HTTP request header
+     *
+     * @param key   - The header key
+     * @param value - The header value
+     */
+    public WebConnectionBuilder addHeader(String key, String value) {
+        this.headers.put(key, value);
+        return this;
+    }
+    
+    /**
      * Sets the location prefix of the remote server
      * (String format %s...)
      * This only for urls that need it
@@ -71,20 +83,6 @@ public class WebConnectionBuilder {
      */
     public WebConnectionBuilder locationPrefix(String prefix) {
         this.url = String.format(url, prefix);
-        return this;
-    }
-    
-    /**
-     * Adds a post parameter to the request
-     *
-     * @param key   - The key
-     * @param value - The value, will be encrypted
-     */
-    public WebConnectionBuilder addPostData(String key, String value) {
-        if (postData.length() != 0) {
-            postData.append("&");
-        }
-        postData.append(key).append("=").append(value);
         return this;
     }
     
@@ -103,6 +101,20 @@ public class WebConnectionBuilder {
     }
     
     /**
+     * Adds a post parameter to the request
+     *
+     * @param key   - The key
+     * @param value - The value, will be encrypted
+     */
+    public WebConnectionBuilder addPostData(String key, String value) {
+        if (postData.length() != 0) {
+            postData.append("&");
+        }
+        postData.append(key).append("=").append(value);
+        return this;
+    }
+    
+    /**
      * Sets the data to post if the request type is POST
      *
      * @param postData - The data to be posted, must be encrypted first
@@ -112,15 +124,8 @@ public class WebConnectionBuilder {
         return this;
     }
     
-    /**
-     * Adds a non encoded HTTP request header
-     *
-     * @param key   - The header key
-     * @param value - The header value
-     */
-    public WebConnectionBuilder addHeader(String key, String value) {
-        this.headers.put(key, value);
-        return this;
+    public Document getAsDocument() throws IOException {
+        return Jsoup.parse(send());
     }
     
     /**
@@ -156,9 +161,12 @@ public class WebConnectionBuilder {
                 IOUtils.copy(writeStream, os);
                 data = os.toByteArray();
             } else {
-                EzSkype.LOGGER.debug("Posting data: {}", postData);
                 data = postData.toString().getBytes("UTF-8");
             }
+    
+            EzSkype.LOGGER.debug("Posting data: {}", postData);
+            EzSkype.LOGGER.debug("Length: {}", data.length);
+    
     
             connection.addRequestProperty("Content-Length", Integer.toString(data.length));
             connection.getOutputStream().write(data);
@@ -193,8 +201,7 @@ public class WebConnectionBuilder {
         return response.toString();
     }
     
-    public Document getAsDocument() throws IOException {
-        return Jsoup.parse(send());
+    public JsonObject getAsJsonObject() throws IOException {
+        return EzSkype.GSON.fromJson(send(), JsonObject.class);
     }
-    
 }

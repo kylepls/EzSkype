@@ -13,6 +13,7 @@ import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 import org.apache.commons.lang.StringUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +31,7 @@ public class SkypeGetGroupConversationPacket extends SkypePacket {
     }
     
     @Override
-    protected SkypeGroupConversationInternal run(WebConnectionBuilder webConnectionBuilder) throws Exception {
+    protected SkypeGroupConversationInternal run(WebConnectionBuilder webConnectionBuilder) throws IOException {
         JsonObject convoJson = EzSkype.GSON.fromJson(webConnectionBuilder.send(), JsonObject.class);
         
         JsonObject propertiesJson = convoJson.getAsJsonObject("properties");

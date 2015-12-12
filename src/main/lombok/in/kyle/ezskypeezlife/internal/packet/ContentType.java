@@ -12,7 +12,8 @@ import lombok.Getter;
 public enum ContentType {
     JSON("application/json"),
     WWW_FORM("application/x-www-form-urlencoded"),
-    OCTET_STREAM("application/octet-stream");
+    OCTET_STREAM("application/octet-stream"),
+    IMAGE("image/jpeg");
     
     @Getter
     private final String value;

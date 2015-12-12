@@ -1,4 +1,4 @@
-package in.kyle.ezskypeezlife.internal.packet.pull;
+package in.kyle.ezskypeezlife.api.obj;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

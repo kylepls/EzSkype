@@ -5,7 +5,6 @@ import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.events.conversation.SkypeUserTypingEvent;
 import in.kyle.ezskypeezlife.internal.obj.SkypeConversationInternal;
 import in.kyle.ezskypeezlife.internal.obj.SkypeUserInternal;
-import in.kyle.ezskypeezlife.internal.thread.SkypePollMessageType;
 
 /**
  * Created by Kyle on 10/9/2015.

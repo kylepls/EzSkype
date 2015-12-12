@@ -5,4 +5,14 @@ package in.kyle.ezskypeezlife.exception;
  */
 public class SkypeException extends Exception {
     
+    public SkypeException() {
+    }
+    
+    public SkypeException(String message) {
+        super(message);
+    }
+    
+    public SkypeException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

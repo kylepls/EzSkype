@@ -1,8 +1,10 @@
 package in.kyle.ezskypeezlife.internal.packet;
 
 import in.kyle.ezskypeezlife.EzSkype;
+import in.kyle.ezskypeezlife.exception.SkypeException;
 import lombok.ToString;
 
+import java.io.IOException;
 import java.util.concurrent.Future;
 
 /**
@@ -24,15 +26,14 @@ public abstract class SkypePacket {
     }
     
     /**
-     * Executes the request
-     *
-     * @throws Exception
+     * Executes the request on the PacketIO thread
+     * @return - The object returned by the packet
      */
     public Future<Object> executeAsync() {
         return ezSkype.getPacketIOPool().sendPacket(this);
     }
     
-    public Object executeSync() throws Exception {
+    public Object executeSync() throws SkypeException, IOException {
         WebConnectionBuilder webConnectionBuilder = getConnectionBuilder();
         EzSkype.LOGGER.debug("Opening connection: " + this.getClass().getCanonicalName() + " " + this + "\n    Connection: " + 
                 webConnectionBuilder);
@@ -41,7 +42,7 @@ public abstract class SkypePacket {
     
     private WebConnectionBuilder getConnectionBuilder() {
         WebConnectionBuilder builder = new WebConnectionBuilder();
-        if (ezSkype.getProxy() != null) {
+        if (ezSkype != null && ezSkype.getProxy() != null) {
             builder.setProxy(ezSkype.getProxy());
         }
         builder.setUrl(url);
@@ -60,7 +61,8 @@ public abstract class SkypePacket {
      *
      * @param webConnectionBuilder - The connection builder
      * @return The data returned from the packet
-     * @throws Exception
+     * @throws SkypeException - If an error occurred while parsing the request or some other non IO related error
+     * @throws IOException - If there was an error sending data to the server
      */
-    protected abstract Object run(WebConnectionBuilder webConnectionBuilder) throws Exception;
+    protected abstract Object run(WebConnectionBuilder webConnectionBuilder) throws SkypeException, IOException;
 }

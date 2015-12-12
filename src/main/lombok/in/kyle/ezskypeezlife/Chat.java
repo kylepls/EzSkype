@@ -1,5 +1,6 @@
 package in.kyle.ezskypeezlife;
 
+import in.kyle.ezskypeezlife.api.obj.emoji.SkypeEmoji;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -11,17 +12,6 @@ import lombok.experimental.UtilityClass;
 public class Chat {
 
     /**
-     * Makes the string into a link
-     *
-     * @param text - The String to link
-     * @param url  - The destination URL
-     * @return - The formatted string
-     */
-    public static String link(final String text, final String url) {
-        return "<a href=\"" + url + "\">" + text + "</a>";
-    }
-
-    /**
      * Makes the text blink for the client
      *
      * @param text - The text to format
@@ -30,35 +20,25 @@ public class Chat {
     public static String blink(final String text) {
         return "<blink>" + text + "</blink>";
     }
-
+    
     /**
-     * Underline text
+     * Bolds a string of text
      *
-     * @param text - The text to format
-     * @return - The formatted string
+     * @param text - The text to bold
+     * @return - The formatted text
      */
-    public static String underline(final String text) {
-        return "<u>" + text + "</u>";
+    public static String bold(final String text) {
+        return "<b>" + text + "</b>";
     }
     
     /**
-     * Italicises a string of text
+     * Makes the text monospace meaning that each character will occupy the same amount of space
      *
-     * @param text - The text to format
-     * @return - The formatted string
+     * @param text - The text to apply the effect to
+     * @return - The formatted text
      */
-    public static String italic(final String text) {
-        return "<i>" + text + "</i>";
-    }
-    
-    /**
-     * Draws a line thorough text
-     *
-     * @param text - The text to format
-     * @return - The formatted string
-     */
-    public static String strikeThrough(final String text) {
-        return "<s>" + text + "</s>";
+    public static String code(final String text) {
+        return "<pre>" + text + "</pre>";
     }
     
     /**
@@ -73,33 +53,73 @@ public class Chat {
     }
     
     /**
+     * Adds an emoji
+     * @param skypeEmoji - The emjoi to be converted to text
+     * @return - The formatted string
+     */
+    public static String emoji(final SkypeEmoji skypeEmoji) {
+        return emoji(skypeEmoji.getShortcuts().get(0));
+    }
+    
+    /**
+     * Adds an emoji
+     *
+     * @param emoji - The emjoi id
+     * @return - The formatted string
+     */
+    public static String emoji(final String emoji) {
+        return "<ss type=\"" + emoji + "\">" + emoji + "</ss>";
+    }
+    
+    /**
+     * Italicises a string of text
+     *
+     * @param text - The text to format
+     * @return - The formatted string
+     */
+    public static String italic(final String text) {
+        return "<i>" + text + "</i>";
+    }
+    
+    /**
+     * Makes the string into a link
+     *
+     * @param text - The String to link
+     * @param url  - The destination URL
+     * @return - The formatted string
+     */
+    public static String link(final String text, final String url) {
+        return "<a href=\"" + url + "\">" + text + "</a>";
+    }
+    
+    /**
      * Sets the size of a string of text
      *
      * @param text - The text to size
      * @param size - The font size of the text
      * @return - The formatted text
      */
-    public static String size(String text, int size) {
+    public static String size(final String text, final int size) {
         return "<font size=\"" + size + "\">" + text + "</font>";
     }
     
     /**
-     * Makes the text monospace meaning that each character will occupy the same amount of space
+     * Draws a line thorough text
      *
-     * @param text - The text to apply the effect to
-     * @return - The formatted text
+     * @param text - The text to format
+     * @return - The formatted string
      */
-    public static String code(String text) {
-        return "<pre>" + text + "</pre>";
+    public static String strikeThrough(final String text) {
+        return "<s>" + text + "</s>";
     }
     
     /**
-     * Bolds a string of text
+     * Underline text
      *
-     * @param text - The text to bold
-     * @return - The formatted text
+     * @param text - The text to format
+     * @return - The formatted string
      */
-    public static String bold(String text) {
-        return "<b>" + text + "</b>";
+    public static String underline(final String text) {
+        return "<u>" + text + "</u>";
     }
 }

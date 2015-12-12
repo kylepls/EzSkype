@@ -5,6 +5,8 @@ import com.gargoylesoftware.htmlunit.WebResponse;
 import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
 
+import java.io.IOException;
+
 /**
  * Created by Kyle on 10/23/2015.
  */
@@ -18,7 +20,7 @@ public class SkypeGuestGetConversationIdPacket extends SkypeGuestPacket {
     }
     
     @Override
-    protected Object run(WebClient webClient) throws Exception {
+    protected Object run(WebClient webClient) throws IOException {
         WebResponse webResponse = webClient.getPage("https://api.scheduler.skype.com/conversation/" + spaceId).getWebResponse();
         JsonObject moreInfo = EzSkype.GSON.fromJson(webResponse.getContentAsString(), JsonObject.class);
         return moreInfo.get("ThreadId").getAsString();

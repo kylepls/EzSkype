@@ -6,6 +6,7 @@ import in.kyle.ezskypeezlife.api.captcha.SkypeCaptcha;
 import in.kyle.ezskypeezlife.api.captcha.SkypeErrorHandler;
 import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
+import in.kyle.ezskypeezlife.internal.packet.SkypePacketException;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 import in.kyle.ezskypeezlife.internal.packet.auth.exception.SkypeCaptchaException;
 import in.kyle.ezskypeezlife.internal.packet.auth.exception.SkypeChangePasswordEmptyException;
@@ -14,6 +15,7 @@ import in.kyle.ezskypeezlife.internal.packet.auth.exception.SkypeLoginException;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
@@ -27,6 +29,10 @@ public class SkypeLoginPacket extends SkypePacket {
     private final SkypeJavascriptParams javascriptParameters;
     private final Optional<SkypeCaptcha> captcha;
     
+    public SkypeLoginPacket(EzSkype ezSkype, SkypeCredentials credentials, SkypeJavascriptParams javascriptParameters) {
+        this(ezSkype, credentials, javascriptParameters, null);
+    }
+    
     public SkypeLoginPacket(EzSkype ezSkype, SkypeCredentials credentials, SkypeJavascriptParams javascriptParameters, SkypeCaptcha 
             skypeCaptcha) {
         super("https://login.skype.com/login?client_id=578134&redirect_uri=https%3A%2F%2Fweb.skype.com", HTTPRequest.POST, ezSkype, false);
@@ -35,12 +41,8 @@ public class SkypeLoginPacket extends SkypePacket {
         this.captcha = Optional.ofNullable(skypeCaptcha);
     }
     
-    public SkypeLoginPacket(EzSkype ezSkype, SkypeCredentials credentials, SkypeJavascriptParams javascriptParameters) {
-        this(ezSkype, credentials, javascriptParameters, null);
-    }
-    
     @Override
-    protected String run(WebConnectionBuilder webConnectionBuilder) throws Exception {
+    protected String run(WebConnectionBuilder webConnectionBuilder) throws SkypePacketException, IOException {
         Date date = new Date();
         webConnectionBuilder.setRequest(HTTPRequest.POST);
         webConnectionBuilder.addEncodedPostData("username", skypeCredentials.getUsername());

@@ -1,11 +1,13 @@
 package in.kyle.ezskypeezlife.internal.obj;
 
+import com.jamesmurty.utils.XMLBuilder;
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.api.SkypeConversationType;
 import in.kyle.ezskypeezlife.api.SkypeMessageType;
 import in.kyle.ezskypeezlife.api.SkypeUserRole;
 import in.kyle.ezskypeezlife.api.obj.SkypeConversation;
 import in.kyle.ezskypeezlife.api.obj.SkypeUser;
+import in.kyle.ezskypeezlife.api.obj.emoji.SkypeFlik;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationAddPacket;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationRolePacket;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationTopicPacket;
@@ -17,6 +19,8 @@ import in.kyle.ezskypeezlife.internal.packet.messages.image.SkypeWriteImagePacke
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -31,22 +35,46 @@ import java.util.Optional;
 @AllArgsConstructor
 public abstract class SkypeConversationInternal implements SkypeConversation {
     
-    protected EzSkype ezSkype;
     protected final SkypeMessageCacheInternal messageCache = new SkypeMessageCacheInternal();
     protected final String longId;
+    protected final SkypeConversationType conversationType;
+    protected EzSkype ezSkype;
     protected String topic;
     protected boolean historyEnabled;
     protected boolean joinEnabled;
     protected String pictureUrl;
-    protected final SkypeConversationType conversationType;
     protected List<SkypeUserInternal> users;
     protected boolean fullyLoaded;
+    
+    public void sendFlik(SkypeFlik skypeFlik) throws ParserConfigurationException, TransformerException {
+        String id = skypeFlik.getId();
+        EzSkype.LOGGER.debug("Sending flik {} to {}", skypeFlik, longId);
+        // @formatter:off
+        String content = 
+                XMLBuilder.create("URIObject").a("type", "Video.1/Flik.1").a("uri", "https://static.asm.skype.com/pes/v1/items/" + id)
+                    .a("url_thumbnail", "https://static.asm.skype.com/pes/v1/items/" + id + "/views/thumbnail")
+                        .e("a").a("href", "https://static.asm.skype.com/pes/v1/items/" + id + "/views/default")
+                            .t("https://static.asm.skype.com/pes/v1/items/" + id + "/views/default")
+                    .up()
+                        .e("OriginalName").a("v", "")
+                    .up().asString();
+        // @formatter:on
+        
+        new SkypeSendMessagePacket(ezSkype, longId, content, Long.toString(ezSkype.getMessageId().incrementAndGet()), SkypeMessageType
+                .MEDIA_FLIKMSG).executeAsync();
+    }
     
     public SkypeMessageInternal sendMessage(String message) {
         EzSkype.LOGGER.debug("Sending message \"{}\" to {}", message, longId);
         String id = Long.toString(ezSkype.getMessageId().incrementAndGet());
-        new SkypeSendMessagePacket(ezSkype, longId, message, id).executeAsync();
-        return new SkypeMessageInternal(ezSkype, id, ezSkype.getLocalUser(), false, SkypeMessageType.RICHTEXT, message, this);
+        new SkypeSendMessagePacket(ezSkype, longId, message, id, SkypeMessageType.RICH_TEXT).executeAsync();
+        return new SkypeMessageInternal(ezSkype, id, (SkypeUserInternal) ezSkype.getLocalUser(), false, SkypeMessageType.RICH_TEXT, 
+                message, this);
+    }
+    
+    public void sendMessage(String content, SkypeMessageType skypeMessageType) {
+        String id = Long.toString(ezSkype.getMessageId().incrementAndGet());
+        new SkypeSendMessagePacket(ezSkype, longId, content, id, skypeMessageType).executeAsync();
     }
     
     @Override
@@ -98,4 +126,6 @@ public abstract class SkypeConversationInternal implements SkypeConversation {
         SkypeSendImagePacket skypeSendImagePacket = new SkypeSendImagePacket(ezSkype, longId, imageId, "asd.png");
         skypeSendImagePacket.executeSync();
     }
+    
+    
 }

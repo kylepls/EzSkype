@@ -5,6 +5,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.google.gson.JsonObject;
 
+import java.io.IOException;
 import java.net.URL;
 
 /**
@@ -15,9 +16,9 @@ public class SkypeGuestGetTokenPacket extends SkypeGuestPacket {
     private final String username;
     private final String spaceId;
     private final String threadId;
-    private String shortId;
     private final SkypeWebClient webClient;
     private final SkypeGuestTempSession tempSession;
+    private String shortId;
     
     public SkypeGuestGetTokenPacket(SkypeWebClient webClient, SkypeGuestTempSession tempSession, String username, String spaceId, String 
             threadId, String shortId) {
@@ -31,7 +32,7 @@ public class SkypeGuestGetTokenPacket extends SkypeGuestPacket {
     }
     
     @Override
-    protected String run(WebClient webClient) throws Exception {
+    protected String run(WebClient webClient) throws IOException {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("flowId", tempSession.getSessionId());
         jsonObject.addProperty("name", username);

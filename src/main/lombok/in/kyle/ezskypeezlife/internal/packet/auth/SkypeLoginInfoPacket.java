@@ -6,6 +6,8 @@ import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 import org.jsoup.nodes.Document;
 
+import java.io.IOException;
+
 /**
  * Created by Kyle on 10/5/2015.
  */
@@ -17,7 +19,7 @@ public class SkypeLoginInfoPacket extends SkypePacket {
     }
     
     @Override
-    protected SkypeJavascriptParams run(WebConnectionBuilder webConnectionBuilder) throws Exception {
+    protected SkypeJavascriptParams run(WebConnectionBuilder webConnectionBuilder) throws IOException {
         Document document = webConnectionBuilder.getAsDocument();
         return SkypeLoginUtils.getParameters(document);
     }

@@ -34,7 +34,9 @@ public class SkypeUsersCache {
             username = username.substring(2);
         }
     
-        if (skypeUsers.containsKey(username)) {
+        if (ezSkype.getLocalUser().getUsername().equals(username)) {
+            return (SkypeUserInternal) ezSkype.getLocalUser();
+        } else if (skypeUsers.containsKey(username)) {
             return skypeUsers.get(username);
         } else {
             SkypeGetUserInfoPacket getUserInfoPacket = new SkypeGetUserInfoPacket(ezSkype, username);

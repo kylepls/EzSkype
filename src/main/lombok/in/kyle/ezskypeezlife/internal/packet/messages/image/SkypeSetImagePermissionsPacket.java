@@ -8,6 +8,8 @@ import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
+import java.io.IOException;
+
 /**
  * Created by Kyle on 11/3/2015.
  */
@@ -21,7 +23,7 @@ public class SkypeSetImagePermissionsPacket extends SkypePacket {
     }
     
     @Override
-    protected Object run(WebConnectionBuilder webConnectionBuilder) throws Exception {
+    protected Object run(WebConnectionBuilder webConnectionBuilder) throws IOException {
         
         JsonObject data = new JsonObject();
         JsonArray jsonArray = new JsonArray();

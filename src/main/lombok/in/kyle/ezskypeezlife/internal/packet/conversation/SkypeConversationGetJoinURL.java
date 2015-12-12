@@ -6,6 +6,8 @@ import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
+import java.io.IOException;
+
 /**
  * Created by Kyle on 10/20/2015.
  */
@@ -19,7 +21,7 @@ public class SkypeConversationGetJoinUrl extends SkypePacket {
     }
     
     @Override
-    protected Object run(WebConnectionBuilder webConnectionBuilder) throws Exception {
+    protected Object run(WebConnectionBuilder webConnectionBuilder) throws IOException {
         JsonObject data = new JsonObject();
         data.addProperty("baseDomain", "https://join.skype.com/launch/");
         data.addProperty("threadId", longId);

@@ -6,6 +6,7 @@ import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
+import java.io.IOException;
 import java.util.UUID;
 
 /**
@@ -21,7 +22,7 @@ public class SkypeAuthFinishPacket extends SkypePacket {
     }
     
     @Override
-    protected SkypeSession run(WebConnectionBuilder webConnectionBuilder) throws Exception {
+    protected SkypeSession run(WebConnectionBuilder webConnectionBuilder) throws IOException {
         webConnectionBuilder.addHeader("Authentication", "skypetoken=" + token);
         webConnectionBuilder.setPostData("{}");
         

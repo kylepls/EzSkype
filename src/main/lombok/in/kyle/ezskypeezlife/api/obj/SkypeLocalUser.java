@@ -1,7 +1,10 @@
-package in.kyle.ezskypeezlife.api;
+package in.kyle.ezskypeezlife.api.obj;
 
-import in.kyle.ezskypeezlife.api.obj.SkypeUser;
+import in.kyle.ezskypeezlife.api.SkypeGender;
+import in.kyle.ezskypeezlife.api.SkypeStatus;
+import in.kyle.ezskypeezlife.internal.obj.SkypeUserInternal;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -33,7 +36,11 @@ public interface SkypeLocalUser extends SkypeUser {
     
     Optional<String> getPhoneOffice();
     
-    Map<String, SkypeUser> getContacts();
+    Map<String, SkypeUserInternal> getContacts();
     
     Map<String, SkypeUser> getPendingContacts();
+    
+    void setProfileImage(InputStream imageSteam);
+    
+    void setStatus(SkypeStatus skypeStatus);
 }

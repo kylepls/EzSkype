@@ -2,12 +2,14 @@ package in.kyle.ezskypeezlife.internal.packet.session;
 
 import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
+import in.kyle.ezskypeezlife.exception.SkypeException;
 import in.kyle.ezskypeezlife.internal.packet.ContentType;
 import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URLEncoder;
 
 /**
@@ -20,7 +22,7 @@ public class SkypeActivePacket extends SkypePacket {
     }
     
     @Override
-    protected Object run(WebConnectionBuilder webConnectionBuilder) throws Exception {
+    protected Object run(WebConnectionBuilder webConnectionBuilder) throws IOException, SkypeException {
         String url = "https://client-s.gateway.messenger.live.com/v1/users/ME/endpoints/" + URLEncoder.encode(ezSkype.getSkypeSession()
                 .getSessionId(), "UTF-8") + "/active";
         webConnectionBuilder.setUrl(url);

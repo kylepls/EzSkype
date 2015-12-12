@@ -1,4 +1,4 @@
-package in.kyle.ezskypeezlife.internal.thread;
+package in.kyle.ezskypeezlife.internal.thread.poll;
 
 import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
@@ -32,7 +32,7 @@ public abstract class SkypePollMessageType {
         
         SkypeUserInternal sender = getFromUser(ezSkype, resource);
     
-        SkypeMessageType messageType = SkypeMessageType.valueOf(resource.get("messagetype").getAsString().toUpperCase());
+        SkypeMessageType messageType = SkypeMessageType.getType(resource.get("messagetype").getAsString().toUpperCase());
         String content = StringEscapeUtils.unescapeXml(resource.get("content").getAsString());
         
         SkypeConversationInternal conversation = (SkypeConversationInternal) ezSkype.getSkypeConversation(longId);

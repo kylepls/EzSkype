@@ -1,13 +1,12 @@
+# Misc
+/src/other
+# Logs folder
 /logs
-/EzSkypeEzLife.iml
+# Login file for tests
 /login.json
-/.idea
-# Created by .ignore support plugin (hsz.mobi)
-### Example user template template
-### Example user template
 
 # IntelliJ project files
+/.idea
+/EzSkypeEzLife.iml
 /pom.xml
 /dependency-reduced-pom.xml
-/src/test/java/random
-/skype.log

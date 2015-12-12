@@ -6,6 +6,8 @@ import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
+import java.io.IOException;
+
 /**
  * Created by Kyle on 11/3/2015.
  */
@@ -16,7 +18,7 @@ public class SkypeGetImageIdPacket extends SkypePacket {
     }
     
     @Override
-    protected String run(WebConnectionBuilder webConnectionBuilder) throws Exception {
+    protected String run(WebConnectionBuilder webConnectionBuilder) throws IOException {
         webConnectionBuilder.addHeader("Authorization", "skype_token " + ezSkype.getSkypeSession().getXToken());
         String data = webConnectionBuilder.send();
         return EzSkype.GSON.fromJson(data, JsonObject.class).get("id").getAsString();

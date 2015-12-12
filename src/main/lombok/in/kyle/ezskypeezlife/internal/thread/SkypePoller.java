@@ -8,6 +8,8 @@ import in.kyle.ezskypeezlife.internal.packet.pull.SkypePullPacket;
 import in.kyle.ezskypeezlife.internal.thread.poll.SkypeControlClearTypingType;
 import in.kyle.ezskypeezlife.internal.thread.poll.SkypeControlTypingType;
 import in.kyle.ezskypeezlife.internal.thread.poll.SkypeEventCallType;
+import in.kyle.ezskypeezlife.internal.thread.poll.SkypeMediaFlikMessageType;
+import in.kyle.ezskypeezlife.internal.thread.poll.SkypePollMessageType;
 import in.kyle.ezskypeezlife.internal.thread.poll.SkypeTextType;
 import in.kyle.ezskypeezlife.internal.thread.poll.SkypeThreadActivityAddMemberType;
 import in.kyle.ezskypeezlife.internal.thread.poll.SkypeThreadActivityDeleteMemberType;
@@ -24,14 +26,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * <p>
  * Pulls new Skype events from the server
  */
-public class SkypePollerThread extends Thread {
+public class SkypePoller implements Runnable {
     
     private final EzSkype ezSkype;
     private final AtomicBoolean active;
     private final List<SkypePollMessageType> messageTypes;
     
-    public SkypePollerThread(EzSkype ezSkype) {
-        super("Skype-Poller-Thread-" + ezSkype.getLocalUser().getUsername());
+    public SkypePoller(EzSkype ezSkype) {
+        Thread.currentThread().setName("Skype-Poller-Thread-" + ezSkype.getLocalUser().getUsername());
         this.ezSkype = ezSkype;
         this.active = ezSkype.getActive();
         
@@ -45,7 +47,8 @@ public class SkypePollerThread extends Thread {
                 new SkypeThreadActivityDeleteMemberType(),
                 new SkypeThreadActivityPictureUpdateType(),
                 new SkypeThreadActivityRoleUpdateType(),
-                new SkypeThreadActivityTopicUpdate()
+                new SkypeThreadActivityTopicUpdate(),
+                new SkypeMediaFlikMessageType()
         );
         // @formatter:on
     }
@@ -86,10 +89,15 @@ public class SkypePollerThread extends Thread {
             
             for (SkypePollMessageType skypePollMessageType : messageTypes) {
                 if (skypePollMessageType.accept(messageType)) {
+                    EzSkype.LOGGER.debug("Extraction approach set to {} for message type {} for message {}", skypePollMessageType
+                            .getClass().getName(), messageType, resource);
                     skypePollMessageType.extract(ezSkype, jsonObject, resource);
                     return;
                 }
             }
+            EzSkype.LOGGER.debug("Could not extract info from message of type {} because it is not a known type", messageType);
+        } else {
+            EzSkype.LOGGER.debug("Unknown message, does not contain message type: {}", jsonObject);
         }
     }
 }

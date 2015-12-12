@@ -5,6 +5,7 @@ import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
+import java.io.IOException;
 import java.util.Date;
 
 /**
@@ -26,7 +27,7 @@ public class SkypeChangePasswordPacket extends SkypePacket {
     }
     
     @Override
-    protected String run(WebConnectionBuilder webConnectionBuilder) throws Exception {
+    protected String run(WebConnectionBuilder webConnectionBuilder) throws IOException {
         
         Date date = new Date();
         webConnectionBuilder.addPostData("username", username);

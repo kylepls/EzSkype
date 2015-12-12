@@ -6,6 +6,7 @@ import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -21,7 +22,7 @@ public class SkypeWriteImagePacket extends SkypePacket {
     }
     
     @Override
-    protected Object run(WebConnectionBuilder webConnectionBuilder) throws Exception {
+    protected Object run(WebConnectionBuilder webConnectionBuilder) throws IOException {
     
         webConnectionBuilder.setContentType(ContentType.OCTET_STREAM);
         webConnectionBuilder.addHeader("Authorization", "skype_token " + ezSkype.getSkypeSession().getXToken());

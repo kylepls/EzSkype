@@ -2,11 +2,15 @@ package in.kyle.ezskypeezlife.internal.obj;
 
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.api.SkypeGender;
-import in.kyle.ezskypeezlife.api.SkypeLocalUser;
+import in.kyle.ezskypeezlife.api.SkypeStatus;
+import in.kyle.ezskypeezlife.api.obj.SkypeLocalUser;
 import in.kyle.ezskypeezlife.api.obj.SkypeUser;
+import in.kyle.ezskypeezlife.internal.packet.session.SkypeSetVisibilityPacket;
+import in.kyle.ezskypeezlife.internal.packet.user.SkypeSetProfilePicturePacket;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,6 +57,10 @@ public class SkypeLocalUserInternal extends SkypeUserInternal implements SkypeLo
         this.pendingContacts = new HashMap<>();
     }
     
+    public Map<String, SkypeUserInternal> getContacts() {
+        return contacts;
+    }
+    
     /**
      * Gets a list of people waiting for contact acceptance
      *
@@ -60,5 +68,28 @@ public class SkypeLocalUserInternal extends SkypeUserInternal implements SkypeLo
      */
     public Map<String, SkypeUser> getPendingContacts() {
         return (Map<String, SkypeUser>) (Object) pendingContacts;
+    }
+    
+    @Override
+    public void setProfileImage(InputStream imageSteam) {
+        new SkypeSetProfilePicturePacket(getEzSkype(), imageSteam).executeAsync();
+    }
+    
+    /**
+     * @param skypeStatus - The online status
+     */
+    public void setStatus(SkypeStatus skypeStatus) {
+        EzSkype.LOGGER.info("Setting online status to {}", skypeStatus.name());
+        SkypeSetVisibilityPacket setVisibilityPacket = new SkypeSetVisibilityPacket(getEzSkype(), skypeStatus);
+        setVisibilityPacket.executeAsync();
+    }
+    
+    @Override
+    public boolean isFullyLoaded() {
+        return true;
+    }
+    
+    @Override
+    public void fullyLoad() {
     }
 }

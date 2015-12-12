@@ -1,5 +1,7 @@
+import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.api.SkypeCredentials;
+import in.kyle.ezskypeezlife.api.SkypeStatus;
 import in.kyle.ezskypeezlife.api.SkypeUserRole;
 import in.kyle.ezskypeezlife.api.captcha.SkypeCaptcha;
 import in.kyle.ezskypeezlife.api.captcha.SkypeErrorHandler;
@@ -18,42 +20,47 @@ import in.kyle.ezskypeezlife.events.conversation.SkypeConversationUserRoleUpdate
 import in.kyle.ezskypeezlife.events.conversation.SkypeMessageEditedEvent;
 import in.kyle.ezskypeezlife.events.conversation.SkypeMessageReceivedEvent;
 import in.kyle.ezskypeezlife.events.user.SkypeContactRequestEvent;
+import in.kyle.ezskypeezlife.exception.SkypeException;
 import org.apache.commons.lang.StringUtils;
 import org.jsoup.Jsoup;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Scanner;
 
 /**
  * Created by Kyle on 10/8/2015.
  */
+@SuppressWarnings("unused")
 public class TestSkypeBot implements SkypeErrorHandler {
     
     private EzSkype ezSkype;
     
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws IOException, SkypeException {
         new TestSkypeBot().startTest();
     }
     
-    private void startTest() throws Exception {
+    private void startTest() throws IOException, SkypeException {
         System.out.println("Logging in");
         
         // Load credentials from a file 'login.json'
-        LoginCredentials loginCredentials = EzSkype.GSON.fromJson(new FileReader(new File("login.json")), LoginCredentials.class);
+        JsonObject login = EzSkype.GSON.fromJson(new FileReader(new File("login.json")), JsonObject.class);
         
-        // Enter the Skype login info here and login
-        ezSkype = new EzSkype(new SkypeCredentials(loginCredentials.getUser(), loginCredentials.getPass()));
-    
+        // Enter the Skype login info here
+        ezSkype = new EzSkype(new SkypeCredentials(login.get("user").getAsString(), login.get("pass").getAsString()));
+        ezSkype.setDebug(true);
+        
         // A error handler is a class that will be called to solve issues with the bot
         ezSkype.setErrorHandler(this);
         ezSkype.login();
+        ezSkype.getLocalUser().setStatus(SkypeStatus.ONLINE);
         
         // Register all the events in this class
         // Events are denoted as methods that have 1 parameter that implements SkypeEvent
         ezSkype.getEventManager().registerEvents(this);
-    
+        
         System.out.println("Logged in");
     }
     
@@ -163,7 +170,6 @@ public class TestSkypeBot implements SkypeErrorHandler {
     public void onRole(SkypeConversationUserRoleUpdate event) {
         event.getConversation().sendMessage("Role update: " + event.getUser().getUsername() + "\nFrom: " + event.getOldRole() +
                 "\nTo: " + event.getNewRole() + "\nIs admin: " + event.getConversation().isAdmin(event.getUser()));
-        
     }
     
     // Called when a call is initiated by a user

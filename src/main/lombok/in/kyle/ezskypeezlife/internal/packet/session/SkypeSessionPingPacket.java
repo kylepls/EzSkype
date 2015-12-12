@@ -1,6 +1,7 @@
 package in.kyle.ezskypeezlife.internal.packet.session;
 
 import in.kyle.ezskypeezlife.EzSkype;
+import in.kyle.ezskypeezlife.exception.SkypeException;
 import in.kyle.ezskypeezlife.internal.packet.ContentType;
 import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
@@ -19,7 +20,7 @@ public class SkypeSessionPingPacket extends SkypePacket {
     }
     
     @Override
-    protected Object run(WebConnectionBuilder webConnectionBuilder) throws Exception {
+    protected Object run(WebConnectionBuilder webConnectionBuilder) throws IOException, SkypeException {
         webConnectionBuilder.setContentType(ContentType.WWW_FORM);
         String session = ezSkype.getSkypeSession().getSessionUuid().toString();
         webConnectionBuilder.setPostData("sessionId=" + session);

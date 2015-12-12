@@ -6,6 +6,8 @@ import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
+import java.io.IOException;
+
 /**
  * Created by Kyle on 10/20/2015.
  */
@@ -16,7 +18,7 @@ public class SkypeConversationJoinUrlIdPacket extends SkypePacket {
     }
     
     @Override
-    protected String run(WebConnectionBuilder webConnectionBuilder) throws Exception {
+    protected String run(WebConnectionBuilder webConnectionBuilder) throws IOException {
         JsonObject response = EzSkype.GSON.fromJson(webConnectionBuilder.send(), JsonObject.class);
         return response.get("longId").getAsString();
     }

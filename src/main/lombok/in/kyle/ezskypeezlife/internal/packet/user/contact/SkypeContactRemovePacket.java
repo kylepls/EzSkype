@@ -6,6 +6,8 @@ import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
+import java.io.IOException;
+
 /**
  * Created by Kyle on 10/7/2015.
  * <p>
@@ -26,7 +28,7 @@ public class SkypeContactRemovePacket extends SkypePacket {
     }
     
     @Override
-    protected JsonObject run(WebConnectionBuilder webConnectionBuilder) throws Exception {
+    protected JsonObject run(WebConnectionBuilder webConnectionBuilder) throws IOException {
         //String id = (String) new SkypeContactEditPacket(ezSkype, username).executeSync();
         webConnectionBuilder.addHeader("X-Stratus-Caller", "skype.com");
         webConnectionBuilder.addHeader("X-Stratus-Request", "a2cf222e");
