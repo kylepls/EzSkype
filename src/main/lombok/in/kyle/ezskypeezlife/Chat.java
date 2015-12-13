@@ -118,6 +118,11 @@ public class Chat {
         return "<font size=\"" + size + "\">" + text + "</font>";
     }
     
+    public static String encodeTags(String text) {
+        return text.replace("<", StringEscapeUtils.escapeXml11((StringEscapeUtils.escapeJson("<"))))
+                .replace(">", StringEscapeUtils.escapeXml11((StringEscapeUtils.escapeJson(">"))));
+    }
+    
     /**
      * Draws a line thorough text
      *
