@@ -9,6 +9,7 @@ import in.kyle.ezskypeezlife.api.skype.SkypeData;
 import in.kyle.ezskypeezlife.api.skype.SkypeEndpoint;
 import in.kyle.ezskypeezlife.api.user.SkypeLocalUser;
 import in.kyle.ezskypeezlife.api.user.SkypeUser;
+import in.kyle.ezskypeezlife.api.user.SkypeUserRole;
 import in.kyle.ezskypeezlife.events.EventManager;
 import in.kyle.ezskypeezlife.exception.SkypeException;
 import in.kyle.ezskypeezlife.internal.caches.SkypeCacheManager;
@@ -28,6 +29,7 @@ import in.kyle.ezskypeezlife.internal.packet.auth.SkypeLoginPacket;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationAddPacket;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationJoinPacket;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationJoinUrlIdPacket;
+import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeCreateConversationPacket;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeGetConversationsPacket;
 import in.kyle.ezskypeezlife.internal.packet.pull.SkypeRegisterEndpointsPacket;
 import in.kyle.ezskypeezlife.internal.packet.ui.SkypeGetPagePackets;
@@ -279,6 +281,12 @@ public class EzSkype {
      */
     public SkypeConversation getSkypeConversation(String longId) {
         return skypeCache.getConversationsCache().getSkypeConversation(longId);
+    }
+    
+    public SkypeConversation createSkypeConversation(Map<SkypeUser, SkypeUserRole> members) throws IOException, SkypeException {
+        SkypeCreateConversationPacket skypeCreateConversationPacket = new SkypeCreateConversationPacket(this, members);
+        SkypeConversation conversation = (SkypeConversation) skypeCreateConversationPacket.executeSync();
+        return conversation;
     }
     
     /**
