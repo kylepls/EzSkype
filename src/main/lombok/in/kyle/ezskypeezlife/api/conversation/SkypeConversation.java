@@ -3,6 +3,7 @@ package in.kyle.ezskypeezlife.api.conversation;
 import in.kyle.ezskypeezlife.api.conversation.message.SkypeMessage;
 import in.kyle.ezskypeezlife.api.user.SkypeUser;
 import in.kyle.ezskypeezlife.api.user.SkypeUserRole;
+import in.kyle.ezskypeezlife.events.conversation.SkypeConversationActionDeniedException;
 
 import java.io.File;
 import java.io.InputStream;
@@ -114,7 +115,7 @@ public interface SkypeConversation {
      * @param skypeUser - The user to set role
      * @param role      - The role of the user
      */
-    void setUserRole(SkypeUser skypeUser, SkypeUserRole role);
+    void setUserRole(SkypeUser skypeUser, SkypeUserRole role) throws SkypeConversationActionDeniedException;
     
     /**
      * Load all fields other than the ID

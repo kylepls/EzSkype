@@ -27,6 +27,7 @@ public abstract class SkypePacket {
     
     /**
      * Executes the request on the PacketIO thread
+     *
      * @return - The object returned by the packet
      */
     public Future<Object> executeAsync() {
@@ -35,15 +36,15 @@ public abstract class SkypePacket {
     
     public Object executeSync() throws SkypeException, IOException {
         WebConnectionBuilder webConnectionBuilder = getConnectionBuilder();
-        EzSkype.LOGGER.debug("Opening connection: " + this.getClass().getCanonicalName() + " " + this + "\n    Connection: " + 
+        EzSkype.LOGGER.debug("Opening connection: " + this.getClass().getCanonicalName() + " " + this + "\n    Connection: " +
                 webConnectionBuilder);
         return run(webConnectionBuilder);
     }
     
     private WebConnectionBuilder getConnectionBuilder() {
         WebConnectionBuilder builder = new WebConnectionBuilder();
-        if (ezSkype != null && ezSkype.getProxy() != null) {
-            builder.setProxy(ezSkype.getProxy());
+        if (ezSkype != null && ezSkype.getSkypeProperties().getProxy().isPresent()) {
+            builder.setProxy(ezSkype.getSkypeProperties().getProxy().get());
         }
         builder.setUrl(url);
         builder.setRequest(httpRequest);
@@ -62,7 +63,7 @@ public abstract class SkypePacket {
      * @param webConnectionBuilder - The connection builder
      * @return The data returned from the packet
      * @throws SkypeException - If an error occurred while parsing the request or some other non IO related error
-     * @throws IOException - If there was an error sending data to the server
+     * @throws IOException    - If there was an error sending data to the server
      */
     protected abstract Object run(WebConnectionBuilder webConnectionBuilder) throws SkypeException, IOException;
 }

@@ -7,7 +7,6 @@ import in.kyle.ezskypeezlife.api.errors.SkypeErrorHandler;
 import in.kyle.ezskypeezlife.api.skype.SkypeCredentials;
 import in.kyle.ezskypeezlife.api.user.SkypeStatus;
 import in.kyle.ezskypeezlife.api.user.SkypeUser;
-import in.kyle.ezskypeezlife.api.user.SkypeUserRole;
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationAddedToEvent;
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationCallEndedEvent;
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationCallStartedEvent;
@@ -90,15 +89,6 @@ public class TestSkypeBot implements SkypeErrorHandler {
                     event.reply("Topic set to '" + topic + "'");
                 } else {
                     event.reply("Usage: +topic topic");
-                }
-                break;
-            case "+role": // Set your role
-                if (args.length > 0) {
-                    SkypeUserRole role = SkypeUserRole.valueOf(args[1].toUpperCase());
-                    event.getMessage().getConversation().setUserRole(event.getMessage().getSender(), role);
-                    event.reply("Set " + event.getMessage().getSender().getUsername() + " to " + role.name());
-                } else {
-                    event.reply("Usage: +role user|master");
                 }
                 break;
             case "+join": // Join a conversation by the Skype join URL, eg: https://join.skype.com/rbjoWQCc9b8l

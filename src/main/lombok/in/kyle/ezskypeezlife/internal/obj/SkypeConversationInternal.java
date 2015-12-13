@@ -8,6 +8,7 @@ import in.kyle.ezskypeezlife.api.conversation.message.SkypeFlik;
 import in.kyle.ezskypeezlife.api.conversation.message.SkypeMessageType;
 import in.kyle.ezskypeezlife.api.user.SkypeUser;
 import in.kyle.ezskypeezlife.api.user.SkypeUserRole;
+import in.kyle.ezskypeezlife.events.conversation.SkypeConversationActionDeniedException;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationAddPacket;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationRolePacket;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationTopicPacket;
@@ -85,6 +86,7 @@ public abstract class SkypeConversationInternal implements SkypeConversation {
     
     @Override
     public void addUser(SkypeUser skypeUser) {
+        // TODO check topic
         new SkypeConversationAddPacket(ezSkype, longId, skypeUser.getUsername()).executeAsync();
     }
     
@@ -99,8 +101,12 @@ public abstract class SkypeConversationInternal implements SkypeConversation {
     }
     
     @Override
-    public void setUserRole(SkypeUser skypeUser, SkypeUserRole role) {
-        new SkypeConversationRolePacket(ezSkype, longId, skypeUser.getUsername(), role).executeAsync();
+    public void setUserRole(SkypeUser skypeUser, SkypeUserRole role) throws SkypeConversationActionDeniedException {
+        if (isAdmin(ezSkype.getLocalUser())) {
+            new SkypeConversationRolePacket(ezSkype, longId, skypeUser.getUsername(), role).executeAsync();
+        } else {
+            throw new SkypeConversationActionDeniedException("You must be a chat admin to perform this action");
+        }
     }
     
     @Override
@@ -127,6 +133,4 @@ public abstract class SkypeConversationInternal implements SkypeConversation {
         SkypeSendImagePacket skypeSendImagePacket = new SkypeSendImagePacket(ezSkype, longId, imageId, "asd.png");
         skypeSendImagePacket.executeSync();
     }
-    
-    
 }

@@ -21,8 +21,10 @@ public class SkypeContactsThread implements Runnable {
     
     private final EzSkype ezSkype;
     private final SkypeLocalUserInternal localUserInternal;
+    private final long updateInterval;
     
-    public SkypeContactsThread(EzSkype ezSkype) {
+    public SkypeContactsThread(EzSkype ezSkype, long updateInterval) {
+        this.updateInterval = updateInterval;
         Thread.currentThread().setName("Skype-Contact-Poller-" + ezSkype.getLocalUser().getUsername());
         this.ezSkype = ezSkype;
         this.localUserInternal = (SkypeLocalUserInternal) ezSkype.getLocalUser();
@@ -143,7 +145,7 @@ public class SkypeContactsThread implements Runnable {
                 EzSkype.LOGGER.error("Error while getting contacts", e);
             }
             try {
-                Thread.sleep(5000);
+                Thread.sleep(updateInterval);
             } catch (InterruptedException ignored) {
             }
         }

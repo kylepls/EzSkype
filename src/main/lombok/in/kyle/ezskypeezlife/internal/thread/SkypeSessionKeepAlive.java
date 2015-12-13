@@ -11,12 +11,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Created by Kyle on 10/8/2015.
  */
-public class SkypeSession implements Runnable {
+public class SkypeSessionKeepAlive implements Runnable {
     
     private final EzSkype ezSkype;
     private final AtomicBoolean active;
+    private final long callInterval;
     
-    public SkypeSession(EzSkype ezSkype) {
+    public SkypeSessionKeepAlive(EzSkype ezSkype, long callInterval) {
+        this.callInterval = callInterval;
         Thread.currentThread().setName("Skype-Session-Thread-" + ezSkype.getLocalUser().getUsername());
         this.ezSkype = ezSkype;
         this.active = ezSkype.getActive();
