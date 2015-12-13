@@ -3,10 +3,15 @@ package in.kyle.ezskypeezlife.internal.guest;
 import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebRequest;
+import com.gargoylesoftware.htmlunit.util.Cookie;
 import com.google.gson.JsonObject;
+import in.kyle.ezskypeezlife.exception.SkypeException;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Created by Kyle on 10/23/2015.
@@ -30,7 +35,7 @@ public class SkypeGuestGetTokenPacket extends SkypeGuestPacket {
     }
     
     @Override
-    protected String run(WebClient webClient) throws IOException {
+    protected String run(WebClient webClient) throws IOException, SkypeGuestGetTokenPacketException {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("flowId", tempSession.getSessionId());
         jsonObject.addProperty("name", username);
@@ -52,8 +57,23 @@ public class SkypeGuestGetTokenPacket extends SkypeGuestPacket {
         webRequest.setRequestBody(jsonObject.toString());
         
         webClient.getPage(webRequest).getWebResponse();
+    
+        Optional<Cookie> guest_token = webClient.getCookieManager().getCookies().stream().filter(cookie -> cookie.getName().startsWith
+                ("guest_token")).findFirst();
+    
+        if (guest_token.isPresent()) {
+            return guest_token.get().getValue();
+        } else {
+            throw new SkypeGuestGetTokenPacketException("Could not find cookie 'guest_token', if the error persists please try changing "
+                    + "your IP\nCookies: [" + StringUtils.join(webClient.getCookieManager().getCookies().stream().map(Cookie::getName)
+                    .collect(Collectors.toList()), ",") + "]");
+        }
+    }
+    
+    private class SkypeGuestGetTokenPacketException extends SkypeException {
         
-        return webClient.getCookieManager().getCookies().stream().filter(cookie -> cookie.getName().startsWith("guest_token")).findFirst
-                ().orElse(null).getValue();
+        public SkypeGuestGetTokenPacketException(String message) {
+            super(message);
+        }
     }
 }

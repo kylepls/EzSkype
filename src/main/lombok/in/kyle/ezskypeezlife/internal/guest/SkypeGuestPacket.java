@@ -1,6 +1,7 @@
 package in.kyle.ezskypeezlife.internal.guest;
 
 import com.gargoylesoftware.htmlunit.WebClient;
+import in.kyle.ezskypeezlife.exception.SkypeException;
 
 import java.io.IOException;
 
@@ -15,9 +16,9 @@ public abstract class SkypeGuestPacket {
         this.webClient = webClient;
     }
     
-    public Object run() throws IOException {
+    public Object run() throws IOException, SkypeException {
         return run(webClient.getWebClient());
     }
     
-    protected abstract Object run(WebClient webClient) throws IOException;
+    protected abstract Object run(WebClient webClient) throws IOException, SkypeException;
 }
