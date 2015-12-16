@@ -51,6 +51,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
@@ -166,8 +167,7 @@ public class EzSkype {
     
     private void loadConversations() throws IOException, SkypeException {
         SkypeGetConversationsPacket skypeGetConversationsPacket = new SkypeGetConversationsPacket(this);
-        Map<String, SkypeConversationInternal> conversations = (Map<String, SkypeConversationInternal>) skypeGetConversationsPacket
-                .executeSync();
+        Map<String, SkypeConversationInternal> conversations = (Map) skypeGetConversationsPacket.executeSync();
         skypeCache.getConversationsCache().getSkypeConversations().putAll(conversations);
     }
     
@@ -299,12 +299,22 @@ public class EzSkype {
     }
     
     /**
+     * Gets Skype users from the provided usernames
+     *
+     * @param usernames - A list of usernames
+     * @return - A list of loaded Skype users
+     */
+    public Map<String, SkypeUser> loadAll(List<String> usernames) throws IOException, SkypeException {
+        return skypeCache.getUsersCache().getOrCreateUsersLoaded(usernames);
+    }
+    
+    /**
      * Gets all the users Skype conversations
      *
      * @return - The users Skype conversations
      */
     public Map<String, SkypeConversation> getConversations() {
-        return (Map<String, SkypeConversation>) (Object) skypeCache.getConversationsCache().getSkypeConversations();
+        return (Map) skypeCache.getConversationsCache().getSkypeConversations();
     }
     
     public void setDebug(boolean debug) {

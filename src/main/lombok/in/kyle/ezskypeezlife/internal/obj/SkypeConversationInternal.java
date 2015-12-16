@@ -9,6 +9,7 @@ import in.kyle.ezskypeezlife.api.conversation.message.SkypeMessageType;
 import in.kyle.ezskypeezlife.api.user.SkypeUser;
 import in.kyle.ezskypeezlife.api.user.SkypeUserRole;
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationActionDeniedException;
+import in.kyle.ezskypeezlife.exception.SkypeException;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationAddPacket;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationRolePacket;
 import in.kyle.ezskypeezlife.internal.packet.conversation.SkypeConversationTopicPacket;
@@ -24,10 +25,12 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Created by Kyle on 10/7/2015.
@@ -81,7 +84,7 @@ public abstract class SkypeConversationInternal implements SkypeConversation {
     
     @Override
     public List<SkypeUser> getUsers() {
-        return (List<SkypeUser>) (Object) users;
+        return (List) users;
     }
     
     @Override
@@ -132,5 +135,10 @@ public abstract class SkypeConversationInternal implements SkypeConversation {
         
         SkypeSendImagePacket skypeSendImagePacket = new SkypeSendImagePacket(ezSkype, longId, imageId, "asd.png");
         skypeSendImagePacket.executeSync();
+    }
+    
+    @Override
+    public void loadAllUsers() throws IOException, SkypeException {
+        ezSkype.loadAll(users.stream().map(SkypeUserInternal::getUsername).collect(Collectors.toList()));
     }
 }

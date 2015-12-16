@@ -80,7 +80,7 @@ public class SkypeGroupConversationInternal extends SkypeConversationInternal {
     public void fullyLoad() {
         if (!fullyLoaded) {
             SkypeGetGroupConversationPacket groupConversationPacket = new SkypeGetGroupConversationPacket(ezSkype, longId);
-            SkypeGroupConversationInternal skypeConversationInternal = null;
+            SkypeGroupConversationInternal skypeConversationInternal;
             try {
                 skypeConversationInternal = (SkypeGroupConversationInternal) groupConversationPacket.executeSync();
             } catch (Exception e) {

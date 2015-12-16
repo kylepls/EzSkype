@@ -24,12 +24,13 @@ public class SkypeGetUserInfoPacket extends SkypePacket {
     
     private final List<String> users;
     
-    /**
-     * @param username - The username of the user you want to get info about
-     */
     public SkypeGetUserInfoPacket(EzSkype ezSkype, String username) {
+        this(ezSkype, Collections.singletonList(username));
+    }
+    
+    public SkypeGetUserInfoPacket(EzSkype ezSkype, List<String> users) {
         super("https://api.skype.com/users/self/contacts/profiles", HTTPRequest.POST, ezSkype, true);
-        users = Collections.singletonList(username);
+        this.users = users;
     }
     
     @Override

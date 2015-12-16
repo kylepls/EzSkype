@@ -2,12 +2,15 @@ package in.kyle.ezskypeezlife.internal.caches;
 
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.api.user.SkypeUser;
+import in.kyle.ezskypeezlife.exception.SkypeException;
 import in.kyle.ezskypeezlife.internal.obj.SkypeUserInternal;
 import in.kyle.ezskypeezlife.internal.packet.user.SkypeGetUserInfoPacket;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by Kyle on 10/7/2015.
@@ -51,6 +54,48 @@ public class SkypeUsersCache {
                 return new SkypeUserInternal(username, ezSkype);
             }
         }
+    }
+    
+    /**
+     * Gets a loaded list of Skype users from usernames
+     *
+     * @param usernames - A list of usernames
+     * @return - A list of loaded Skype users
+     */
+    public Map<String, SkypeUser> getOrCreateUsersLoaded(List<String> usernames) throws IOException, SkypeException {
+        usernames = usernames.stream().map(username -> username.startsWith("8:") ? username.substring(2) : username).collect(Collectors
+                .toList());
+    
+        List<SkypeUser> usersAlready = usernames.stream().filter(skypeUsers::containsKey).map(skypeUsers::get).collect(Collectors.toList());
+        usernames.removeAll(usersAlready.stream().map(SkypeUser::getUsername).collect(Collectors.toList()));
+    
+        SkypeGetUserInfoPacket getUserInfoPacket = new SkypeGetUserInfoPacket(ezSkype, usernames);
+        EzSkype.LOGGER.debug("Getting users {}", usernames);
+        List<SkypeUser> skypeUserInternalList = (List<SkypeUser>) getUserInfoPacket.executeSync();
+        usersAlready.addAll(skypeUserInternalList);
+    
+        Map<String, SkypeUser> collect = usersAlready.stream().collect(Collectors.toMap(SkypeUser::getUsername, skypeUser -> skypeUser));
+    
+        usersAlready.forEach(user -> {
+            SkypeUserInternal skypeUser = (SkypeUserInternal) user;
+            SkypeUser skypeUserNew = collect.remove(skypeUser.getUsername());
+            skypeUser.setFirstName(skypeUserNew.getFirstName());
+            skypeUser.setLastName(skypeUserNew.getLastName());
+            skypeUser.setMood(skypeUserNew.getMood());
+            skypeUser.setRichMood(skypeUserNew.getRichMood());
+            skypeUser.setDisplayName(skypeUserNew.getDisplayName());
+            skypeUser.setCountry(skypeUserNew.getCountry());
+            skypeUser.setCity(skypeUserNew.getCity());
+            skypeUser.setAvatarUrl(skypeUserNew.getAvatarUrl());
+            skypeUser.setLoaded(true);
+        });
+    
+    
+        Map<String, SkypeUserInternal> toAdd = new HashMap<>((Map) collect);
+        skypeUsers.putAll(toAdd);
+        return collect;
+    
+        // TODO make always loaded
     }
     
     /**

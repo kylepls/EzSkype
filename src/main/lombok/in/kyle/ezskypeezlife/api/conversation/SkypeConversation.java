@@ -4,8 +4,10 @@ import in.kyle.ezskypeezlife.api.conversation.message.SkypeMessage;
 import in.kyle.ezskypeezlife.api.user.SkypeUser;
 import in.kyle.ezskypeezlife.api.user.SkypeUserRole;
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationActionDeniedException;
+import in.kyle.ezskypeezlife.exception.SkypeException;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
@@ -151,5 +153,7 @@ public interface SkypeConversation {
      * @throws Exception - If the image could not be sent
      */
     void sendImage(URL url) throws Exception;
+    
+    void loadAllUsers() throws IOException, SkypeException;
     
 }
