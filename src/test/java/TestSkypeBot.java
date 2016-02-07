@@ -217,4 +217,8 @@ public class TestSkypeBot implements SkypeErrorHandler {
         System.out.println("Set new password!");
         return null;
     }
+    
+    @Override
+    public void handleException(Exception exception) {
+    }
 }
