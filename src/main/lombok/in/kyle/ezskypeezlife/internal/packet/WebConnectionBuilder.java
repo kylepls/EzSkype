@@ -188,6 +188,7 @@ public class WebConnectionBuilder {
                     EzSkype.LOGGER.error("An error occurred while sending data to server\n  In = null, Connection: " + connection, e);
                 }
             }
+    
             throw e;
         }
         

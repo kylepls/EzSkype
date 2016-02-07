@@ -50,12 +50,12 @@ public class TestSkypeBot implements SkypeErrorHandler {
         // Enter the Skype login info here
         ezSkype = new EzSkype(new SkypeCredentials(login.get("user").getAsString(), login.get("pass").getAsString()));
         ezSkype.setDebug(true);
-        
         // A error handler is a class that will be called to solve issues with the bot
         ezSkype.setErrorHandler(this);
         ezSkype.login();
         ezSkype.getLocalUser().setStatus(SkypeStatus.ONLINE);
-        
+        //ezSkype.joinSkypeConversation("https://join.skype.com/vINZFUIL55sN");
+    
         // Register all the events in this class
         // Events are denoted as methods that have 1 parameter that implements SkypeEvent
         ezSkype.getEventManager().registerEvents(this);

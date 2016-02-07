@@ -2,6 +2,7 @@ package in.kyle.ezskypeezlife.internal.packet;
 
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.exception.SkypeException;
+import lombok.Getter;
 import lombok.ToString;
 
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.util.concurrent.Future;
 @ToString
 public abstract class SkypePacket {
     
+    @Getter
     protected final EzSkype ezSkype;
     private String url;
     private HTTPRequest httpRequest;

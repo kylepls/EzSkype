@@ -107,7 +107,7 @@ public class EzSkype {
         this.skypeCredentials = skypeCredentials;
         this.active = new AtomicBoolean();
         this.skypeCache = new SkypeCacheManager(this);
-        this.eventManager = new EventManager();
+        this.eventManager = new EventManager(errorHandler);
         this.packetIOPool = new SkypePacketIOPool(2);
         this.messageId = new AtomicLong(System.currentTimeMillis());
         this.skypeProperties = skypeProperties;

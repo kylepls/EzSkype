@@ -85,6 +85,7 @@ public class SkypeGroupConversationInternal extends SkypeConversationInternal {
                 skypeConversationInternal = (SkypeGroupConversationInternal) groupConversationPacket.executeSync();
             } catch (Exception e) {
                 EzSkype.LOGGER.error("Error loading conversation " + this, e);
+                ezSkype.getErrorHandler().handleException(e);
                 return;
             }
             topic = skypeConversationInternal.getTopic();

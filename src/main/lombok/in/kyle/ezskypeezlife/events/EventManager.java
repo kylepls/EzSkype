@@ -1,6 +1,7 @@
 package in.kyle.ezskypeezlife.events;
 
 import in.kyle.ezskypeezlife.EzSkype;
+import in.kyle.ezskypeezlife.api.errors.SkypeErrorHandler;
 import lombok.Data;
 import lombok.Getter;
 
@@ -17,8 +18,10 @@ public class EventManager {
     
     @Getter
     private final List<HoldListener> listeners;
+    private final SkypeErrorHandler skypeErrorHandler;
     
-    public EventManager() {
+    public EventManager(SkypeErrorHandler skypeErrorHandler) {
+        this.skypeErrorHandler = skypeErrorHandler;
         this.listeners = new ArrayList();
     }
     
@@ -58,6 +61,7 @@ public class EventManager {
                         holdListener.getMethod().invoke(holdListener.getObject(), event);
                     } catch (Exception e) {
                         EzSkype.LOGGER.error("Error while firing event: " + holdListener, e);
+                        skypeErrorHandler.handleException(e);
                     }
                 }
             }

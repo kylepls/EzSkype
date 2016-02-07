@@ -37,11 +37,13 @@ public class SkypeSessionKeepAlive implements Runnable {
                     ezSkype.login();
                 } catch (Exception e) {
                     EzSkype.LOGGER.error("Could not login to Skype again, shutting down", e);
+                    ezSkype.getErrorHandler().handleException(e);
                     active.set(false);
                     return;
                 }
             } catch (Exception e) {
                 EzSkype.LOGGER.error("Error sending session ping packet", e);
+                ezSkype.getErrorHandler().handleException(e);
             }
     
             try {

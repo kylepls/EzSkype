@@ -37,6 +37,7 @@ public class SkypePullPacket extends SkypePacket {
             String string = writer.toString();
             
             EzSkype.LOGGER.error("Error pulling Skype info: \n" + string, e);
+            ezSkype.getErrorHandler().handleException(e);
         }
         return EzSkype.GSON.fromJson(result, JsonObject.class);
     }

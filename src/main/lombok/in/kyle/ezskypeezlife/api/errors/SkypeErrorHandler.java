@@ -20,4 +20,9 @@ public interface SkypeErrorHandler {
      * @return - The new Skype password
      */
     String setNewPassword();
+    
+    /**
+     * Called whenever an exception is thrown when sending a packet and whatnot
+     */
+    void handleException(Exception exception);
 }

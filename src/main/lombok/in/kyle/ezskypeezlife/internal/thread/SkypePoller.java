@@ -69,6 +69,7 @@ public class SkypePoller implements Runnable {
                                 extractInfo(jsonObject.getAsJsonObject());
                             } catch (Exception e) {
                                 EzSkype.LOGGER.error("Error extracting info from:\n" + jsonObject, e);
+                                ezSkype.getErrorHandler().handleException(e);
                             }
                         }
                     } else {
@@ -77,7 +78,8 @@ public class SkypePoller implements Runnable {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            EzSkype.LOGGER.error("Error with poll", e);
+            ezSkype.getErrorHandler().handleException(e);
         }
     }
     

@@ -143,6 +143,7 @@ public class SkypeContactsThread implements Runnable {
                         */
             } catch (Exception e) {
                 EzSkype.LOGGER.error("Error while getting contacts", e);
+                ezSkype.getErrorHandler().handleException(e);
             }
             try {
                 Thread.sleep(updateInterval);

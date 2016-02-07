@@ -25,6 +25,7 @@ public class SkypePacketIOPool {
                 return skypePacket.executeSync();
             } catch (Exception e) {
                 EzSkype.LOGGER.error("Packet sending error, packet: " + skypePacket, e);
+                skypePacket.getEzSkype().getErrorHandler().handleException(e);
                 return e;
             }
         });
