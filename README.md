@@ -30,6 +30,8 @@ Add the dependency
 </dependencies>
 ```
 
+Alternate versions can be found [here](https://jitpack.io/#AkHo1ic/EzSkype)
+
 ### Usage
 
 Basic bot usage can be found on the [wiki](https://github.com/AkHo1ic/EzSkype/wiki)
