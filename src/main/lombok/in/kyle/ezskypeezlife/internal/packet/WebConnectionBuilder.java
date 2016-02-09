@@ -23,6 +23,8 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
+import static in.kyle.ezskypeezlife.EzSkype.LOGGER;
+
 /**
  * Created by Kyle on 10/5/2015.
  */
@@ -135,8 +137,7 @@ public class WebConnectionBuilder {
      * @throws IOException
      */
     public String send() throws IOException {
-        EzSkype.LOGGER.debug("Opening connection {} to: {}", request.name(), url);
-    
+        LOGGER.debug("  Opening connection {} to: {}", request.name(), url);
         if (proxy == null) {
             connection = (HttpURLConnection) new URL(url).openConnection();
         } else {
@@ -151,7 +152,9 @@ public class WebConnectionBuilder {
         }
         
         headers.forEach(connection::addRequestProperty);
-        
+    
+        LOGGER.debug("  Connection info: {}", this.toString());
+        LOGGER.debug("  Headers: {}", getHeaders());
         if (request == HTTPRequest.POST || request == HTTPRequest.PUT) {
             connection.setDoOutput(true);
             byte[] data;
@@ -164,10 +167,7 @@ public class WebConnectionBuilder {
                 data = postData.toString().getBytes("UTF-8");
             }
     
-            EzSkype.LOGGER.debug("Posting data: {}", postData);
-            EzSkype.LOGGER.debug("Length: {}", data.length);
-    
-    
+            LOGGER.debug("  Posting data: {}", postData);
             connection.addRequestProperty("Content-Length", Integer.toString(data.length));
             connection.getOutputStream().write(data);
             connection.getOutputStream().close();
@@ -183,9 +183,9 @@ public class WebConnectionBuilder {
                     StringWriter writer = new StringWriter();
                     IOUtils.copy(connection.getErrorStream(), writer);
                     String string = writer.toString();
-                    EzSkype.LOGGER.error("An error occurred while sending data to server\n  Data:\n" + string, e);
+                    LOGGER.error("  An error occurred while sending data to server\n  Data:\n" + string, e);
                 } else {
-                    EzSkype.LOGGER.error("An error occurred while sending data to server\n  In = null, Connection: " + connection, e);
+                    LOGGER.error("  An error occurred while sending data to server\n  In = null, Connection: " + connection, e);
                 }
             }
     
@@ -199,6 +199,11 @@ public class WebConnectionBuilder {
             response.append("\n").append(line);
         }
         connection.getInputStream().close();
+    
+        if (response.length() < 1000) {
+            LOGGER.debug("  Response: (code={}, data={})", connection.getResponseCode(), response.toString().replace("\n", ""));
+        }
+    
         return response.toString();
     }
     

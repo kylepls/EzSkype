@@ -15,8 +15,8 @@ import java.io.IOException;
 public class SkypeAuthEndpointFinalPacket extends SkypePacket {
     
     public SkypeAuthEndpointFinalPacket(EzSkype ezSkype) {
-        super("https://client-s.gateway.messenger.live.com/v1/users/ME/endpoints/" + ezSkype.getSkypeSession().getSessionId() +
-                "/presenceDocs/messagingService", HTTPRequest.PUT, ezSkype, true);
+        super("https://{}client-s.gateway.messenger.live.com/v1/users/ME/endpoints/{}/presenceDocs/messagingService", HTTPRequest.PUT, 
+                ezSkype, true, ezSkype.getSkypeSession().getLocation(), ezSkype.getSkypeSession().getSessionId());
     }
     
     @Override

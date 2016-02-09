@@ -20,11 +20,19 @@ public abstract class SkypePacket {
     private HTTPRequest httpRequest;
     private boolean useHeaders;
     
-    public SkypePacket(String url, HTTPRequest httpRequest, EzSkype ezSkype, boolean useHeaders) {
+    public SkypePacket(String url, HTTPRequest httpRequest, EzSkype ezSkype, boolean useHeaders, String... urlArgs) {
         this.url = url;
         this.httpRequest = httpRequest;
         this.ezSkype = ezSkype;
         this.useHeaders = useHeaders;
+        replaceUrlVars(urlArgs);
+    }
+    
+    private void replaceUrlVars(String... vars) {
+        for (String string : vars) {
+            int i = url.indexOf("{}");
+            url = url.substring(0, i) + string + url.substring(i + 2);
+        }
     }
     
     /**
@@ -38,8 +46,6 @@ public abstract class SkypePacket {
     
     public Object executeSync() throws SkypeException, IOException {
         WebConnectionBuilder webConnectionBuilder = getConnectionBuilder();
-        EzSkype.LOGGER.debug("Opening connection: " + this.getClass().getCanonicalName() + " " + this + "\n    Connection: " +
-                webConnectionBuilder);
         return run(webConnectionBuilder);
     }
     
@@ -53,6 +59,9 @@ public abstract class SkypePacket {
         if (useHeaders) {
             builder.addHeaders(ezSkype);
         }
+    
+        EzSkype.LOGGER.debug("Executing packet: {} URL: {}", getClass().getSimpleName(), url);
+    
         return builder;
     }
     

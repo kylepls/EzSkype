@@ -10,6 +10,7 @@ import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 /**
@@ -17,23 +18,18 @@ import java.net.URLEncoder;
  */
 public class SkypeActivePacket extends SkypePacket {
     
-    public SkypeActivePacket(EzSkype ezSkype) {
-        super("tbd", HTTPRequest.POST, ezSkype, true);
+    public SkypeActivePacket(EzSkype ezSkype) throws UnsupportedEncodingException {
+        super("https://{}client-s.gateway.messenger.live.com/v1/users/ME/endpoints/{}/active", HTTPRequest.POST, ezSkype, true, ezSkype
+                .getSkypeSession().getLocation(), URLEncoder.encode(ezSkype.getSkypeSession().getSessionId(), "UTF-8"));
     }
     
     @Override
     protected Object run(WebConnectionBuilder webConnectionBuilder) throws IOException, SkypeException {
-        String url = "https://client-s.gateway.messenger.live.com/v1/users/ME/endpoints/" + URLEncoder.encode(ezSkype.getSkypeSession()
-                .getSessionId(), "UTF-8") + "/active";
-        webConnectionBuilder.setUrl(url);
-        
         JsonObject data = new JsonObject();
         data.addProperty("timeout", 12);
     
         webConnectionBuilder.setContentType(ContentType.JSON);
         webConnectionBuilder.setPostData(data.toString());
-    
-        EzSkype.LOGGER.debug("Sending skype active packet, url: {}", url);
     
         try {
             webConnectionBuilder.send();

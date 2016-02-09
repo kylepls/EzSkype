@@ -117,7 +117,7 @@ public class SkypeLoginPacket extends SkypePacket {
         }
     
         String value = elementsByAttributeValue.get(0).val();
-        EzSkype.LOGGER.debug("Got login value: " + value);
+        EzSkype.LOGGER.debug("  Got login value: " + value);
         return value;
     }
 }

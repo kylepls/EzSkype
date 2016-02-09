@@ -21,8 +21,8 @@ import java.io.StringWriter;
 public class SkypePullPacket extends SkypePacket {
     
     public SkypePullPacket(EzSkype ezSkype) {
-        super("https://client-s.gateway.messenger.live.com/v1/users/ME/endpoints/SELF/subscriptions/0/poll", HTTPRequest.POST, ezSkype, 
-                true);
+        super("https://{}client-s.gateway.messenger.live.com/v1/users/ME/endpoints/SELF/subscriptions/0/poll", HTTPRequest.POST, ezSkype,
+                true, ezSkype.getSkypeSession().getLocation());
     }
     
     @Override
@@ -35,8 +35,8 @@ public class SkypePullPacket extends SkypePacket {
             StringWriter writer = new StringWriter();
             IOUtils.copy(webConnectionBuilder.getConnection().getErrorStream(), writer);
             String string = writer.toString();
-            
-            EzSkype.LOGGER.error("Error pulling Skype info: \n" + string, e);
+    
+            EzSkype.LOGGER.error("  Error pulling Skype info: \n" + string, e);
             ezSkype.getErrorHandler().handleException(e);
         }
         return EzSkype.GSON.fromJson(result, JsonObject.class);

@@ -87,6 +87,8 @@ public class EzSkype {
     private SkypeProperties skypeProperties;
     @Getter
     private SkypeData skypeData;
+    @Getter
+    private boolean extensive;
     
     /**
      * Creates a new EzSkype instance with default properties
@@ -318,6 +320,11 @@ public class EzSkype {
     }
     
     public void setDebug(boolean debug) {
+        setDebug(debug, false);
+    }
+    
+    public void setDebug(boolean debug, boolean extensive) {
+        this.extensive = extensive;
         Level level;
         if (debug) {
             level = Level.DEBUG;

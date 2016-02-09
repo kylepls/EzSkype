@@ -36,9 +36,9 @@ public class SkypeAuthFinishPacket extends SkypePacket {
     
     @Override
     protected SkypeSession run(WebConnectionBuilder webConnectionBuilder) throws IOException {
-        LOGGER.info("Token: " + token + " throwing IT IN THE TRAAAAAAAAAAAAAAASH");
+        LOGGER.info("   Token: " + token + " throwing IT IN THE TRAAAAAAAAAAAAAAASH");
     
-        LOGGER.info("Getting new token...");
+        LOGGER.info("   Getting new token...");
     
         SkypeCredentials skypeCredentials = ezSkype.getSkypeCredentials();
     
@@ -48,7 +48,7 @@ public class SkypeAuthFinishPacket extends SkypePacket {
             e.printStackTrace();
         }
     
-        LOGGER.info("New better token is: " + token);
+        LOGGER.info("   New better token is: " + token);
         
         webConnectionBuilder.addHeader("Authentication", "skypetoken=" + token);
         webConnectionBuilder.setPostData("{}");
@@ -62,16 +62,20 @@ public class SkypeAuthFinishPacket extends SkypePacket {
         String regToken = tokenOre[0];
         
         String endpoint = tokenOre[2].substring(tokenOre[2].indexOf("=") + 1);
+        UUID sessionUuid = UUID.randomUUID();
     
-        return new SkypeSession(regToken, token, location, endpoint, UUID.randomUUID());
+        LOGGER.debug("   Session data:");
+        LOGGER.debug("      RegToken: {}", regToken);
+        LOGGER.debug("      XToken: {}", token);
+        LOGGER.debug("      Location: {}", location);
+        LOGGER.debug("      Session Id: {}", endpoint);
+        LOGGER.debug("      Session UUID: {}", sessionUuid);
+    
+        return new SkypeSession(regToken, token, location, endpoint, sessionUuid);
     }
     
     public String getXTokenFromUsernamePassword(String username, String password) throws Exception {
-        LOGGER.info(String.format("Logging in with: %s:%s", username, password));
-        LOGGER.info("Getting hash...");
         final String hash = hash(username, password);
-        LOGGER.info("Got hash: " + hash);
-        LOGGER.info("Trying to connect!");
         
         try {
             Document document = Jsoup.connect("https://api.skype.com/login/skypetoken").data("scopes", "client").data("clientVersion", 

@@ -23,8 +23,8 @@ public class SkypeRegisterEndpointsPacket extends SkypePacket {
     private final SkypeEndpoint[] endpoints;
     
     public SkypeRegisterEndpointsPacket(EzSkype ezSkype, SkypeEndpoint[] endpoints) {
-        super("https://client-s.gateway.messenger.live.com/v1/users/ME/endpoints/SELF/subscriptions", HTTPRequest
-                .POST, ezSkype, true);
+        super("https://{}client-s.gateway.messenger.live.com/v1/users/ME/endpoints/SELF/subscriptions", HTTPRequest.POST, ezSkype, true, 
+                ezSkype.getSkypeSession().getLocation());
         this.endpoints = endpoints;
     }
     
@@ -38,8 +38,7 @@ public class SkypeRegisterEndpointsPacket extends SkypePacket {
         Arrays.stream(endpoints).forEach(endpoint -> resources.add(new JsonPrimitive(endpoint.getUrlAppend())));
         data.add("interestedResources", resources);
     
-        EzSkype.LOGGER.debug("Endpoints: {}", Arrays.asList(endpoints));
-        EzSkype.LOGGER.debug("Data {}", data);
+        EzSkype.LOGGER.debug("   Endpoint data {}", data);
         webConnectionBuilder.locationPrefix(ezSkype.getSkypeSession().getLocation());
         webConnectionBuilder.setContentType(ContentType.JSON);
         webConnectionBuilder.setPostData(data.toString());
