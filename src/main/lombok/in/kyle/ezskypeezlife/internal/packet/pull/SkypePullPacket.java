@@ -21,8 +21,8 @@ import java.io.StringWriter;
 public class SkypePullPacket extends SkypePacket {
     
     public SkypePullPacket(EzSkype ezSkype) {
-        super("https://{}client-s.gateway.messenger.live.com/v1/users/ME/endpoints/SELF/subscriptions/0/poll", HTTPRequest.POST, ezSkype,
-                true, ezSkype.getSkypeSession().getLocation());
+        super("https://client-s.gateway.messenger.live.com/v1/users/ME/endpoints/SELF/subscriptions/0/poll", HTTPRequest.POST, ezSkype, 
+                true);
     }
     
     @Override

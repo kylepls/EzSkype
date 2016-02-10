@@ -13,8 +13,7 @@ import java.io.IOException;
 public class SkypeContactRequestAcceptPacket extends SkypePacket {
     
     public SkypeContactRequestAcceptPacket(EzSkype ezSkype, String username) {
-        super("https://api.skype.com/users/self/contacts/auth-request/" + username + "/accept", HTTPRequest.PUT, 
-                ezSkype, true);
+        super("https://api.skype.com/users/self/contacts/auth-request/{}/accept", HTTPRequest.PUT, ezSkype, true, username);
     }
     
     @Override

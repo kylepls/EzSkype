@@ -21,8 +21,7 @@ public class SkypeSendImagePacket extends SkypePacket {
     private final String imageName;
     
     public SkypeSendImagePacket(EzSkype ezSkype, String longId, String imageId, String imageName) {
-        super("https://client-s.gateway.messenger.live.com/v1/users/ME/conversations/" + longId + "/messages", HTTPRequest.POST, ezSkype,
-                true);
+        super("https://client-s.gateway.messenger.live.com/v1/users/ME/conversations/{}/messages", HTTPRequest.POST, ezSkype, true, longId);
         this.imageId = imageId;
         this.imageName = imageName;
     }

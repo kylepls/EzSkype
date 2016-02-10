@@ -13,8 +13,7 @@ import java.io.IOException;
 public class SkypeContactEditPacket extends SkypePacket {
     
     public SkypeContactEditPacket(EzSkype ezSkype, String username) {
-        super("https://client-s.gateway.messenger.live.com/v1/users/ME/contacts/8:" + username, HTTPRequest.OPTIONS,
-                ezSkype, true);
+        super("https://client-s.gateway.messenger.live.com/v1/users/ME/contacts/8:{}", HTTPRequest.OPTIONS, ezSkype, true, username);
     }
     
     @Override

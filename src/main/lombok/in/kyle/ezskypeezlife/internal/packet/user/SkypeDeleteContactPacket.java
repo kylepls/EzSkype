@@ -21,7 +21,7 @@ public class SkypeDeleteContactPacket extends SkypePacket {
      *                 Call getResponse after to get the response
      */
     public SkypeDeleteContactPacket(EzSkype ezSkype, String username) {
-        super("https://api.skype.com/users/self/contacts/" + username, HTTPRequest.DELETE, ezSkype, true);
+        super("https://api.skype.com/users/self/contacts/{}", HTTPRequest.DELETE, ezSkype, true, username);
     }
     
     @Override

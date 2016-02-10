@@ -17,8 +17,8 @@ public class SkypeEditMessagePacket extends SkypePacket {
     private final String messageId;
     
     public SkypeEditMessagePacket(EzSkype ezSkype, String conversationLongId, String content, String messageId) {
-        super("https://client-s.gateway.messenger.live.com/v1/users/ME/conversations/" + conversationLongId + "/messages", HTTPRequest
-                .POST, ezSkype, true);
+        super("https://client-s.gateway.messenger.live.com/v1/users/ME/conversations/{}/messages", HTTPRequest.POST, ezSkype, true, 
+                conversationLongId);
         this.content = content;
         this.messageId = messageId;
     }
@@ -30,7 +30,7 @@ public class SkypeEditMessagePacket extends SkypePacket {
         data.addProperty("messagetype", "RichText");
         data.addProperty("contenttype", "text");
         data.addProperty("skypeeditedid", messageId);
-        EzSkype.LOGGER.debug("Sending edit: " + data.toString());
+        logger.debug("Sending edit: " + data.toString());
         webConnectionBuilder.setPostData(data.toString());
         webConnectionBuilder.send();
         return null;

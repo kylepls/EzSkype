@@ -13,12 +13,12 @@ import java.util.Optional;
 @Data
 public class SkypeProperties {
     
-    private final long contactUpdateInterval;
-    private final long sessionPingInterval;
-    private final boolean updateContacts;
-    private final SkypeEndpoint[] endpoints;
-    private final Optional<Proxy> proxy;
-    private final int packetIOThreads;
+    private long contactUpdateInterval;
+    private long sessionPingInterval;
+    private boolean updateContacts;
+    private SkypeEndpoint[] endpoints;
+    private Optional<Proxy> proxy;
+    private int packetIOThreads;
     
     public SkypeProperties() {
         this(20000L, 30000L, true, SkypeEndpoint.values(), Optional.empty(), 2);

@@ -1,38 +1,62 @@
 package in.kyle.ezskypeezlife.internal.packet.auth;
 
+import com.google.gson.JsonObject;
 import in.kyle.ezskypeezlife.EzSkype;
-import in.kyle.ezskypeezlife.api.errors.SkypeCaptcha;
-import in.kyle.ezskypeezlife.api.errors.SkypeErrorHandler;
 import in.kyle.ezskypeezlife.api.skype.SkypeCredentials;
 import in.kyle.ezskypeezlife.exception.SkypeException;
 import in.kyle.ezskypeezlife.internal.packet.HTTPRequest;
 import in.kyle.ezskypeezlife.internal.packet.SkypePacket;
 import in.kyle.ezskypeezlife.internal.packet.WebConnectionBuilder;
-import in.kyle.ezskypeezlife.internal.packet.auth.exception.SkypeCaptchaException;
-import in.kyle.ezskypeezlife.internal.packet.auth.exception.SkypeChangePasswordEmptyException;
-import in.kyle.ezskypeezlife.internal.packet.auth.exception.SkypeChangePasswordException;
-import in.kyle.ezskypeezlife.internal.packet.auth.exception.SkypeLoginException;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
+import lombok.SneakyThrows;
+import org.apache.commons.codec.binary.Base64;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Optional;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Created by Kyle on 10/5/2015.
  */
 public class SkypeLoginPacket extends SkypePacket {
     
+    private static final String SKYPE_VERSION = "0/7.17.0.105//";
+    private static final String AUTH_PAYLOAD = "%s\nskyper\n%s";
     private final SkypeCredentials skypeCredentials;
-    private final SkypeJavascriptParams javascriptParameters;
-    private final Optional<SkypeCaptcha> captcha;
     
-    public SkypeLoginPacket(EzSkype ezSkype, SkypeCredentials credentials, SkypeJavascriptParams javascriptParameters) {
-        this(ezSkype, credentials, javascriptParameters, null);
+    public SkypeLoginPacket(EzSkype ezSkype, SkypeCredentials skypeCredentials) {
+        super("https://api.skype.com/login/skypetoken", HTTPRequest.POST, ezSkype, false);
+        this.skypeCredentials = skypeCredentials;
     }
     
+    @Override
+    @SneakyThrows
+    protected Object run(WebConnectionBuilder webConnectionBuilder) throws SkypeException, IOException {
+        webConnectionBuilder.addEncodedPostData("scopes", "client");
+        webConnectionBuilder.addEncodedPostData("clientVersion", SKYPE_VERSION);
+        webConnectionBuilder.addEncodedPostData("username", skypeCredentials.getUsername());
+        
+        String hash = hash(skypeCredentials.getUsername(), new String(skypeCredentials.getPassword()));
+        
+        webConnectionBuilder.addEncodedPostData("passwordHash", hash);
+        
+        JsonObject response = webConnectionBuilder.getAsJsonObject();
+        return response.get("skypetoken").getAsString();
+    }
+    
+    public String hash(String username, String password) throws IllegalStateException {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            
+            byte[] encodedMD = md.digest(String.format(AUTH_PAYLOAD, username, password).getBytes());
+            byte[] encodedBase = Base64.encodeBase64(encodedMD);
+            
+            return new String(encodedBase);
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+    
+    /*
     public SkypeLoginPacket(EzSkype ezSkype, SkypeCredentials credentials, SkypeJavascriptParams javascriptParameters, SkypeCaptcha 
             skypeCaptcha) {
         super("https://login.skype.com/login?client_id=578134&redirect_uri=https%3A%2F%2Fweb.skype.com", HTTPRequest.POST, ezSkype, false);
@@ -40,7 +64,9 @@ public class SkypeLoginPacket extends SkypePacket {
         this.javascriptParameters = javascriptParameters;
         this.captcha = Optional.ofNullable(skypeCaptcha);
     }
+     */
     
+    /*
     @Override
     protected String run(WebConnectionBuilder webConnectionBuilder) throws SkypeException, IOException {
         Date date = new Date();
@@ -120,4 +146,5 @@ public class SkypeLoginPacket extends SkypePacket {
         EzSkype.LOGGER.debug("  Got login value: " + value);
         return value;
     }
+    */
 }

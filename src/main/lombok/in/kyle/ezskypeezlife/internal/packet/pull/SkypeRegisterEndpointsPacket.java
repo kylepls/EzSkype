@@ -23,8 +23,7 @@ public class SkypeRegisterEndpointsPacket extends SkypePacket {
     private final SkypeEndpoint[] endpoints;
     
     public SkypeRegisterEndpointsPacket(EzSkype ezSkype, SkypeEndpoint[] endpoints) {
-        super("https://{}client-s.gateway.messenger.live.com/v1/users/ME/endpoints/SELF/subscriptions", HTTPRequest.POST, ezSkype, true, 
-                ezSkype.getSkypeSession().getLocation());
+        super("https://client-s.gateway.messenger.live.com/v1/users/ME/endpoints/SELF/subscriptions", HTTPRequest.POST, ezSkype, true);
         this.endpoints = endpoints;
     }
     

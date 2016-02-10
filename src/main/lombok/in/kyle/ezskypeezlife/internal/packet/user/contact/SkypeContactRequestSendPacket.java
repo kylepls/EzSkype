@@ -22,7 +22,7 @@ public class SkypeContactRequestSendPacket extends SkypePacket {
     }
     
     public SkypeContactRequestSendPacket(EzSkype ezSkype, String username, String greeting) {
-        super("https://api.skype.com/users/self/contacts/auth-request/" + username, HTTPRequest.PUT, ezSkype, true);
+        super("https://api.skype.com/users/self/contacts/auth-request/{}", HTTPRequest.PUT, ezSkype, true, username);
         this.greeting = greeting;
     }
     

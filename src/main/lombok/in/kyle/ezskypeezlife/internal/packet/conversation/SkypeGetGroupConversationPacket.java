@@ -26,8 +26,7 @@ import java.util.stream.Collectors;
 public class SkypeGetGroupConversationPacket extends SkypePacket {
     
     public SkypeGetGroupConversationPacket(EzSkype ezSkype, String longId) {
-        super("https://client-s.gateway.messenger.live.com/v1/threads/" + longId + "?view=msnp24Equivalent", HTTPRequest.GET, ezSkype, 
-                true);
+        super("https://client-s.gateway.messenger.live.com/v1/threads/{}?view=msnp24Equivalent", HTTPRequest.GET, ezSkype, true, longId);
     }
     
     @Override
@@ -77,9 +76,8 @@ public class SkypeGetGroupConversationPacket extends SkypePacket {
             JsonObject memberObject = memberElement.getAsJsonObject();
             String username = memberObject.get("id").getAsString();
             username = username.substring(username.indexOf(":") + 1);
-            
-            SkypeUserInternal skypeUserInternal = ezSkype.getSkypeCache().getUsersCache().getOrCreateUserUnloaded
-                    (username);
+    
+            SkypeUserInternal skypeUserInternal = ezSkype.getSkypeCache().getUsersCache().getOrCreateUserUnloaded(username);
             
             SkypeUserRole role = SkypeUserRole.valueOf(memberObject.get("role").getAsString().toUpperCase());
             

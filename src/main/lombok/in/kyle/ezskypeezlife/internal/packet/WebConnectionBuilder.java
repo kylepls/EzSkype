@@ -8,6 +8,7 @@ import lombok.ToString;
 import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.slf4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -22,8 +23,6 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
-
-import static in.kyle.ezskypeezlife.EzSkype.LOGGER;
 
 /**
  * Created by Kyle on 10/5/2015.
@@ -52,12 +51,15 @@ public class WebConnectionBuilder {
     private Proxy proxy;
     @Setter
     private InputStream writeStream;
+    @Setter
+    private Logger logger;
     
     public WebConnectionBuilder() {
         this.request = HTTPRequest.GET;
         this.postData = new StringBuilder();
         this.headers = new HashMap<>();
         this.contentType = ContentType.WWW_FORM;
+        this.logger = EzSkype.LOGGER;
     }
     
     public void addHeaders(EzSkype ezSkype) {
@@ -137,7 +139,7 @@ public class WebConnectionBuilder {
      * @throws IOException
      */
     public String send() throws IOException {
-        LOGGER.debug("  Opening connection {} to: {}", request.name(), url);
+        logger.debug("  Opening connection {} to: {}", request.name(), url);
         if (proxy == null) {
             connection = (HttpURLConnection) new URL(url).openConnection();
         } else {
@@ -153,8 +155,8 @@ public class WebConnectionBuilder {
         
         headers.forEach(connection::addRequestProperty);
     
-        LOGGER.debug("  Connection info: {}", this.toString());
-        LOGGER.debug("  Headers: {}", getHeaders());
+        logger.debug("  Connection info: {}", this.toString());
+        logger.debug("  Headers: {}", getHeaders());
         if (request == HTTPRequest.POST || request == HTTPRequest.PUT) {
             connection.setDoOutput(true);
             byte[] data;
@@ -167,7 +169,7 @@ public class WebConnectionBuilder {
                 data = postData.toString().getBytes("UTF-8");
             }
     
-            LOGGER.debug("  Posting data: {}", postData);
+            logger.debug("  Posting data: {}", postData);
             connection.addRequestProperty("Content-Length", Integer.toString(data.length));
             connection.getOutputStream().write(data);
             connection.getOutputStream().close();
@@ -183,9 +185,9 @@ public class WebConnectionBuilder {
                     StringWriter writer = new StringWriter();
                     IOUtils.copy(connection.getErrorStream(), writer);
                     String string = writer.toString();
-                    LOGGER.error("  An error occurred while sending data to server\n  Data:\n" + string, e);
+                    logger.error("  An error occurred while sending data to server\n  Data:\n" + string, e);
                 } else {
-                    LOGGER.error("  An error occurred while sending data to server\n  In = null, Connection: " + connection, e);
+                    logger.error("  An error occurred while sending data to server\n  In = null, Connection: " + connection, e);
                 }
             }
     
@@ -201,7 +203,7 @@ public class WebConnectionBuilder {
         connection.getInputStream().close();
     
         if (response.length() < 1000) {
-            LOGGER.debug("  Response: (code={}, data={})", connection.getResponseCode(), response.toString().replace("\n", ""));
+            logger.debug("  Response: (code={}, data={})", connection.getResponseCode(), response.toString().replace("\n", ""));
         }
     
         return response.toString();

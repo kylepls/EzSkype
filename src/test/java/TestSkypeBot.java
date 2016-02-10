@@ -5,6 +5,7 @@ import in.kyle.ezskypeezlife.api.conversation.message.SkypeMessage;
 import in.kyle.ezskypeezlife.api.errors.SkypeCaptcha;
 import in.kyle.ezskypeezlife.api.errors.SkypeErrorHandler;
 import in.kyle.ezskypeezlife.api.skype.SkypeCredentials;
+import in.kyle.ezskypeezlife.api.skype.SkypeProperties;
 import in.kyle.ezskypeezlife.api.user.SkypeStatus;
 import in.kyle.ezskypeezlife.api.user.SkypeUser;
 import in.kyle.ezskypeezlife.events.conversation.SkypeConversationAddedToEvent;
@@ -48,8 +49,12 @@ public class TestSkypeBot implements SkypeErrorHandler {
         JsonObject login = EzSkype.GSON.fromJson(new FileReader(new File("login.json")), JsonObject.class);
         
         // Enter the Skype login info here
-        ezSkype = new EzSkype(new SkypeCredentials(login.get("user").getAsString(), login.get("pass").getAsString()));
-        ezSkype.setDebug(true);
+        SkypeProperties properties = new SkypeProperties();
+        properties.setSessionPingInterval(30000L);
+        properties.setUpdateContacts(false);
+        System.out.println(properties);
+        ezSkype = new EzSkype(new SkypeCredentials(login.get("user").getAsString(), login.get("pass").getAsString()), properties);
+        ezSkype.setDebug(false);
         // A error handler is a class that will be called to solve issues with the bot
         ezSkype.setErrorHandler(this);
         ezSkype.login();

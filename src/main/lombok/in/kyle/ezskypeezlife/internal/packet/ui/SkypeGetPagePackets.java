@@ -36,22 +36,21 @@ public class SkypeGetPagePackets extends SkypePacket {
         
         String javascriptUrl = document.getElementsByTag("script").attr("src");
         webConnectionBuilder.setUrl(javascriptUrl);
-        
-        EzSkype.LOGGER.debug("Getting javascript from {}", javascriptUrl);
+    
+        logger.debug("Getting javascript from {}", javascriptUrl);
         
         String javascript = webConnectionBuilder.send();
         
         Matcher matcher = bootStrapPattern.matcher(javascript);
         if (matcher.find()) {
             String url = "http://" + matcher.group() + "/SkypeBootstrap.min.js";
-            
-            EzSkype.LOGGER.debug("Got javascript from {}", url);
+    
+            logger.debug("Got javascript from {}", url);
             
             webConnectionBuilder.setUrl(url);
             String bootStrapJavascript = webConnectionBuilder.send();
-            
-            EzSkype.LOGGER.debug("BS javascript\n" + bootStrapJavascript);
-            
+    
+            logger.debug("  BS javascript: {}", bootStrapJavascript);
             matcher = platformPattern.matcher(bootStrapJavascript);
             if (matcher.find()) {
                 int platformId = Integer.parseInt(matcher.group(1));

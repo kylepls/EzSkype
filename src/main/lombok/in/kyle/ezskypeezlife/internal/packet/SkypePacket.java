@@ -4,6 +4,8 @@ import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.exception.SkypeException;
 import lombok.Getter;
 import lombok.ToString;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.concurrent.Future;
@@ -16,6 +18,7 @@ public abstract class SkypePacket {
     
     @Getter
     protected final EzSkype ezSkype;
+    protected final Logger logger;
     private String url;
     private HTTPRequest httpRequest;
     private boolean useHeaders;
@@ -25,12 +28,20 @@ public abstract class SkypePacket {
         this.httpRequest = httpRequest;
         this.ezSkype = ezSkype;
         this.useHeaders = useHeaders;
+        this.logger = LoggerFactory.getLogger(getClass());
         replaceUrlVars(urlArgs);
     }
     
     private void replaceUrlVars(String... vars) {
+        if (url.contains("client-s") && ezSkype.getSkypeSession() != null && ezSkype.getSkypeSession().getLocation() != null) {
+            url = url.replace("client-s", ezSkype.getSkypeSession().getLocation() + "client-s");
+        }
+    
         for (String string : vars) {
             int i = url.indexOf("{}");
+            if (i == -1) {
+                throw new IndexOutOfBoundsException("Could not find {} for string (" + string + ") URL (" + url + ")");
+            }
             url = url.substring(0, i) + string + url.substring(i + 2);
         }
     }
@@ -56,11 +67,12 @@ public abstract class SkypePacket {
         }
         builder.setUrl(url);
         builder.setRequest(httpRequest);
+        builder.setLogger(logger);
         if (useHeaders) {
             builder.addHeaders(ezSkype);
         }
     
-        EzSkype.LOGGER.debug("Executing packet: {} URL: {}", getClass().getSimpleName(), url);
+        logger.debug("Executing packet: {} URL: {}", getClass().getSimpleName(), url);
     
         return builder;
     }

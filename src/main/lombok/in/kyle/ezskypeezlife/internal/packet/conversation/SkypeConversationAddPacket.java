@@ -14,8 +14,7 @@ import java.io.IOException;
 public class SkypeConversationAddPacket extends SkypePacket {
     
     public SkypeConversationAddPacket(EzSkype ezSkype, String longId, String username) {
-        super("https://client-s.gateway.messenger.live.com/v1/threads/" + longId + "/members/8:" + username, HTTPRequest.PUT, ezSkype, 
-                true);
+        super("https://client-s.gateway.messenger.live.com/v1/threads/{}/members/8:{}", HTTPRequest.PUT, ezSkype, true, longId, username);
     }
     
     @Override

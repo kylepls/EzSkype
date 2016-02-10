@@ -19,8 +19,8 @@ import java.net.URLEncoder;
 public class SkypeActivePacket extends SkypePacket {
     
     public SkypeActivePacket(EzSkype ezSkype) throws UnsupportedEncodingException {
-        super("https://{}client-s.gateway.messenger.live.com/v1/users/ME/endpoints/{}/active", HTTPRequest.POST, ezSkype, true, ezSkype
-                .getSkypeSession().getLocation(), URLEncoder.encode(ezSkype.getSkypeSession().getSessionId(), "UTF-8"));
+        super("https://client-s.gateway.messenger.live.com/v1/users/ME/endpoints/{}/active", HTTPRequest.POST, ezSkype, true, URLEncoder
+                .encode(ezSkype.getSkypeSession().getSessionId(), "UTF-8"));
     }
     
     @Override

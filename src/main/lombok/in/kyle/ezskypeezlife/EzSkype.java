@@ -87,8 +87,6 @@ public class EzSkype {
     private SkypeProperties skypeProperties;
     @Getter
     private SkypeData skypeData;
-    @Getter
-    private boolean extensive;
     
     /**
      * Creates a new EzSkype instance with default properties
@@ -130,7 +128,7 @@ public class EzSkype {
         SkypeJavascriptParams parameters = (SkypeJavascriptParams) loginInfoPacket.executeSync();
         
         // Get x-token
-        SkypeLoginPacket skypeLoginPacket = new SkypeLoginPacket(this, skypeCredentials, parameters);
+        SkypeLoginPacket skypeLoginPacket = new SkypeLoginPacket(this, skypeCredentials);
         String xToken = (String) skypeLoginPacket.executeSync();
         finishLogin(xToken);
         EzSkype.LOGGER.info("Loading conversations");
@@ -320,11 +318,6 @@ public class EzSkype {
     }
     
     public void setDebug(boolean debug) {
-        setDebug(debug, false);
-    }
-    
-    public void setDebug(boolean debug, boolean extensive) {
-        this.extensive = extensive;
         Level level;
         if (debug) {
             level = Level.DEBUG;

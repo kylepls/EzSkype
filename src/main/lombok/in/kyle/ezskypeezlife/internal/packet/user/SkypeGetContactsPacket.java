@@ -20,20 +20,16 @@ import java.util.Optional;
  */
 public class SkypeGetContactsPacket extends SkypePacket {
     
+    private static String APP = "?$filter=type%20eq%20%27skype%27%20or%20type%20eq%20%27msn%27%20or%20type%20eq%20%27agent%27&reason" + 
+            "=default";
+    
     public SkypeGetContactsPacket(EzSkype ezSkype) {
-        super("tbd", HTTPRequest.GET, ezSkype, true);
+        super("https://contacts.skype.com/contacts/v1/users/{}/contacts{}", HTTPRequest.GET, ezSkype, true, ezSkype.getLocalUser()
+                .getUsername(), APP);
     }
     
     @Override
     protected UserContacts run(WebConnectionBuilder webConnectionBuilder) throws IOException {
-        String privateUsername = ezSkype.getLocalUser().getUsername();
-        
-        String append = "?$filter=type%20eq%20%27skype%27%20or%20type%20eq%20%27msn%27%20or%20type%20eq%20%27agent%27&reason=default";
-        
-        String url = "https://contacts.skype.com/contacts/v1/users/" + privateUsername + "/contacts" + append;
-        
-        webConnectionBuilder.setUrl(url);
-        
         JsonObject response = EzSkype.GSON.fromJson(webConnectionBuilder.send(), JsonObject.class);
         JsonArray contactsArray = response.getAsJsonArray("contacts");
         Map<String, SkypeUserInternal> contacts = new HashMap<>();

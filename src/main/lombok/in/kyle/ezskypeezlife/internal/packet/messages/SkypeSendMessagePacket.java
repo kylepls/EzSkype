@@ -28,8 +28,8 @@ public class SkypeSendMessagePacket extends SkypePacket {
      * @param message - The message content
      */
     public SkypeSendMessagePacket(EzSkype ezSkype, String convoId, String message, String id, SkypeMessageType messageType) {
-        super("https://client-s.gateway.messenger.live.com/v1/users/ME/conversations/" + convoId + "/messages", HTTPRequest.POST, 
-                ezSkype, true);
+        super("https://client-s.gateway.messenger.live.com/v1/users/ME/conversations/{}/messages", HTTPRequest.POST, ezSkype, true, 
+                convoId);
         this.message = message;
         this.id = id;
         this.messageType = messageType;

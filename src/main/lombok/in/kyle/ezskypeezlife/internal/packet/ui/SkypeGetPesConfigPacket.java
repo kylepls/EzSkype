@@ -15,13 +15,13 @@ import java.io.IOException;
 public class SkypeGetPesConfigPacket extends SkypePacket {
     
     public SkypeGetPesConfigPacket(EzSkype ezSkype, int platformId, String version) {
-        super("https://a.config.skype.com/config/v1/Skype/" + platformId + "_" + version + ".0/SkypePersonalization?apikey=skype.com", 
-                HTTPRequest.GET, ezSkype, false);
+        super("https://a.config.skype.com/config/v1/Skype/{}_{}.0/SkypePersonalization?apikey=skype.com", HTTPRequest.GET, ezSkype, 
+                false, Integer.toString(platformId), version);
     }
     
     @Override
     protected PesReturnObject run(WebConnectionBuilder webConnectionBuilder) throws IOException {
-        EzSkype.LOGGER.info("Getting PES version: {}", webConnectionBuilder.getUrl());
+        logger.info("Getting PES version: {}", webConnectionBuilder.getUrl());
         JsonObject data = webConnectionBuilder.getAsJsonObject();
         String configUrl = data.get("pes_config").getAsString();
         webConnectionBuilder.setUrl(configUrl);

@@ -17,8 +17,7 @@ public class SkypeConversationTopicPacket extends SkypePacket {
     private final String topic;
     
     public SkypeConversationTopicPacket(EzSkype ezSkype, String longId, String topic) {
-        super("https://client-s.gateway.messenger.live.com/v1/threads/" + longId + "/properties?name=topic", HTTPRequest.PUT, ezSkype, 
-                true);
+        super("https://client-s.gateway.messenger.live.com/v1/threads/{}/properties?name=topic", HTTPRequest.PUT, ezSkype, true, longId);
         this.topic = topic;
     }
     

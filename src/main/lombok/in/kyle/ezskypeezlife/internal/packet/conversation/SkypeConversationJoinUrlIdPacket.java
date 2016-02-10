@@ -14,7 +14,7 @@ import java.io.IOException;
 public class SkypeConversationJoinUrlIdPacket extends SkypePacket {
     
     public SkypeConversationJoinUrlIdPacket(EzSkype ezSkype, String url) {
-        super("https://join.skype.com/api/v1/meetings/" + url.substring(url.lastIndexOf("/") + 1), HTTPRequest.GET, ezSkype, true);
+        super("https://join.skype.com/api/v1/meetings/{}", HTTPRequest.GET, ezSkype, true, url.substring(url.lastIndexOf("/") + 1));
     }
     
     @Override

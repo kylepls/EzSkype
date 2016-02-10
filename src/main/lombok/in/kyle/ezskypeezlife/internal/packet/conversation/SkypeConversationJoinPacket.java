@@ -14,7 +14,7 @@ import java.io.IOException;
 public class SkypeConversationJoinPacket extends SkypePacket {
     
     public SkypeConversationJoinPacket(EzSkype ezSkype, String longId) {
-        super("https://api.scheduler.skype.com/conversation/" + longId, HTTPRequest.GET, ezSkype, true);
+        super("https://api.scheduler.skype.com/conversation/{}", HTTPRequest.GET, ezSkype, true, longId);
     }
     
     @Override

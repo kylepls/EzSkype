@@ -17,8 +17,7 @@ public class SkypeSetProfilePicturePacket extends SkypePacket {
     private final InputStream image;
     
     public SkypeSetProfilePicturePacket(EzSkype ezSkype, InputStream image) {
-        super(String.format("https://api.skype.com/users/%s/profile/avatar", ezSkype.getLocalUser().getUsername()), HTTPRequest.PUT, 
-                ezSkype, true);
+        super("https://api.skype.com/users/{}/profile/avatar", HTTPRequest.PUT, ezSkype, true, ezSkype.getLocalUser().getUsername());
         this.image = image;
     }
     

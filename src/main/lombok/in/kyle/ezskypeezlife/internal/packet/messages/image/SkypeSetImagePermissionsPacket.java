@@ -18,7 +18,7 @@ public class SkypeSetImagePermissionsPacket extends SkypePacket {
     private final String longId;
     
     public SkypeSetImagePermissionsPacket(EzSkype ezSkype, String imageId, String longId) {
-        super("https://api.asm.skype.com/v1/objects/" + imageId + "/permissions", HTTPRequest.PUT, ezSkype, false);
+        super("https://api.asm.skype.com/v1/objects/{}/permissions", HTTPRequest.PUT, ezSkype, false, imageId);
         this.longId = longId;
     }
     

@@ -68,7 +68,7 @@ public class SkypeCreateConversationPacket extends SkypePacket {
                                 "\n Json: " + response);
                     }
                 } else if (code != 0) {
-                    EzSkype.LOGGER.debug("Error adding user {} to new conversation, Skype returned error code {}. If this code is 206 " +
+                    logger.debug("Error adding user {} to new conversation, Skype returned error code {}. If this code is 206 " +
                             "please make sure to add them as a contact before creating a new conversation. Json: {}", id, code, response);
                 }
             }

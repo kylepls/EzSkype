@@ -30,7 +30,7 @@ public class SkypeSendContactRequestPacket extends SkypePacket {
      *                 Use getResponse after to get the response from the server
      */
     public SkypeSendContactRequestPacket(EzSkype ezSkype, String username, String greeting) {
-        super("https://api.skype.com/users/self/contacts/auth-request/" + username, HTTPRequest.PUT, ezSkype, true);
+        super("https://api.skype.com/users/self/contacts/auth-request/{}", HTTPRequest.PUT, ezSkype, true, username);
         this.username = username;
         this.greeting = greeting;
     }

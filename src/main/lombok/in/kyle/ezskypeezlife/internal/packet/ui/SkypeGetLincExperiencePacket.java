@@ -20,8 +20,8 @@ public class SkypeGetLincExperiencePacket extends SkypePacket {
     private final Pattern swxPlatformIdPattern;
     
     public SkypeGetLincExperiencePacket(EzSkype ezSkype, int platformId, String version) {
-        super("https://b.config.skype.com/config/v1/SkypeLyncWebExperience/" + platformId + "_" + version + ".0?apikey=skype.com", 
-                HTTPRequest.GET, ezSkype, false);
+        super("https://b.config.skype.com/config/v1/SkypeLyncWebExperience/{}_{}.0?apikey=skype.com", HTTPRequest.GET, ezSkype, false, 
+                Integer.toString(platformId), version);
         swxPlatformIdPattern = Pattern.compile("platformId:(?: +)?(?:\"|')?([0-9]{3,4})");
     }
     
@@ -43,9 +43,9 @@ public class SkypeGetLincExperiencePacket extends SkypePacket {
             return new SkypeLyncExperiences(baseUrl, swxVersion, platformId);
             
         } else {
-            EzSkype.LOGGER.error("BASE URL: " + baseUrl);
-            EzSkype.LOGGER.error("SWX JAVASCRIPT URL: " + swxJavascriptUrl);
-            EzSkype.LOGGER.error("SWX: \n" + swxJavascript);
+            logger.error("BASE URL: " + baseUrl);
+            logger.error("SWX JAVASCRIPT URL: " + swxJavascriptUrl);
+            logger.error("SWX: \n" + swxJavascript);
             throw new SkypeSwxVersionUndefinedException();
         }
         

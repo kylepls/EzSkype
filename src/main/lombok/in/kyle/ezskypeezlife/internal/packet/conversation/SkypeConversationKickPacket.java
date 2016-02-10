@@ -13,8 +13,8 @@ import java.io.IOException;
 public class SkypeConversationKickPacket extends SkypePacket {
     
     public SkypeConversationKickPacket(EzSkype ezSkype, String longId, String username) {
-        super("https://client-s.gateway.messenger.live.com/v1/threads/" + longId + "/members/8:" + username, HTTPRequest.DELETE, ezSkype,
-                true);
+        super("https://client-s.gateway.messenger.live.com/v1/threads/{}/members/8:{}", HTTPRequest.DELETE, ezSkype, true, longId, 
+                username);
     }
     
     @Override

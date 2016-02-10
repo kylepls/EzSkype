@@ -126,7 +126,7 @@ public class SkypeUserInternal implements SkypeUser {
         } else {
             try {
                 JsonObject o = (JsonObject) new SkypeContactRemovePacket(ezSkype, username).executeSync();
-                System.out.println("Response: " + o);
+                EzSkype.LOGGER.debug("Response: {}", o);
             } catch (Exception e) {
                 e.printStackTrace();
             }

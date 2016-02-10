@@ -17,7 +17,7 @@ public class SkypeWriteImagePacket extends SkypePacket {
     private final InputStream inputStream;
     
     public SkypeWriteImagePacket(EzSkype ezSkype, String imageId, InputStream inputStream) {
-        super("https://api.asm.skype.com/v1/objects/" + imageId + "/content/imgpsh", HTTPRequest.PUT, ezSkype, false);
+        super("https://api.asm.skype.com/v1/objects/{}/content/imgpsh", HTTPRequest.PUT, ezSkype, false, imageId);
         this.inputStream = inputStream;
     }
     
