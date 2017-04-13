@@ -1,3 +1,8 @@
+### Disclaimer
+```diff
+- This is no longer being maintained and likely will not work anymore as the protocol used for connecting to the Skype web interface have most likely changed. 
+```
+
 # EzSkype
 A Skype for Web compatibility layer for Java
 
