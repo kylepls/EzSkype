@@ -1,6 +1,6 @@
 ### Disclaimer
 ```diff
-- This is no longer being maintained and likely will not work anymore as the protocol used for connecting to the Skype web interface have most likely changed. 
+- This is no longer being maintained and likely will not work anymore as the protocol used for connecting to the Skype web interface has most likely changed. 
 ```
 
 # EzSkype
